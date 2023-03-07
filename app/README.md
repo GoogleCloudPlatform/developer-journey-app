@@ -36,3 +36,21 @@ A sample [API route](https://nextjs.org/docs/api-routes/introduction) can be acc
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
+## Tests
+
+```bash
+npm test
+npm run test:watch
+# or
+yarn test
+yarn test:watch
+# or
+pnpm test
+pnpm test:watch
+```
+
+[ts-jest](https://kulshekhar.github.io/ts-jest/) is installed as a dev
+dependency to support writing tests in TypeScript. The jest configuration
+(`jest.config.js`) sets `preset: 'ts-jest'` to enable this.
+
+Initial test example is located at `src/lib/__test__/database.test.ts`.
