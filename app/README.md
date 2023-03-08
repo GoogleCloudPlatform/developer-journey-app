@@ -40,6 +40,29 @@ A sample [API route](https://nextjs.org/docs/api-routes/introduction) can be acc
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
+## Starting the Firestore emulator
+
+> The Google Cloud Firestore emulator requires a Java 8+ JRE installed and on
+your system PATH
+> 
+> If you need to install Java, you can get it from here:
+> https://adoptium.net/
+>
+> - To choose a specific version, to to: https://adoptium.net/temurin/releases/
+> - If you're on a Mac with an Apple Silicon M1 or M2 chip, choose the `aarch64` architecture.
+> - Choose `JRE` instead of the full `JDK` package unless you plan to do Java
+>   development.
+
+```bash
+gcloud auth login
+gcloud components install cloud-firestore-emulator
+# or if already installed:
+# gcloud components update
+gcloud emulators firestore start
+```
+
+> For more detail, see the docs for [Emulate Firestore locally](https://cloud.google.com/firestore/docs/emulator).
+
 ## Tests
 
 ```bash
