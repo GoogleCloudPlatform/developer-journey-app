@@ -1,5 +1,7 @@
 # Developer notes
 
+These notes are for local development.
+
 This is a [Next.js](https://nextjs.org/) 13 (stable) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
@@ -16,7 +18,9 @@ yarn install
 pnpm install
 ```
 
-> If you don't have a preference, [pnpm](https://pnpm.io/) is recommended.
+> If you don't have a preference, [pnpm](https://pnpm.io/) is recommended for local development.
+> However, this repo standardizes on `npm`, so `yarn.lock` and `pnpm-lock.yaml` are ignored
+> (`.gitignore`).
 
 Run the development server:
 
