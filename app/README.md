@@ -58,8 +58,25 @@ gcloud auth login
 gcloud components install cloud-firestore-emulator
 # or if already installed:
 # gcloud components update
-gcloud emulators firestore start
 ```
+
+Choose the port you want to use for the Firestore emulator, for example `9999`,
+and export the `FIRESTORE_EMULATOR_HOST` environment variable:
+
+```bash
+export FIRESTORE_EMULATOR_HOST="localhost:9999"
+```
+
+Start the emulator:
+
+```bash
+gcloud emulators firestore start --host-port="$FIRESTORE_EMULATOR_HOST"
+```
+
+> When the exported `FIRESTORE_EMULATOR_HOST` environment variable is set, the
+> Firestore client will automatically use it to connect to the emulator.
+
+Press `Ctrl-C` when you want to stop the Firestore emulator.
 
 > For more detail, see the docs for [Emulate Firestore locally](https://cloud.google.com/firestore/docs/emulator).
 

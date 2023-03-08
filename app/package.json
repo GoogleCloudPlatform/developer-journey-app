@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --verbose",
-    "test:watch": "jest --verbose --watch"
+    "test": "jest --verbose --detectOpenHandles",
+    "test:watch": "jest --verbose --detectOpenHandles --watch"
   },
   "dependencies": {
     "@google-cloud/firestore": "^6.5.0",
