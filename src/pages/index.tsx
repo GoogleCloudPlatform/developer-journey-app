@@ -1,9 +1,8 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from 'src/styles/Home.module.css'
 
-const inter = Inter({ subsets: ['latin'] })
+import LoginBtn from "../components/login-btn";
 
 export default function Home() {
   return (
@@ -17,6 +16,9 @@ export default function Home() {
       <main className={styles.main}>
         <div className={styles.center}>
           Google Cloud head start app for JavaScript - Developer App Journey
+        </div>
+        <div>
+          <LoginBtn/>
         </div>
       </main>
     </>
