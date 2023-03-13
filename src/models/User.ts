@@ -5,13 +5,6 @@ export type SessionId = string;
 export type SessionResult = object | SessionId;
 
 export class User {
-  userId?: string;
-
-  email?: Email;
-
-  results?: SessionResult[];
-
-  lastSession?: Timestamp;
-
-  
+  userId!: string;
+  completedMissions!: Set<string>;
 }
