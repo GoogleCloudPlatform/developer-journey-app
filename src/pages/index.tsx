@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { Inter } from 'next/font/google'
 import styles from 'src/styles/Home.module.css'
 
+import MissionSelector from "../components/mission-selector";
 import LoginBtn from "../components/login-btn";
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
         <div className={styles.center}>
           Google Cloud head start app for JavaScript - Developer App Journey
         </div>
+        <MissionSelector />
         <div>
           <LoginBtn/>
         </div>
