@@ -1,27 +1,32 @@
 import { useState } from "react"
+import Image from 'next/image'
+import { Mission } from "src/models/Mission";
 
-const missions = [
+
+const missions: Mission[] = [
   {
     "id": "AsEOyVuuSPdAAf1ZKhSU",
     "title": "Deploy a NextJS App with a Firestore Database",
-    "technologies": ['CLOUD_RUN', 'FIRESTORE'],
+    "technologies": ['cloud_run', 'firestore'],
     "learningResources": [
       {
         "title": "Integrate Next.js",
         "link": 'https://firebase.google.com/docs/hosting/nextjs'
       },
     ],
+    status: 'NOT_STARTED',
   },
   {
     "id": "Sb8XWrxLMykaBU7oZEMH",
     "title": "Deploy a NodeJS App with a Firestore Database",
-    "technologies": ['CLOUD_RUN', 'FIRESTORE', 'CLOUD_STORAGE', 'OPERATIONS_SUITE'],
+    "technologies": ['cloud_run', 'firestore', 'cloud_storage'],
     "learningResources": [
       {
         "title": "Getting started with Node.js",
         "link": 'https://cloud.google.com/nodejs/getting-started'
       },
     ],
+    status: 'NOT_STARTED',
   },
 ];
 
@@ -55,7 +60,21 @@ export default function Component() {
             </li>
           ))}
         </ul>
-        {currentMission.technologies.join(', ')}
+        {currentMission.technologies.map(technology => (
+          <Image
+            key={technology}
+            src={`./google-cloud-icons/${technology}.svg`}
+            alt={`icon of ${technology}`}
+            width='50'
+            height='50'
+          />
+        ))}
+        {currentMission.status}
+        <button>
+          Complete
+          {' '}
+          {currentMission.title}
+        </button>
       </div>
     </>
   )
