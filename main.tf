@@ -20,8 +20,8 @@ resource "random_id" "bucket_prefix" {
 }
 
 resource "google_storage_bucket" "default" {
-  name     = "image-backend-bucket-${random_id.bucket_prefix.hex}"
-  project = var.project_id
+  name          = "image-backend-bucket-${random_id.bucket_prefix.hex}"
+  project       = var.project_id
   location      = "us-central1"
   storage_class = "REGIONAL"
   force_destroy = true
@@ -51,7 +51,7 @@ resource "google_compute_backend_bucket" "default" {
 # Cloud Run service and network endpoint group
 resource "google_cloud_run_v2_service" "default" {
   name     = "hello"
-  project = var.project_id
+  project  = var.project_id
   location = "us-central1"
   ingress  = "INGRESS_TRAFFIC_ALL"
 
@@ -90,7 +90,7 @@ resource "google_compute_region_network_endpoint_group" "default" {
 # TODO: Make into HTTPS
 # External HTTP loadbalancer
 resource "google_compute_global_address" "default" {
-  name = "reserved-ip"
+  name    = "reserved-ip"
   project = var.project_id
 }
 
