@@ -120,14 +120,14 @@ resource "google_compute_url_map" "default" {
   name            = "http-lb"
   default_service = google_compute_backend_service.default.id
   host_rule {
-    hosts        = ["mysite.com"]
-    path_matcher = "mysite"
+    hosts        = ["${google_compute_global_address.default.address}"]
+    path_matcher = "ip4addr"
   }
   path_matcher {
-    name            = "mysite"
-    default_service = google_compute_backend_bucket.default.id
+    name            = "ip4addr"
+    default_service = google_compute_backend_service.default.id
     path_rule {
-      paths   = ["/img"]
+      paths   = ["/img/*"]
       service = google_compute_backend_bucket.default.id
     }
   }
