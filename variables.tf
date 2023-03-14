@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,5 @@
 
 variable "project_id" {
   description = "The project ID to deploy to"
-  type        = string
-}
-
-variable "bucket_name" {
-  description = "The name of the bucket to create"
   type        = string
 }

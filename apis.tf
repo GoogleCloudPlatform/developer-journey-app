@@ -13,3 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+# Google Cloud Services to enable
+
+locals {
+  services = [
+    "run.googleapis.com"
+  ]
+}
+
+resource "google_project_service" "enabled" {
+  for_each                   = toset(local.services)
+  project                    = var.project_id
+  service                    = each.value
+  disable_dependent_services = true
+  disable_on_destroy         = false
+}
