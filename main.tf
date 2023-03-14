@@ -113,6 +113,15 @@ resource "google_compute_backend_service" "default" {
     negative_caching             = true
     serve_while_stale            = "86400"
     signed_url_cache_max_age_sec = 0
+    cache_key_policy {
+      include_host           = true
+      include_http_headers   = []
+      include_named_cookies  = []
+      include_protocol       = true
+      include_query_string   = true
+      query_string_blacklist = []
+      query_string_whitelist = []
+    }
   }
 }
 
