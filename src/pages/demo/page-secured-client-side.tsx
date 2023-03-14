@@ -1,20 +1,10 @@
-import {GetStaticPropsContext, GetStaticPropsResult} from "next";
-
-interface PropsData {
-  greeting: string,
-}
-
-// Next.js will call this function at build-time
-export async function getStaticProps(context: GetStaticPropsContext): Promise<GetStaticPropsResult<PropsData>> {
-  const data: PropsData = {
-    greeting: "Hello",
-  }
-
+// Static generation
+export async function getStaticProps() {
   return {
-    props: data,
+    props: {},
   };
 }
 
-export default function Page({greeting}: {greeting: string}) {
-  return <div>{greeting}! This page is <strong>secured</strong></div>;
+export default function Page() {
+  return <div>This client-side rendered page is <strong>secured</strong></div>;
 }
