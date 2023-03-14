@@ -1,7 +1,4 @@
-export class LearningResource {
-  title!: string;
-  link!: string;
-}
+import { LearningResource } from "./LearningResource";
 
 export class Mission {
   id!: string;

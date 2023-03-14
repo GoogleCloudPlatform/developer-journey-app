@@ -6,5 +6,5 @@
 
 export class User {
   userId!: string;
-  completedMissions!: Set<string>;
+  completedMissions!: string[];
 }
