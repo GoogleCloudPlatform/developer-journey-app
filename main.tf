@@ -146,3 +146,12 @@ resource "google_compute_global_forwarding_rule" "default" {
   target                = google_compute_target_http_proxy.default.id
   ip_address            = google_compute_global_address.default.id
 }
+
+# Firestore
+resource "google_firestore_database" "database" {
+  name                        = "(default)"
+  location_id                 = "nam5"
+  type                        = "FIRESTORE_NATIVE"
+  concurrency_mode            = "OPTIMISTIC"
+  app_engine_integration_mode = "DISABLED"
+}

@@ -18,7 +18,8 @@
 
 locals {
   services = [
-    "run.googleapis.com"
+    "run.googleapis.com",
+    "firestore.googleapis.com"
   ]
 }
 
