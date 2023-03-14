@@ -10,6 +10,6 @@ export class Mission {
   learningResources!: LearningResource[];
 
   // status is not stored in the database, it is calculated from the user object
-  status: "NOT_STARTED" | "IN_PROGRESS" | "COMPLETE" = "NOT_STARTED";
+  status!: string;
 }
 
