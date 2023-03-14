@@ -1,6 +1,8 @@
 import Head from 'next/head'
 import { Inter } from 'next/font/google'
 import styles from 'src/styles/Home.module.css'
+import Link from 'next/link';
+
 
 import MissionSelector from "../components/mission-selector";
 import LoginBtn from "../components/login-btn";
@@ -21,6 +23,9 @@ export default function Home() {
         <MissionSelector />
         <div>
           <LoginBtn/>
+        </div>
+        <div>
+          <Link href="/secure-page-example">Secure page example</Link>
         </div>
       </main>
     </>
