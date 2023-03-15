@@ -144,16 +144,28 @@ resource "google_compute_url_map" "default" {
 }
 
 resource "google_compute_target_http_proxy" "default" {
-  name    = "http-lb-proxy"
+  name    = "http-proxy"
   url_map = google_compute_url_map.default.id
 }
 
-resource "google_compute_global_forwarding_rule" "default" {
-  name                  = "http-lb-forwarding-rule"
-  ip_protocol           = "TCP"
+resource "google_compute_target_https_proxy" "default" {
+  name    = "https-proxy"
+  url_map = google_compute_url_map.default.id
+}
+
+resource "google_compute_global_forwarding_rule" "http" {
+  name                  = "http-forwarding-rule"
   load_balancing_scheme = "EXTERNAL_MANAGED"
   port_range            = "80"
   target                = google_compute_target_http_proxy.default.id
+  ip_address            = google_compute_global_address.default.id
+}
+
+resource "google_compute_global_forwarding_rule" "https" {
+  name                  = "https-forwarding-rule"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
+  port_range            = "443"
+  target                = google_compute_target_https_proxy.default.id
   ip_address            = google_compute_global_address.default.id
 }
 
