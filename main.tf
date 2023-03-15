@@ -87,7 +87,7 @@ resource "google_compute_region_network_endpoint_group" "default" {
     service = google_cloud_run_v2_service.default.name
   }
 }
-# TODO: Make into HTTPS
+
 # External HTTP loadbalancer
 resource "google_compute_global_address" "default" {
   name    = "reserved-ip"
@@ -95,16 +95,16 @@ resource "google_compute_global_address" "default" {
 }
 
 resource "google_compute_backend_service" "default" {
-  name       = "run-backend-service"
-  port_name  = "http"
-  protocol   = "HTTP"
+  name                  = "run-backend-service"
+  port_name             = "http"
+  protocol              = "HTTP"
   load_balancing_scheme = "EXTERNAL_MANAGED"
-  enable_cdn = true
+  enable_cdn            = true
   backend {
     group = google_compute_region_network_endpoint_group.default.id
   }
   log_config {
-    enable = true
+    enable      = true
     sample_rate = 1
   }
   cdn_policy {
