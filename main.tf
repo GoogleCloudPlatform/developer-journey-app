@@ -94,6 +94,12 @@ resource "google_compute_global_address" "default" {
   project = var.project_id
 }
 
+resource "google_compute_global_address" "temp" {
+  name    = "reserved-ip-temp"
+  project = var.project_id
+}
+
+
 resource "google_compute_backend_service" "default" {
   name                  = "run-backend-service"
   port_name             = "http"
@@ -144,9 +150,17 @@ resource "google_compute_url_map" "default" {
   }
 }
 
+resource "google_compute_url_map" "https_redirect" {
+  name = "https-redirect"
+  default_url_redirect {
+    https_redirect         = true
+    redirect_response_code = "MOVED_PERMANENTLY_DEFAULT"
+    strip_query            = false
+  }
+}
 resource "google_compute_target_http_proxy" "default" {
   name    = "http-proxy"
-  url_map = google_compute_url_map.default.id
+  url_map = google_compute_url_map.https_redirect.id
 }
 
 resource "google_compute_target_https_proxy" "default" {
