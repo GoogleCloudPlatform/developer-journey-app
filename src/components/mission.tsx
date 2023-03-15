@@ -2,6 +2,9 @@ import Image from 'next/image'
 import { Mission } from "src/models/Mission";
 import styles from 'src/styles/Mission.module.css'
 
+import GameControls from "../components/game-controls";
+import TileBoard from "../components/tile-board";
+
 export default function Component() {
   const missions: Mission[] = [
     {
@@ -33,27 +36,6 @@ export default function Component() {
 
   return (
     <>
-      <section className={styles.content}>
-        <h2>Tiles</h2>
-      </section>
-      <section className={styles.controls}>
-        <h2>Controls</h2>
-        <div>WASD</div>
-      </section>
-      <section className={styles.inventory}>
-        <h2>Inventory</h2>
-        <div>
-          {currentMission.technologies.map(technology => (
-            <Image
-              key={technology}
-              src={`./google-cloud-icons/${technology}.svg`}
-              alt={`icon of ${technology}`}
-              width='50'
-              height='50'
-            />
-          ))}
-        </div>
-      </section>
       <section className={styles.prompts}>
         <ul>
           <li>
@@ -77,6 +59,22 @@ export default function Component() {
             </li>
           ))}
         </ul>
+      </section>
+      <TileBoard />
+      <GameControls />
+      <section className={styles.inventory}>
+        <h2>Inventory</h2>
+        <div>
+          {currentMission.technologies.map(technology => (
+            <Image
+              key={technology}
+              src={`./google-cloud-icons/${technology}.svg`}
+              alt={`icon of ${technology}`}
+              width='50'
+              height='50'
+            />
+          ))}
+        </div>
       </section>
       <footer className={styles.footer}>
         Mission Selector:

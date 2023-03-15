@@ -1,20 +1,32 @@
-.content {
-  grid-area: content;
+.tileBoard {
+  grid-area: tileBoard;
   background-color: #20bf6b;
   padding: 20px;
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(3, 1fr);
 }
+
+.tile {
+  height: 40px;
+  background-color: #ccc;
+}
+
 .prompts {
   grid-area: prompts;
   background-color: #45aaf2;
 }
+
 .controls {
   grid-area: controls;
   background-color: #fec1f7;
 }
+
 .inventory {
   grid-area: inventory;
   background-color: #fef697;
 }
+
 .footer {
   padding: 20px;
   grid-area: footer;
