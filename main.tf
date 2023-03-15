@@ -104,6 +104,7 @@ resource "google_compute_backend_service" "default" {
     group = google_compute_region_network_endpoint_group.default.id
   }
   log_config {
+    enable = true
     sample_rate = 1
   }
   cdn_policy {
@@ -151,6 +152,19 @@ resource "google_compute_target_http_proxy" "default" {
 resource "google_compute_target_https_proxy" "default" {
   name    = "https-proxy"
   url_map = google_compute_url_map.default.id
+
+  ssl_certificates = [google_compute_managed_ssl_certificate.default.id]
+  # certificate_map  = 
+  # ssl_policy       = 
+  # quic_override    = 
+}
+
+resource "google_compute_managed_ssl_certificate" "default" {
+  name = "test-ssl-certificate"
+
+  managed {
+    domains = ["example.com."]
+  }
 }
 
 resource "google_compute_global_forwarding_rule" "http" {
@@ -170,10 +184,10 @@ resource "google_compute_global_forwarding_rule" "https" {
 }
 
 # Firestore
-resource "google_firestore_database" "database" {
-  name                        = "(default)"
-  location_id                 = "nam5"
-  type                        = "FIRESTORE_NATIVE"
-  concurrency_mode            = "OPTIMISTIC"
-  app_engine_integration_mode = "DISABLED"
-}
+# resource "google_firestore_database" "database" {
+#   name                        = "(default)"
+#   location_id                 = "nam5"
+#   type                        = "FIRESTORE_NATIVE"
+#   concurrency_mode            = "OPTIMISTIC"
+#   app_engine_integration_mode = "DISABLED"
+# }
