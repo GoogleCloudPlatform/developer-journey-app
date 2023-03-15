@@ -98,6 +98,7 @@ resource "google_compute_backend_service" "default" {
   name       = "run-backend-service"
   port_name  = "http"
   protocol   = "HTTP"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
   enable_cdn = true
   backend {
     group = google_compute_region_network_endpoint_group.default.id
@@ -150,7 +151,7 @@ resource "google_compute_target_http_proxy" "default" {
 resource "google_compute_global_forwarding_rule" "default" {
   name                  = "http-lb-forwarding-rule"
   ip_protocol           = "TCP"
-  load_balancing_scheme = "EXTERNAL"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
   port_range            = "80"
   target                = google_compute_target_http_proxy.default.id
   ip_address            = google_compute_global_address.default.id
