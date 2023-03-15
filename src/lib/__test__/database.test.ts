@@ -2,32 +2,42 @@ import {Firestore} from "@google-cloud/firestore";
 import {Database} from "../database";
 import {User} from "../../models/User";
 
+const directDatabaseConnectionForTestReset = new Firestore({
+  projectId: "birds-of-paradise",
+  // keyFilename: '/path/to/keyfile.json',
+});
+
 describe("database tests", () => {
   let fs: Database;
 
   beforeAll(async () => {
+    await directDatabaseConnectionForTestReset.collection('users').doc('Bob').delete()
     fs = new Database();
   })
 
-  it.skip("should pass (just a placeholder)", () => {
-    expect(true).toBeTruthy();
+  it("should add and get a user", async () => {
+    await fs.setUser({userId: 'Bob'});
+    const user = await fs.getUser({userId: 'Bob'});
+
+    expect(user).toEqual({ userId: "Bob", completedMissions: [] });
   });
 
-  it("should add a doc", async () => {
+  it("should add completed missions", async () => {
+    await fs.setUser({userId: 'Bob'});
+    await fs.addCompletedMission({userId: 'Bob', missionId: 'Mission0001aweifjwek'});
+    const firstUserResponse = await fs.getUser({userId: 'Bob'});
 
-    const docRef = fs.db.collection('users').doc("bob");
-
-    await docRef.set({
-      userId: "1",
-      email: "bob@example.com",
+    expect(firstUserResponse).toEqual({
+      "userId": "Bob",
+      completedMissions: ['Mission0001aweifjwek']
     });
 
-    const snapshot = await fs.db.collection('users').get();
-    snapshot.forEach((doc) => {
-      console.log(doc.id, '=>', doc.data());
-    });
+    await fs.addCompletedMission({userId: 'Bob', missionId: 'Mission0002aweifjwek'});
+    const secondUserResponse = await fs.getUser({userId: 'Bob'});
 
-    expect(snapshot.size).toEqual(1);
-    await fs.db.collection("users").doc("bob").delete()
+    expect(secondUserResponse).toEqual({
+      "userId": "Bob",
+      completedMissions: ['Mission0001aweifjwek', 'Mission0002aweifjwek']
+    });
   });
 });
