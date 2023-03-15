@@ -5,6 +5,7 @@ import { Database } from "../lib/database";
 import { FieldValue } from "@google-cloud/firestore";
 import { initializeApp } from "firebase/app";
 import { getFirestore, setDoc, arrayUnion, connectFirestoreEmulator } from "firebase/firestore";
+import styles from 'src/styles/Mission.module.css'
 
 const app = initializeApp({
   projectId: "birds-of-paradise",
@@ -17,15 +18,6 @@ const db = getFirestore(app);
 connectFirestoreEmulator(db, 'localhost', 9999);
 
 import { doc, getDoc } from "firebase/firestore";
-
-const docRef = doc(db, "user", "carl");
-
-const completeMission = (currentMissionId: string) => {
-  setDoc(docRef, {
-    completedMissions: arrayUnion(currentMissionId)
-  }, {merge: true});
-  console.log({ currentMissionId })
-}
 
 export default function Component() {
   const [missions, setMissions] = useState<Mission[]>([
@@ -55,13 +47,21 @@ export default function Component() {
     },
   ]);
   const [currentMission, setCurrentMission] = useState(missions[0]);
-  const [user, setUser] = useState({});
-  useEffect(() => {
+
+  const docRef = doc(db, "user", "luke");
+
+  const completeMission = (currentMissionId: string) => {
+    setDoc(docRef, {
+      completedMissions: arrayUnion(currentMissionId)
+    }, { merge: true }).then(getMissions);
+    console.log({ currentMissionId })
+  }
+
+  const getMissions = () => {
     getDoc(docRef).then((response) => {
       if (response.exists()) {
         const newUser = response.data();
         console.log("Document data:", newUser);
-        setUser(newUser);
         const missionsWithStatuses = missions.map(mission => ({
           ...mission,
           status: newUser.completedMissions.includes(mission.id) ? 'COMPLETE' : 'NOT_STARTED',
@@ -73,28 +73,55 @@ export default function Component() {
         console.log("No such document!");
       }
     });
+  }
+
+  useEffect(() => {
+    getMissions();
   }, []);
 
   return (
     <>
-      <pre>
-        {JSON.stringify(missions, null, 2)}
-      </pre>
-      {missions.map(mission => (
-        <div key={mission.id}>
-          <button onClick={() => setCurrentMission(mission)}>
-            {mission.title}
+      <section className={styles.content}>
+        <h2>Tiles</h2>
+        <div>
+          <button onClick={() => completeMission(currentMission.id)}>
+            Complete
+            {' '}
+            {currentMission.title}
           </button>
         </div>
-      ))}
-      <h2>{currentMission.title}</h2>
-
-      <div>
-        The technolgies involved are:
-        {currentMission.technologies.join(', ')}
-      </div>
-
-      <div>
+      </section>
+      <section className={styles.controls}>
+        <h2>Controls</h2>
+        <div>WASD</div>
+      </section>
+      <section className={styles.inventory}>
+        <h2>Inventory</h2>
+        <div>
+          {currentMission.technologies.map(technology => (
+            <Image
+              key={technology}
+              src={`./google-cloud-icons/${technology}.svg`}
+              alt={`icon of ${technology}`}
+              width='50'
+              height='50'
+            />
+          ))}
+        </div>
+      </section>
+      <section className={styles.prompts}>
+        <ul>
+          <li>
+            Welcome to
+            {': '}
+            {currentMission.title}
+          </li>
+          <li>
+            Status:
+            {' '}
+            {currentMission.status}
+          </li>
+        </ul>
         To learn more, check out these learning resources:
         <ul>
           {currentMission.learningResources.map(learningResource => (
@@ -105,22 +132,17 @@ export default function Component() {
             </li>
           ))}
         </ul>
-        {currentMission.technologies.map(technology => (
-          <Image
-            key={technology}
-            src={`./google-cloud-icons/${technology}.svg`}
-            alt={`icon of ${technology}`}
-            width='50'
-            height='50'
-          />
+      </section>
+      <footer className={styles.footer}>
+        Mission Selector:
+        {missions.map(mission => (
+          <div key={mission.id}>
+            <button onClick={() => setCurrentMission(mission)}>
+              {mission.title}
+            </button>
+          </div>
         ))}
-        {currentMission.status}
-        <button onClick={() => completeMission(currentMission.id)}>
-          Complete
-          {' '}
-          {currentMission.title}
-        </button>
-      </div>
+      </footer>
     </>
   )
 }

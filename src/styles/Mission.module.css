@@ -1,0 +1,22 @@
+.content {
+  grid-area: content;
+  background-color: #20bf6b;
+  padding: 20px;
+}
+.prompts {
+  grid-area: prompts;
+  background-color: #45aaf2;
+}
+.controls {
+  grid-area: controls;
+  background-color: #fec1f7;
+}
+.inventory {
+  grid-area: inventory;
+  background-color: #fef697;
+}
+.footer {
+  padding: 20px;
+  grid-area: footer;
+  background-color: #fd9644;
+}

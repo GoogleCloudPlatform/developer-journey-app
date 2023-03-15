@@ -4,7 +4,7 @@ import styles from 'src/styles/Home.module.css'
 import Link from 'next/link';
 
 
-import MissionSelector from "../components/mission-selector";
+import Mission from "../components/mission";
 import LoginBtn from "../components/login-btn";
 
 export default function Home() {
@@ -16,13 +16,14 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.center}>
+
+      <main className={styles.wrapper}>
+        <header className={styles.header}>
           Google Cloud head start app for JavaScript - Developer App Journey
-        </div>
-        <MissionSelector />
+        </header>
+        <Mission />
         <div>
-          <LoginBtn/>
+          <LoginBtn />
         </div>
         <div>
           <Link href="/secure-page-example">Secure page example</Link>
