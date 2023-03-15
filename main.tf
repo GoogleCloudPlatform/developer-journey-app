@@ -88,17 +88,37 @@ resource "google_compute_region_network_endpoint_group" "default" {
   }
 }
 
-# External HTTP loadbalancer
+### External loadbalancer ###
 resource "google_compute_global_address" "default" {
   name    = "reserved-ip"
   project = var.project_id
 }
 
-resource "google_compute_global_address" "temp" {
-  name    = "reserved-ip-temp"
-  project = var.project_id
+resource "google_compute_url_map" "default" {
+  name            = "https-load-balancer"
+  default_service = google_compute_backend_service.default.id
+  host_rule {
+    hosts        = ["${google_compute_global_address.default.address}"]
+    path_matcher = "ip4addr"
+  }
+  path_matcher {
+    name            = "ip4addr"
+    default_service = google_compute_backend_service.default.id
+    path_rule {
+      paths   = ["/assets/*"]
+      service = google_compute_backend_bucket.default.id
+    }
+  }
 }
 
+resource "google_compute_url_map" "https_redirect" {
+  name = "http-https-redirect"
+  default_url_redirect {
+    https_redirect         = true
+    redirect_response_code = "MOVED_PERMANENTLY_DEFAULT"
+    strip_query            = false
+  }
+}
 
 resource "google_compute_backend_service" "default" {
   name                  = "run-backend-service"
@@ -133,31 +153,6 @@ resource "google_compute_backend_service" "default" {
   }
 }
 
-resource "google_compute_url_map" "default" {
-  name            = "http-lb"
-  default_service = google_compute_backend_service.default.id
-  host_rule {
-    hosts        = ["${google_compute_global_address.default.address}"]
-    path_matcher = "ip4addr"
-  }
-  path_matcher {
-    name            = "ip4addr"
-    default_service = google_compute_backend_service.default.id
-    path_rule {
-      paths   = ["/assets/*"]
-      service = google_compute_backend_bucket.default.id
-    }
-  }
-}
-
-resource "google_compute_url_map" "https_redirect" {
-  name = "https-redirect"
-  default_url_redirect {
-    https_redirect         = true
-    redirect_response_code = "MOVED_PERMANENTLY_DEFAULT"
-    strip_query            = false
-  }
-}
 resource "google_compute_target_http_proxy" "default" {
   name    = "http-proxy"
   url_map = google_compute_url_map.https_redirect.id
