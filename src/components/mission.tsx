@@ -3,6 +3,7 @@ import { Mission } from "src/models/Mission";
 import styles from 'src/styles/Mission.module.css'
 
 import GameControls from "../components/game-controls";
+import TileBoard from "../components/tile-board";
 
 export default function Component() {
   const missions: Mission[] = [
@@ -59,9 +60,7 @@ export default function Component() {
           ))}
         </ul>
       </section>
-      <section className={styles.content}>
-        <h2>Tiles</h2>
-      </section>
+      <TileBoard />
       <GameControls />
       <section className={styles.inventory}>
         <h2>Inventory</h2>
