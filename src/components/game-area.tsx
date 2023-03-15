@@ -1,20 +1,12 @@
 import Head from 'next/head'
 import styles from 'src/styles/Home.module.css'
 import Link from 'next/link';
-import { useAppSelector, useAppDispatch } from '../redux/hooks'
-import { moveUp, moveDown, moveLeft, moveRight } from '../redux/playerPositionSlice'
-
-// Redux
-import { RootState } from '../redux/store'
 
 // Components
 import Mission from "../components/mission";
 import LoginBtn from "../components/login-btn";
 
 export default function Home() {
-  const count = useAppSelector((state: RootState) => state.playerPosition)
-  const dispatch = useAppDispatch()
-
   return (
     <>
       <Head>
@@ -36,36 +28,6 @@ export default function Home() {
           <Link href="/secure-page-example">Secure page example</Link>
         </div>
       </main>
-
-      <div>
-        <div>
-          <span>{JSON.stringify(count)}</span>
-          <button
-            aria-label="Move player up"
-            onClick={() => dispatch(moveUp())}
-          >
-            Move up
-          </button>
-          <button
-            aria-label="Move player down"
-            onClick={() => dispatch(moveDown())}
-          >
-            Move down
-          </button>
-          <button
-            aria-label="Move player left"
-            onClick={() => dispatch(moveLeft())}
-          >
-            Move left
-          </button>
-          <button
-            aria-label="Move player right"
-            onClick={() => dispatch(moveRight())}
-          >
-            Move right
-          </button>
-        </div>
-      </div>
     </>
   )
 }
