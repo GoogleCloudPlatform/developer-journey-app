@@ -138,7 +138,7 @@ resource "google_compute_url_map" "default" {
     name            = "ip4addr"
     default_service = google_compute_backend_service.default.id
     path_rule {
-      paths   = ["/img/*"]
+      paths   = ["/assets/*"]
       service = google_compute_backend_bucket.default.id
     }
   }
