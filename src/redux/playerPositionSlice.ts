@@ -1,13 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
-// Define a type for the slice state
-interface playerPositionState {
-  x: number
-  y: number
-}
+import { createSlice } from '@reduxjs/toolkit'
+import { GridPosition } from 'src/models/GridPosition'
 
 // Define the initial state using that type
-const initialState: playerPositionState = {
+const initialState: GridPosition = {
   x: 0,
   y: 0
 }

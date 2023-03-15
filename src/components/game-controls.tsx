@@ -19,7 +19,7 @@ export default function Component() {
       case 'd':
         return dispatch(moveRight())
     }
-    console.log({keyCode})
+
     switch (keyCode) {
       case 38:
         return dispatch(moveUp())
