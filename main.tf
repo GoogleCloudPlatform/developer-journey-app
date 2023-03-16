@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 locals {
-  client_id    = "client_id_value"
   nextauth_url = "http://${google_compute_global_address.default.address}"
 }
 
@@ -57,6 +56,10 @@ resource "random_id" "client_secret" {
   byte_length = 32
 }
 
+resource "random_id" "client_id" {
+  byte_length = 32
+}
+
 resource "random_id" "nextauth_secret" {
   byte_length = 32
 }
@@ -75,7 +78,27 @@ resource "google_secret_manager_secret_version" "client_secret" {
 
 resource "google_secret_manager_secret_iam_binding" "client_secret" {
   secret_id = google_secret_manager_secret.client_secret.secret_id
-  role = "roles/secretmanager.secretAccessor"
+  role      = "roles/secretmanager.secretAccessor"
+  members = [
+    "serviceAccount:${google_service_account.cloud_run.email}",
+  ]
+}
+
+resource "google_secret_manager_secret" "client_id" {
+  secret_id = "google-client-id"
+  replication {
+    automatic = true
+  }
+}
+
+resource "google_secret_manager_secret_version" "client_id" {
+  secret      = google_secret_manager_secret.client_id.id
+  secret_data = random_id.client_id.b64_std
+}
+
+resource "google_secret_manager_secret_iam_binding" "client_id" {
+  secret_id = google_secret_manager_secret.client_id.secret_id
+  role      = "roles/secretmanager.secretAccessor"
   members = [
     "serviceAccount:${google_service_account.cloud_run.email}",
   ]
@@ -95,7 +118,7 @@ resource "google_secret_manager_secret_version" "nextauth_secret" {
 
 resource "google_secret_manager_secret_iam_binding" "nextauth_secret" {
   secret_id = google_secret_manager_secret.nextauth_secret.secret_id
-  role = "roles/secretmanager.secretAccessor"
+  role      = "roles/secretmanager.secretAccessor"
   members = [
     "serviceAccount:${google_service_account.cloud_run.email}",
   ]
@@ -118,12 +141,17 @@ resource "google_cloud_run_v2_service" "default" {
     containers {
       image = "us-docker.pkg.dev/cloudrun/container/hello"
       env {
-        name  = "GOOGLE_CLIENT_ID"
-        value = local.client_id
-      }
-      env {
         name  = "NEXTAUTH_URL"
         value = local.nextauth_url
+      }
+      env {
+        name = "GOOGLE_CLIENT_ID"
+        value_source {
+          secret_key_ref {
+            secret  = google_secret_manager_secret.client_id.secret_id
+            version = "latest"
+          }
+        }
       }
       env {
         name = "GOOGLE_CLIENT_SECRET"
