@@ -1,38 +1,16 @@
 import Image from 'next/image'
 import { Mission } from "src/models/Mission";
+import { useAppSelector } from 'src/redux/hooks';
+import { RootState } from 'src/redux/store';
 import styles from 'src/styles/Mission.module.css'
 
 import GameControls from "../components/game-controls";
 import TileBoard from "../components/tile-board";
+import Inventory from "../components/inventory";
+import { LearningResource } from 'src/models/LearningResource';
 
 export default function Component() {
-  const missions: Mission[] = [
-    {
-      "id": "AsEOyVuuSPdAAf1ZKhSU",
-      "title": "Deploy a NextJS App with a Firestore Database",
-      "technologies": ['cloud_run', 'firestore'],
-      "learningResources": [
-        {
-          "title": "Integrate Next.js",
-          "link": 'https://firebase.google.com/docs/hosting/nextjs'
-        },
-      ],
-      status: 'NOT_STARTED',
-    },
-    {
-      "id": "Sb8XWrxLMykaBU7oZEMH",
-      "title": "Deploy a NodeJS App with a Firestore Database",
-      "technologies": ['cloud_run', 'firestore', 'cloud_storage'],
-      "learningResources": [
-        {
-          "title": "Getting started with Node.js",
-          "link": 'https://cloud.google.com/nodejs/getting-started'
-        },
-      ],
-      status: 'NOT_STARTED',
-    },
-  ];
-  const currentMission = missions[0];
+  const currentMission = useAppSelector((state: RootState) => state.mission)
 
   return (
     <>
@@ -51,7 +29,7 @@ export default function Component() {
         </ul>
         To learn more, check out these learning resources:
         <ul>
-          {currentMission.learningResources.map(learningResource => (
+          {currentMission.learningResources.map((learningResource: LearningResource) => (
             <li key={learningResource.link}>
               <a href={learningResource.link}>
                 {learningResource.title}
@@ -62,20 +40,7 @@ export default function Component() {
       </section>
       <TileBoard />
       <GameControls />
-      <section className={styles.inventory}>
-        <h2>Inventory</h2>
-        <div>
-          {currentMission.technologies.map(technology => (
-            <Image
-              key={technology}
-              src={`./google-cloud-icons/${technology}.svg`}
-              alt={`icon of ${technology}`}
-              width='50'
-              height='50'
-            />
-          ))}
-        </div>
-      </section>
+      <Inventory />
       <footer className={styles.footer}>
         Mission Selector:
       </footer>
