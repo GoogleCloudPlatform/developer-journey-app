@@ -7,6 +7,8 @@ import { moveUp, moveDown, moveLeft, moveRight } from '../redux/playerPositionSl
 import { useEffect } from 'react';
 
 export default function Component() {
+  const playerPosition = useAppSelector((state: RootState) => state.playerPosition)
+  const dispatch = useAppDispatch()
 
   function keyPressHandler({ key, keyCode }: any) {
     switch (key) {
@@ -39,9 +41,6 @@ export default function Component() {
       window.removeEventListener("keydown", keyPressHandler);
     };
   }, []); // Empty array ensures that effect is only run on mount and unmount
-
-  const playerPosition = useAppSelector((state: RootState) => state.playerPosition)
-  const dispatch = useAppDispatch()
 
   return (
     <section className={styles.controls}>
