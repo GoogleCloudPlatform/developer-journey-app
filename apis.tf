@@ -19,7 +19,8 @@
 locals {
   services = [
     "run.googleapis.com",
-    "firestore.googleapis.com"
+    "firestore.googleapis.com",
+    "secretmanager.googleapis.com"
   ]
 }
 

@@ -51,6 +51,30 @@ resource "google_compute_backend_bucket" "default" {
     serve_while_stale = 86400
   }
 }
+# Secret Manager resources
+resource "google_secret_manager_secret" "client_secret" {
+  secret_id = "google-client-secret"
+  replication {
+    automatic = true
+  }
+}
+
+resource "google_secret_manager_secret_version" "client_secret" {
+  secret      = google_secret_manager_secret.client_secret.id
+  secret_data = "secret-data"
+}
+
+resource "google_secret_manager_secret" "nextauth_secret" {
+  secret_id = "nextauth-secret"
+  replication {
+    automatic = true
+  }
+}
+
+resource "google_secret_manager_secret_version" "nextauth_secret" {
+  secret      = google_secret_manager_secret.client_secret.id
+  secret_data = "secret-data"
+}
 
 # Cloud Run service and network endpoint group
 resource "google_cloud_run_v2_service" "default" {
