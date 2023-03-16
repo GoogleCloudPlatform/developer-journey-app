@@ -9,8 +9,8 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Birds of Paradise</title>
-        <meta name="description" content="Google Cloud head start app for JavaScript" />
+        <title>Developer Journey App</title>
+        <meta name="description" content="Google Cloud Developer Journey App for JavaScript" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

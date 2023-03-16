@@ -7,7 +7,7 @@ import LoginBtn from "./login-btn";
 export default function Home() {
   return (
     <header className={styles.header}>
-      Google Cloud head start app for JavaScript - Developer App Journey
+      Developer App Journey
       <div>
         <LoginBtn />
       </div>
