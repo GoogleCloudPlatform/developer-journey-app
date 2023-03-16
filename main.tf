@@ -81,7 +81,7 @@ resource "google_secret_manager_secret" "nextauth_secret" {
 }
 
 resource "google_secret_manager_secret_version" "nextauth_secret" {
-  secret      = google_secret_manager_secret.client_secret.id
+  secret      = google_secret_manager_secret.nextauth_secret.id
   secret_data = random_id.nextauth_secret.b64_std
 }
 
