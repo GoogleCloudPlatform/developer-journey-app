@@ -1,10 +1,9 @@
 import Head from 'next/head'
 import styles from 'src/styles/Home.module.css'
-import Link from 'next/link';
 
 // Components
 import Mission from "../components/mission";
-import LoginBtn from "../components/login-btn";
+import Header from "../components/header";
 
 export default function Home() {
   return (
@@ -17,16 +16,8 @@ export default function Home() {
       </Head>
 
       <main className={styles.wrapper}>
-        <header className={styles.header}>
-          Google Cloud head start app for JavaScript - Developer App Journey
-        </header>
+        <Header />
         <Mission />
-        <div>
-          <LoginBtn />
-        </div>
-        <div>
-          <Link href="/secure-page-example">Secure page example</Link>
-        </div>
       </main>
     </>
   )

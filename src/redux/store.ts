@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import missionSlice from './missionSlice'
 import playerPositionReducer from './playerPositionSlice'
+import userSlice from './userSlice'
 
 export const store = configureStore({
   reducer: {
     playerPosition: playerPositionReducer,
     mission: missionSlice,
+    user: userSlice,
   }
 })
 

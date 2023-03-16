@@ -6,7 +6,7 @@ import { missions } from 'src/initialData.ts/missions'
 const initialState: Mission = missions[0];
 
 export const playerPositionSlice = createSlice({
-  name: 'playerPosition',
+  name: 'mission',
   initialState,
   reducers: {
     nextMission: state => {

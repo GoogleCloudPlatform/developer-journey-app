@@ -7,6 +7,7 @@ import styles from 'src/styles/Mission.module.css'
 import GameControls from "../components/game-controls";
 import TileBoard from "../components/tile-board";
 import Inventory from "../components/inventory";
+import MissionSelector from "../components/mission-selector";
 import { LearningResource } from 'src/models/LearningResource';
 
 export default function Component() {
@@ -41,9 +42,7 @@ export default function Component() {
       <TileBoard />
       <GameControls />
       <Inventory />
-      <footer className={styles.footer}>
-        Mission Selector:
-      </footer>
+      <MissionSelector />
     </>
   )
 }

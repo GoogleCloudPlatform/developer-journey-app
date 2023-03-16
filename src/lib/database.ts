@@ -11,31 +11,31 @@ export class Database {
     });
   }
 
-  
-  async setUser({userId} :any): Promise<any> {
-    const userDoc = this.db.collection('users').doc(userId);
+  async setUser({email, completedMissions} :any): Promise<any> {
+    const userDoc = this.db.collection('users').doc(email);
     
     return userDoc.set({
-      userId,
+      email,
+      completedMissions: completedMissions || [],
     }, {merge: true});
   }
 
-  async getUser({userId}: any): Promise<User> {
-    const userDoc = this.db.collection('users').doc(userId);
+  async getUser({email}: any): Promise<User> {
+    const userDoc = this.db.collection('users').doc(email);
     const snapshot = await userDoc.get();
     const completedMissions = snapshot.data()?.completedMissions || [];
-    
-    return { userId, completedMissions }
+
+    return { email, completedMissions }
   }
 
-  async addCompletedMission({userId, missionId} :any): Promise<any> {
-    const userDoc = this.db.collection('users').doc(userId);
-    const { completedMissions } = await this.getUser({userId});
+  async addCompletedMission({email, missionId} :any): Promise<any> {
+    const { completedMissions } = await this.getUser({email});
     const updatedMissions = [ ...completedMissions, missionId ]
 
     
-    return userDoc.set({
+    return this.setUser({
+      email,
       completedMissions: updatedMissions,
-    }, {merge: true});
+    });
   }
 }
