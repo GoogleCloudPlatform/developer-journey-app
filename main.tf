@@ -15,7 +15,7 @@
  */
 locals {
   client_id    = "client_id_value"
-  nextauth_url = "nextauth_url_value"
+  nextauth_url = "http://${google_compute_global_address.default.address}"
 }
 
 # GCS bucket
