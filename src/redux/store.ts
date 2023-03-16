@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
+import missionSlice from './missionSlice'
 import playerPositionReducer from './playerPositionSlice'
 
 export const store = configureStore({
   reducer: {
     playerPosition: playerPositionReducer,
+    mission: missionSlice,
   }
 })
 
