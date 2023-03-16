@@ -73,6 +73,14 @@ resource "google_secret_manager_secret_version" "client_secret" {
   secret_data = random_id.client_secret.b64_std
 }
 
+resource "google_secret_manager_secret_iam_binding" "client_secret" {
+  secret_id = google_secret_manager_secret.client_secret.secret_id
+  role = "roles/secretmanager.secretAccessor"
+  members = [
+    "serviceAccount:${google_service_account.cloud_run.email}",
+  ]
+}
+
 resource "google_secret_manager_secret" "nextauth_secret" {
   secret_id = "nextauth-secret"
   replication {
@@ -85,7 +93,21 @@ resource "google_secret_manager_secret_version" "nextauth_secret" {
   secret_data = random_id.nextauth_secret.b64_std
 }
 
-# Cloud Run service and network endpoint group
+resource "google_secret_manager_secret_iam_binding" "nextauth_secret" {
+  secret_id = google_secret_manager_secret.nextauth_secret.secret_id
+  role = "roles/secretmanager.secretAccessor"
+  members = [
+    "serviceAccount:${google_service_account.cloud_run.email}",
+  ]
+}
+
+# Cloud Run service resources and network endpoint group
+
+resource "google_service_account" "cloud_run" {
+  account_id   = "cloud-run-service-account"
+  display_name = "Service account for Cloud Run."
+}
+
 resource "google_cloud_run_v2_service" "default" {
   name     = "hello"
   project  = var.project_id
@@ -136,6 +158,7 @@ resource "google_cloud_run_v2_service" "default" {
         }
       }
     }
+    service_account = google_service_account.cloud_run.email
   }
 }
 
