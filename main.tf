@@ -95,7 +95,7 @@ resource "google_compute_global_address" "default" {
 }
 
 resource "google_compute_url_map" "default" {
-  name            = "https-load-balancer"
+  name            = "http-load-balancer"
   default_service = google_compute_backend_service.default.id
   host_rule {
     hosts        = ["${google_compute_global_address.default.address}"]
@@ -108,15 +108,6 @@ resource "google_compute_url_map" "default" {
       paths   = ["/assets/*"]
       service = google_compute_backend_bucket.default.id
     }
-  }
-}
-
-resource "google_compute_url_map" "https_redirect" {
-  name = "http-https-redirect"
-  default_url_redirect {
-    https_redirect         = true
-    redirect_response_code = "MOVED_PERMANENTLY_DEFAULT"
-    strip_query            = false
   }
 }
 
@@ -155,25 +146,7 @@ resource "google_compute_backend_service" "default" {
 
 resource "google_compute_target_http_proxy" "default" {
   name    = "http-proxy"
-  url_map = google_compute_url_map.https_redirect.id
-}
-
-resource "google_compute_target_https_proxy" "default" {
-  name    = "https-proxy"
   url_map = google_compute_url_map.default.id
-
-  ssl_certificates = [google_compute_managed_ssl_certificate.default.id]
-  # certificate_map  = 
-  # ssl_policy       = 
-  # quic_override    = 
-}
-
-resource "google_compute_managed_ssl_certificate" "default" {
-  name = "test-ssl-certificate"
-
-  managed {
-    domains = ["example.com."]
-  }
 }
 
 resource "google_compute_global_forwarding_rule" "http" {
@@ -181,14 +154,6 @@ resource "google_compute_global_forwarding_rule" "http" {
   load_balancing_scheme = "EXTERNAL_MANAGED"
   port_range            = "80"
   target                = google_compute_target_http_proxy.default.id
-  ip_address            = google_compute_global_address.default.id
-}
-
-resource "google_compute_global_forwarding_rule" "https" {
-  name                  = "https-forwarding-rule"
-  load_balancing_scheme = "EXTERNAL_MANAGED"
-  port_range            = "443"
-  target                = google_compute_target_https_proxy.default.id
   ip_address            = google_compute_global_address.default.id
 }
 
