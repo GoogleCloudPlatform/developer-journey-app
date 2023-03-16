@@ -13,6 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+locals {
+  client_id    = "client_id_value"
+  nextauth_url = "nextauth_url_value"
+}
 
 # GCS bucket
 resource "random_id" "bucket_prefix" {
@@ -58,6 +62,28 @@ resource "google_cloud_run_v2_service" "default" {
   template {
     containers {
       image = "us-docker.pkg.dev/cloudrun/container/hello"
+      env {
+        name  = "GOOGLE_CLIENT_ID"
+        value = local.client_id
+      }
+      env {
+        name  = "NEXTAUTH_URL"
+        value = local.nextauth_url
+      }
+      startup_probe {
+        initial_delay_seconds = 0
+        timeout_seconds       = 1
+        period_seconds        = 3
+        failure_threshold     = 1
+        tcp_socket {
+          port = 8080
+        }
+      }
+      liveness_probe {
+        http_get {
+          path = "/"
+        }
+      }
     }
   }
 }
