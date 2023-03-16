@@ -52,6 +52,15 @@ resource "google_compute_backend_bucket" "default" {
   }
 }
 # Secret Manager resources
+
+resource "random_id" "client_secret" {
+  byte_length = 32
+}
+
+resource "random_id" "nextauth_secret" {
+  byte_length = 32
+}
+
 resource "google_secret_manager_secret" "client_secret" {
   secret_id = "google-client-secret"
   replication {
@@ -61,7 +70,7 @@ resource "google_secret_manager_secret" "client_secret" {
 
 resource "google_secret_manager_secret_version" "client_secret" {
   secret      = google_secret_manager_secret.client_secret.id
-  secret_data = "secret-data"
+  secret_data = random_id.client_secret.b64_std
 }
 
 resource "google_secret_manager_secret" "nextauth_secret" {
@@ -73,7 +82,7 @@ resource "google_secret_manager_secret" "nextauth_secret" {
 
 resource "google_secret_manager_secret_version" "nextauth_secret" {
   secret      = google_secret_manager_secret.client_secret.id
-  secret_data = "secret-data"
+  secret_data = random_id.nextauth_secret.b64_std
 }
 
 # Cloud Run service and network endpoint group
