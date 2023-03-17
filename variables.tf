@@ -18,3 +18,9 @@ variable "project_id" {
   description = "The project ID to deploy to"
   type        = string
 }
+
+variable "enable_apis" {
+  type        = string
+  description = "Whether or not to enable underlying apis in this solution. ."
+  default     = true
+}

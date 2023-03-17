@@ -15,19 +15,20 @@
  */
 
 # Google Cloud Services to enable
+module "project_services" {
+  source                      = "terraform-google-modules/project-factory/google//modules/project_services"
+  version                     = "13.0.0"
+  disable_services_on_destroy = false
+  project_id                  = var.project_id
+  enable_apis                 = var.enable_apis
 
-locals {
-  services = [
-    "run.googleapis.com",
+  activate_apis = [
+    "cloudbuild.googleapis.com",
+    "compute.googleapis.com",
     "firestore.googleapis.com",
-    "secretmanager.googleapis.com"
+    "iam.googleapis.com",
+    "run.googleapis.com",
+    "secretmanager.googleapis.com",
+    "storage.googleapis.com"
   ]
-}
-
-resource "google_project_service" "enabled" {
-  for_each                   = toset(local.services)
-  project                    = var.project_id
-  service                    = each.value
-  disable_dependent_services = true
-  disable_on_destroy         = false
 }
