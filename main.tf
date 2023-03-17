@@ -293,3 +293,11 @@ resource "google_compute_global_forwarding_rule" "http" {
 #   concurrency_mode            = "OPTIMISTIC"
 #   app_engine_integration_mode = "DISABLED"
 # }
+
+# Artifact Registry 
+resource "google_artifact_registry_repository" "default" {
+  location      = "us-central1"
+  repository_id = "dev-journey"
+  description   = "Dev journey artifact registry repo."
+  format        = "DOCKER"
+}
