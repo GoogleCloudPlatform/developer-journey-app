@@ -15,7 +15,7 @@ export default function Component({ x, y }: GridPosition) {
   const tileIsFinalTile = x == 2 && y == 2;
 
   const tileItem = inventory.find(item => item.position.x === x && item.position.y === y && item.status === 'NOT_COLLECTED');
-  const allItemsCollected = inventory.every(item => item.status === 'COLLECTED');
+  const allItemsCollected = inventory.length > 0 && inventory.every(item => item.status === 'COLLECTED');
 
   const completeMission = () => {
     if (allItemsCollected) {
