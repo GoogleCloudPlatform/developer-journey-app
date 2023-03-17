@@ -22,7 +22,7 @@ export default function Component() {
       })
   }
 
-  useEffect(fetchUser, []);
+  useEffect(fetchUser, [dispatch]);
 
   const signInAndGetUser = () => {
     signIn().then(fetchUser)
