@@ -11,14 +11,14 @@ export default function Home() {
     <>
       <Head>
         <title>Birds of Paradise</title>
-        <meta name="description" content="Google Cloud head start app for JavaScript" />
+        <meta name="description" content="Developer Journey App" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.wrapper}>
         <header className={styles.header}>
-          Google Cloud head start app for JavaScript - Developer App Journey
+          Developer Journey App
         </header>
         <Mission />
         <div>
