@@ -1,6 +1,7 @@
 import { useSession, signIn, signOut } from "next-auth/react"
 import { useEffect } from "react";
 import { User } from "src/models/User";
+import { startMission } from "src/redux/gameSlice";
 import { useAppDispatch } from "src/redux/hooks";
 import { setUser } from "src/redux/userSlice";
 
@@ -12,7 +13,10 @@ export default function Component() {
     console.log('Fetching a user')
     fetch('/api/user')
       .then((response) => response.json())
-      .then((data: User) => dispatch(setUser(data)))
+      .then((user: User) => {
+        dispatch(setUser(user))
+        dispatch(startMission({ user }))
+      })
       .catch(error => {
         console.error('/api/user GET request did not work.', { error })
       })

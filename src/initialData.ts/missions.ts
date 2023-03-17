@@ -11,7 +11,6 @@ export const missions: Mission[] = [
         "link": 'https://firebase.google.com/docs/hosting/nextjs'
       },
     ],
-    status: 'NOT_STARTED',
   },
   {
     "id": "Sb8XWrxLMykaBU7oZEMH",
@@ -23,6 +22,5 @@ export const missions: Mission[] = [
         "link": 'https://cloud.google.com/nodejs/getting-started'
       },
     ],
-    status: 'NOT_STARTED',
   },
 ];

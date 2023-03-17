@@ -5,7 +5,7 @@ import styles from 'src/styles/Mission.module.css'
 import { LearningResource } from 'src/models/LearningResource';
 
 export default function Component() {
-  const currentMission = useAppSelector((state: RootState) => state.mission)
+  const {mission: currentMission, status} = useAppSelector((state: RootState) => state.game)
 
   return (
     <section className={styles.prompts}>
@@ -18,7 +18,7 @@ export default function Component() {
         <li>
           Status:
           {' '}
-          {currentMission.status}
+          {status}
         </li>
       </ul>
       To learn more, check out these learning resources:
