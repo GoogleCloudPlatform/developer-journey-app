@@ -1,27 +1,48 @@
 import { useSession, signIn, signOut } from "next-auth/react"
+import { useEffect } from "react";
+import { User } from "src/models/User";
+import { useAppDispatch } from "src/redux/hooks";
+import { setUser } from "src/redux/userSlice";
 
 export default function Component() {
+  const dispatch = useAppDispatch()
   const { data: session } = useSession()
+
+  const fetchUser = () => {
+    console.log('Fetching a user')
+    fetch('/api/user')
+      .then((response) => response.json())
+      .then((data: User) => dispatch(setUser(data)))
+      .catch(error => {
+        console.error('/api/user GET request did not work.', { error })
+      })
+  }
+
+  useEffect(fetchUser, []);
+
+  const signInAndGetUser = () => {
+    signIn().then(fetchUser)
+  }
+
+  const signOutAndForgetUser = () => {
+    signOut().then(() => {
+      dispatch(setUser({ email: '', completedMissions: [] }))
+    })
+  }
+
+
   if (session) {
     return (
-        <>
-          Signed in as {session.user?.email} <br />
-          <button onClick={() => signOut()}>Sign out</button>
-          <hr/>
-          <div>
-            {JSON.stringify(session)}
-          </div>
-        </>
+      <>
+        Signed in as {session.user?.email} <br />
+        <button onClick={() => signOutAndForgetUser()}>Sign out</button>
+      </>
     )
   }
   return (
-      <>
-        Not signed in <br />
-        <button onClick={() => signIn()}>Sign in</button>
-        <hr/>
-        <div>
-          {JSON.stringify(session)}
-        </div>
-      </>
+    <>
+      Not signed in <br />
+      <button onClick={() => signInAndGetUser()}>Sign in</button>
+    </>
   )
 }
