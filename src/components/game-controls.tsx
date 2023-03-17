@@ -38,11 +38,10 @@ export default function Component() {
 
   useEffect(() => {
     window.addEventListener("keydown", keyPressHandler);
-    // Remove event listeners on cleanup
     return () => {
       window.removeEventListener("keydown", keyPressHandler);
     };
-  }, []); // Empty array ensures that effect is only run on mount and unmount
+  });
 
   return (
     <section className={styles.controls}>
