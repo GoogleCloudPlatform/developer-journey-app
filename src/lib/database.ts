@@ -11,7 +11,7 @@ export class Database {
     });
   }
 
-  async setUser({email, completedMissions} :any): Promise<any> {
+  async setUser({email, completedMissions}: User): Promise<any> {
     const userDoc = this.db.collection('users').doc(email);
     
     return userDoc.set({
@@ -20,7 +20,7 @@ export class Database {
     }, {merge: true});
   }
 
-  async getUser({email}: any): Promise<User> {
+  async getUser({email}: {email: string}): Promise<User> {
     const userDoc = this.db.collection('users').doc(email);
     const snapshot = await userDoc.get();
     const completedMissions = snapshot.data()?.completedMissions || [];
@@ -28,7 +28,7 @@ export class Database {
     return { email, completedMissions }
   }
 
-  async addCompletedMission({email, missionId} :any): Promise<any> {
+  async addCompletedMission({email, missionId}: {email: string, missionId: string}): Promise<any> {
     const { completedMissions } = await this.getUser({email});
     const updatedMissions = [ ...completedMissions, missionId ]
 

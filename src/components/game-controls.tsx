@@ -3,14 +3,14 @@ import styles from 'src/styles/Mission.module.css'
 // Redux
 import { RootState } from '../redux/store'
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
-import { moveUp, moveDown, moveLeft, moveRight } from '../redux/playerPositionSlice'
+import { moveUp, moveDown, moveLeft, moveRight } from '../redux/gameSlice'
 import { useEffect } from 'react';
 
 export default function Component() {
-  const playerPosition = useAppSelector((state: RootState) => state.playerPosition)
+  const {playerPosition} = useAppSelector((state: RootState) => state.game)
   const dispatch = useAppDispatch()
 
-  function keyPressHandler({ key, keyCode }: any) {
+  function keyPressHandler({ key, keyCode }: {key: string | undefined, keyCode: number | undefined}) {
     switch (key) {
       case 'w':
         return dispatch(moveUp())

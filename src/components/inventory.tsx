@@ -5,18 +5,17 @@ import { RootState } from 'src/redux/store';
 import styles from 'src/styles/Mission.module.css'
 
 export default function Component() {
-  const currentMission = useAppSelector((state: RootState) => state.mission)
+  const { inventory } = useAppSelector((state: RootState) => state.game)
 
   return (
     <section className={styles.inventory}>
       <h2>Inventory</h2>
-      {JSON.stringify({currentMission})}
       <div>
-        {currentMission.technologies.map(technology => (
+        {inventory.filter(item => item.status === 'COLLECTED').map(({title}) => (
           <Image
-            key={technology}
-            src={`./google-cloud-icons/${technology}.svg`}
-            alt={`icon of ${technology}`}
+            key={title}
+            src={`./google-cloud-icons/${title}.svg`}
+            alt={`icon of ${title}`}
             width='50'
             height='50'
           />
