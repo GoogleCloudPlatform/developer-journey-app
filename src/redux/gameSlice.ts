@@ -74,9 +74,13 @@ export const gameSlice = createSlice({
     moveRight: state => {
       if (state.playerPosition.x < 2) state.playerPosition.x += 1
     },
-    addTechnologyToInventory: (state, action: PayloadAction<string>) => {
-      console.log({action})
-      const itemIndex = state.inventory.findIndex(item => item.title === action.payload);
+    collectItem: (state) => {
+      const itemIndex = state.inventory.findIndex(item => {
+        const isCorrectXPosition = item.position.x === state.playerPosition.x;
+        const isCorrectYPosition = item.position.y === state.playerPosition.y;
+        const isNotCollected = item.status === 'NOT_COLLECTED';
+        return isCorrectXPosition && isCorrectYPosition && isNotCollected;
+      });
       state.inventory[itemIndex] = {
         ...state.inventory[itemIndex],
         status: 'COLLECTED',
@@ -86,6 +90,6 @@ export const gameSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { startMission, moveUp, moveDown, moveLeft, moveRight, addTechnologyToInventory } = gameSlice.actions
+export const { startMission, moveUp, moveDown, moveLeft, moveRight, collectItem } = gameSlice.actions
 
 export default gameSlice.reducer
