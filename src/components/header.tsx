@@ -12,7 +12,10 @@ export default function Home() {
         <LoginBtn />
       </div>
       <div>
-        <Link href="/secure-page-example">Secure page example</Link>
+        <Link href="/">Home</Link>
+      </div>
+      <div>
+        <Link href="/mission-history">Mission History</Link>
       </div>
     </header>
   )
