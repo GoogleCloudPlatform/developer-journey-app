@@ -7,6 +7,10 @@
   grid-template-columns: repeat(3, 1fr);
 }
 
+.missionHistory {
+  background-color: #45f282;
+}
+
 .tile {
   height: 40px;
   background-color: #ccc;
