@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useGetUserQuery } from "src/redux/apiSlice";
 import { startMission } from "src/redux/gameSlice";
 import { useAppDispatch } from "src/redux/hooks";
-import { setUser } from "src/redux/userSlice";
 
 export default function Component() {
   const dispatch = useAppDispatch()
@@ -18,10 +17,7 @@ export default function Component() {
 
   useEffect(() => {
     if(user) {
-      dispatch(setUser(user))
       dispatch(startMission({ user }))
-    } else {
-      dispatch(setUser({ email: '', completedMissions: [] }))
     }
   }, [dispatch, user?.email]);
 

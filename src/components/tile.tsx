@@ -4,10 +4,7 @@ import { RootState } from '../redux/store'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { GridPosition } from 'src/models/GridPosition';
 import { collectItem, startMission } from 'src/redux/gameSlice';
-import { setUser } from 'src/redux/userSlice';
-import { User } from 'src/models/User';
 import { useAddCompletedMissionMutation, useGetUserQuery } from 'src/redux/apiSlice'
-import { useEffect } from 'react';
 
 
 export default function Component({ x, y }: GridPosition) {
@@ -30,7 +27,7 @@ export default function Component({ x, y }: GridPosition) {
   const tileItem = inventory.find(item => item.position.x === x && item.position.y === y && item.status === 'NOT_COLLECTED');
 
 
-  const completeMission = () => {
+  const completeMission = async () => {
     if (allItemsCollected && user) {
       addCompletedMission({ mission }).unwrap()
         .then(() => {
@@ -62,7 +59,7 @@ export default function Component({ x, y }: GridPosition) {
           </button>
         )}
         {allItemsCollected && tileIsFinalTile && (
-          <button disabled={!playerIsOnTile && !isSaving} onClick={completeMission}>
+          <button disabled={!playerIsOnTile || isSaving} onClick={completeMission}>
             {isSaving ? 'Saving...' : 'Complete Mission'}
           </button>
         )}

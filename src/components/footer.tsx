@@ -1,19 +1,32 @@
-import { useAppSelector } from 'src/redux/hooks';
-import { RootState } from 'src/redux/store';
 import styles from 'src/styles/Mission.module.css'
+import { useGetUserQuery } from 'src/redux/apiSlice'
+
 
 export default function Component() {
-  const user = useAppSelector((state: RootState) => state.user)
+  const {
+    data: user,
+    isLoading,
+    isSuccess,
+    isError,
+    error
+  } = useGetUserQuery();
 
-  return (
-    <footer className={styles.footer}>
-      Completed Missions:
-      {' '}
-      {user.completedMissions.join(', ')}
-    </footer>
-  )
+  if (isLoading) {
+    return <div>Loading...</div>
+  } else if (isSuccess) {
+    return (
+      <footer className={styles.footer}>
+        {user.completedMissions.length}
+        {' '}
+        Completed Missions:
+        {' '}
+        {user.completedMissions.join(', ')}
+      </footer>
+    )
+  } else if (isError) {
+    return <div>{error.toString()}</div>
+  }
 }
-
 
 
 

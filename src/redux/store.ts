@@ -1,12 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import gameReducer from './gameSlice'
-import userSlice from './userSlice'
 import { apiSlice } from 'src/redux/apiSlice';
 
 export const store = configureStore({
   reducer: {
     game: gameReducer,
-    user: userSlice,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: getDefaultMiddleware =>

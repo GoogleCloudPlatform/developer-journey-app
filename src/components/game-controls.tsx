@@ -5,10 +5,13 @@ import { RootState } from '../redux/store'
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
 import { moveUp, moveDown, moveLeft, moveRight, collectItem, startMission } from '../redux/gameSlice'
 import { useEffect } from 'react';
+import { useGetUserQuery } from 'src/redux/apiSlice';
 
 export default function Component() {
   const { playerPosition, allItemsCollected } = useAppSelector((state: RootState) => state.game)
-  const user = useAppSelector((state: RootState) => state.user)
+  const {
+    data: user,
+  } = useGetUserQuery();
   const playerOnFinalSquare = playerPosition.x === 2 && playerPosition.y === 2;
   const dispatch = useAppDispatch()
 
@@ -34,7 +37,7 @@ export default function Component() {
       case 39: // right arrow
         return dispatch(moveRight())
       case 13: // enter
-        if (allItemsCollected && playerOnFinalSquare) return dispatch(startMission({user, nextMission: true}))
+        if (allItemsCollected && playerOnFinalSquare && user) return dispatch(startMission({user, nextMission: true}))
         return dispatch(collectItem())
     }
   }
