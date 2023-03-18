@@ -19,7 +19,7 @@ export default function Component() {
     if(user) {
       dispatch(startMission({ user }))
     }
-  }, [dispatch, user?.email]);
+  }, [dispatch, user]);
 
   if (isLoading) {
     return <div>Loading...</div>
