@@ -6,54 +6,69 @@ import { GridPosition } from 'src/models/GridPosition';
 import { collectItem, startMission } from 'src/redux/gameSlice';
 import { setUser } from 'src/redux/userSlice';
 import { User } from 'src/models/User';
+import { useAddCompletedMissionMutation, useGetUserQuery } from 'src/redux/apiSlice'
+import { useEffect } from 'react';
+
 
 export default function Component({ x, y }: GridPosition) {
+  const {
+    data: user,
+    isLoading,
+    isSuccess,
+    isError,
+    error
+  } = useGetUserQuery();
+
+  const [addCompletedMission, { isLoading: isSaving }] = useAddCompletedMissionMutation()
+  
   const dispatch = useAppDispatch()
 
-  const { playerPosition, mission, inventory } = useAppSelector((state: RootState) => state.game)
+  const { playerPosition, mission, inventory, allItemsCollected } = useAppSelector((state: RootState) => state.game)
   const playerIsOnTile = playerPosition.x === x && playerPosition.y === y;
   const tileIsFinalTile = x == 2 && y == 2;
 
   const tileItem = inventory.find(item => item.position.x === x && item.position.y === y && item.status === 'NOT_COLLECTED');
-  const allItemsCollected = inventory.length > 0 && inventory.every(item => item.status === 'COLLECTED');
+
 
   const completeMission = () => {
-    if (allItemsCollected) {
-      fetch('/api/user', {
-        method: 'POST',
-        body: JSON.stringify(mission),
-      }).then((response) => response.json())
-        .then((user: User) => {
-          dispatch(setUser(user))
+    if (allItemsCollected && user) {
+      addCompletedMission({ mission }).unwrap()
+        .then(() => {
           dispatch(startMission({ user, nextMission: true }))
         })
         .catch(error => {
-          console.error('/api/user POST request did not work.', { error })
+          console.error('addCompletedMission request did not work.', { error })
         })
     }
   }
 
-  return (
-    <section className={styles.tile}>
-      {playerIsOnTile && 'X'}
-      {tileItem && (
-        <Image
-          src={`./google-cloud-icons/${tileItem.title}.svg`}
-          alt={`icon of ${tileItem.title}`}
-          width='30'
-          height='30'
-        />
-      )}
-      {playerIsOnTile && tileItem && (
-        <button onClick={() => dispatch(collectItem())}>
-          Collect Item {tileItem.title}
-        </button>
-      )}
-      {allItemsCollected && tileIsFinalTile && (
-        <button disabled={!playerIsOnTile} onClick={completeMission}>
-          Complete Mission
-        </button>
-      )}
-    </section>
-  )
+  if (isLoading) {
+    return <div>Loading...</div>
+  } else if (isSuccess) {
+    return (
+      <section className={styles.tile}>
+        {playerIsOnTile && 'X'}
+        {tileItem && (
+          <Image
+            src={`./google-cloud-icons/${tileItem.title}.svg`}
+            alt={`icon of ${tileItem.title}`}
+            width='30'
+            height='30'
+          />
+        )}
+        {playerIsOnTile && tileItem && (
+          <button onClick={() => dispatch(collectItem())}>
+            Collect Item {tileItem.title}
+          </button>
+        )}
+        {allItemsCollected && tileIsFinalTile && (
+          <button disabled={!playerIsOnTile && !isSaving} onClick={completeMission}>
+            {isSaving ? 'Saving...' : 'Complete Mission'}
+          </button>
+        )}
+      </section>
+    )
+  } else if (isError) {
+    return <div>{error.toString()}</div>
+  }
 }

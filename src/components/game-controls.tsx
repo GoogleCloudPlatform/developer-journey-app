@@ -3,11 +3,13 @@ import styles from 'src/styles/Mission.module.css'
 // Redux
 import { RootState } from '../redux/store'
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
-import { moveUp, moveDown, moveLeft, moveRight, collectItem } from '../redux/gameSlice'
+import { moveUp, moveDown, moveLeft, moveRight, collectItem, startMission } from '../redux/gameSlice'
 import { useEffect } from 'react';
 
 export default function Component() {
-  const { playerPosition } = useAppSelector((state: RootState) => state.game)
+  const { playerPosition, allItemsCollected } = useAppSelector((state: RootState) => state.game)
+  const user = useAppSelector((state: RootState) => state.user)
+  const playerOnFinalSquare = playerPosition.x === 2 && playerPosition.y === 2;
   const dispatch = useAppDispatch()
 
   function keyPressHandler({ key, keyCode }: { key: string | undefined, keyCode: number | undefined }) {
@@ -32,6 +34,7 @@ export default function Component() {
       case 39: // right arrow
         return dispatch(moveRight())
       case 13: // enter
+        if (allItemsCollected && playerOnFinalSquare) return dispatch(startMission({user, nextMission: true}))
         return dispatch(collectItem())
     }
   }
