@@ -25,8 +25,8 @@ resource "random_id" "bucket_prefix" {
 resource "google_storage_bucket" "default" {
   name          = "image-backend-bucket-${random_id.bucket_prefix.hex}"
   project       = var.project_id
-  location      = "us-central1"
-  storage_class = "REGIONAL"
+  location      = "US"
+  storage_class = "STANDARD"
   force_destroy = true
 }
 
