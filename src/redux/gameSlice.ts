@@ -21,13 +21,13 @@ const initialState: {
 };
 
 const legalInventoryGridPositions = [
-  {x: 0, y: 1},
-  {x: 0, y: 2},
-  {x: 1, y: 0},
-  {x: 1, y: 1},
-  {x: 1, y: 2},
-  {x: 2, y: 0},
-  {x: 2, y: 1},
+  { x: 0, y: 1 },
+  { x: 0, y: 2 },
+  { x: 1, y: 0 },
+  { x: 1, y: 1 },
+  { x: 1, y: 2 },
+  { x: 2, y: 0 },
+  { x: 2, y: 1 },
 ];
 
 export const gameSlice = createSlice({
@@ -35,7 +35,7 @@ export const gameSlice = createSlice({
   initialState,
   reducers: {
     startMission: (state, action: PayloadAction<{ mission?: Mission, user: User, nextMission?: boolean }>) => {
-      const {user, nextMission} = action.payload;
+      const { user, nextMission } = action.payload;
       // if no mission provided, restart this mission
       let mission = action.payload.mission || state.mission;
 
@@ -58,11 +58,15 @@ export const gameSlice = createSlice({
       const sameMission = stateMissionId === missionId;
 
       if (!sameMission || state.inventory.length < 1) {
-        inventory = mission.technologies.map(technology => ({
-          position: legalInventoryGridPositions[Math.floor(Math.random() * legalInventoryGridPositions.length)],
-          status: 'NOT_COLLECTED',
-          title: technology,
-        }))
+        const arrayLength = legalInventoryGridPositions.length;
+        const shuffledArray = legalInventoryGridPositions.sort(() => 0.5 - Math.random());
+        inventory = mission.technologies.map((technology, index) => {
+          return ({
+            position: shuffledArray[index % arrayLength],
+            status: 'NOT_COLLECTED',
+            title: technology,
+          })
+        })
       }
 
       return {
