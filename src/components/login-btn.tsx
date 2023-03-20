@@ -1,52 +1,44 @@
 import { useSession, signIn, signOut } from "next-auth/react"
 import { useEffect } from "react";
-import { User } from "src/models/User";
+import { useGetUserQuery } from "src/redux/apiSlice";
 import { startMission } from "src/redux/gameSlice";
 import { useAppDispatch } from "src/redux/hooks";
-import { setUser } from "src/redux/userSlice";
 
 export default function Component() {
   const dispatch = useAppDispatch()
-  const { data: session } = useSession()
 
-  const fetchUser = () => {
-    console.log('Fetching a user')
-    fetch('/api/user')
-      .then((response) => response.json())
-      .then((user: User) => {
-        dispatch(setUser(user))
-        dispatch(startMission({ user }))
-      })
-      .catch(error => {
-        console.error('/api/user GET request did not work.', { error })
-      })
-  }
+  const {
+    data: user,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetUserQuery();
 
-  useEffect(fetchUser, [dispatch]);
+  useEffect(() => {
+    if(user) {
+      dispatch(startMission({ user }))
+    }
+  }, [dispatch, user]);
 
-  const signInAndGetUser = () => {
-    signIn().then(fetchUser)
-  }
-
-  const signOutAndForgetUser = () => {
-    signOut().then(() => {
-      dispatch(setUser({ email: '', completedMissions: [] }))
-    })
-  }
-
-
-  if (session) {
+  if (isLoading) {
+    return <div>Loading...</div>
+  } else if (isSuccess) {
+    if (user.email) {
+      return (
+        <>
+          Signed in as {JSON.stringify(user.email)} <br />
+          <button onClick={() => signOut()}>Sign out</button>
+        </>
+      )
+    }
     return (
       <>
-        Signed in as {session.user?.email} <br />
-        <button onClick={() => signOutAndForgetUser()}>Sign out</button>
+        Not signed in <br />
+        <button onClick={() => signIn()}>Sign in</button>
       </>
     )
+  } else if (isError) {
+    return <div>{error.toString()}</div>
   }
-  return (
-    <>
-      Not signed in <br />
-      <button onClick={() => signInAndGetUser()}>Sign in</button>
-    </>
-  )
 }
