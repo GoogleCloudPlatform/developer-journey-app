@@ -1,4 +1,4 @@
-import { useSession, signIn, signOut } from "next-auth/react"
+import { signIn, signOut } from "next-auth/react"
 import { useEffect } from "react";
 import { useGetUserQuery } from "src/redux/apiSlice";
 import { startMission } from "src/redux/gameSlice";
