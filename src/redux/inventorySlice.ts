@@ -1,5 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { GridPosition } from 'src/models/GridPosition'
+import { createSlice } from '@reduxjs/toolkit'
 
 // Define the initial state using that type
 const initialState: string[] = []
@@ -10,8 +9,5 @@ export const inventorySlice = createSlice({
   reducers: {
   }
 })
-
-// Action creators are generated for each case reducer function
-export const {  } = inventorySlice.actions
 
 export default inventorySlice.reducer

@@ -1,4 +1,4 @@
-import NextAuth, { AuthOptions, Session, User } from 'next-auth';
+import NextAuth, { AuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import assert from 'node:assert';
 

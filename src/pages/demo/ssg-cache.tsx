@@ -1,11 +1,11 @@
-import {GetStaticPropsContext, GetStaticPropsResult} from "next";
+import {GetStaticPropsResult} from "next";
 
 interface PropsData {
   greeting: string,
 }
 
 // Next.js will call this function at build-time
-export async function getStaticProps(context: GetStaticPropsContext): Promise<GetStaticPropsResult<PropsData>> {
+export async function getStaticProps(): Promise<GetStaticPropsResult<PropsData>> {
   const data: PropsData = {
     greeting: "Hello",
   }
