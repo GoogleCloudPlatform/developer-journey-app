@@ -5,6 +5,6 @@ export async function getStaticProps() {
   };
 }
 
-export default function Page({greeting}: {greeting: string}) {
+export default function Page() {
   return <div>This client-side rendered page is intentionally <strong>unsecured</strong></div>;
 }
