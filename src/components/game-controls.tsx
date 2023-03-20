@@ -3,12 +3,12 @@ import styles from 'src/styles/Mission.module.css'
 // Redux
 import { RootState } from '../redux/store'
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
-import { moveUp, moveDown, moveLeft, moveRight, collectItem, startMission } from '../redux/gameSlice'
+import { moveUp, moveDown, moveLeft, moveRight, collectItem, startMission, setIsSavingMission } from '../redux/gameSlice'
 import { useEffect } from 'react';
 import { useAddCompletedMissionMutation, useGetUserQuery } from 'src/redux/apiSlice';
 
 export default function Component() {
-  const { playerPosition, allItemsCollected, mission } = useAppSelector((state: RootState) => state.game)
+  const { playerPosition, allItemsCollected, mission, isSavingMission } = useAppSelector((state: RootState) => state.game)
   const {
     data: user,
   } = useGetUserQuery();
@@ -39,14 +39,17 @@ export default function Component() {
       case 39: // right arrow
         return dispatch(moveRight())
       case 13: // enter
-        if (allItemsCollected && playerOnFinalSquare && user) {
+        if (allItemsCollected && playerOnFinalSquare && user && !isSavingMission) {
+          dispatch(setIsSavingMission(true));
           return addCompletedMission({ mission }).unwrap()
             .then(() => {
               dispatch(startMission({ user, nextMission: true }))
             })
             .catch(error => {
               console.error('addCompletedMission request did not work.', { error })
-            })
+            }).finally(() => {
+              dispatch(setIsSavingMission(false));
+            });
         }
         return dispatch(collectItem())
     }

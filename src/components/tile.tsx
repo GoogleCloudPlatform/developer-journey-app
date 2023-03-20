@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { RootState } from '../redux/store'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { GridPosition } from 'src/models/GridPosition';
-import { collectItem, startMission } from 'src/redux/gameSlice';
+import { collectItem, setIsSavingMission, startMission } from 'src/redux/gameSlice';
 import { useAddCompletedMissionMutation, useGetUserQuery } from 'src/redux/apiSlice'
 
 
@@ -16,11 +16,11 @@ export default function Component({ x, y }: GridPosition) {
     error
   } = useGetUserQuery();
 
-  const [addCompletedMission, { isLoading: isSaving }] = useAddCompletedMissionMutation()
+  const [addCompletedMission] = useAddCompletedMissionMutation()
   
   const dispatch = useAppDispatch()
 
-  const { playerPosition, mission, inventory, allItemsCollected } = useAppSelector((state: RootState) => state.game)
+  const { playerPosition, mission, inventory, allItemsCollected, isSavingMission } = useAppSelector((state: RootState) => state.game)
   const playerIsOnTile = playerPosition.x === x && playerPosition.y === y;
   const tileIsFinalTile = x == 2 && y == 2;
 
@@ -29,13 +29,16 @@ export default function Component({ x, y }: GridPosition) {
 
   const completeMission = async () => {
     if (allItemsCollected && user) {
-      addCompletedMission({ mission }).unwrap()
+      dispatch(setIsSavingMission(true));
+      return addCompletedMission({ mission }).unwrap()
         .then(() => {
           dispatch(startMission({ user, nextMission: true }))
         })
         .catch(error => {
           console.error('addCompletedMission request did not work.', { error })
-        })
+        }).finally(() => {
+          dispatch(setIsSavingMission(false));
+        });
     }
   }
 
@@ -59,8 +62,8 @@ export default function Component({ x, y }: GridPosition) {
           </button>
         )}
         {allItemsCollected && tileIsFinalTile && (
-          <button disabled={!playerIsOnTile || isSaving} onClick={completeMission}>
-            {isSaving ? 'Saving...' : 'Complete Mission'}
+          <button disabled={!playerIsOnTile || isSavingMission} onClick={completeMission}>
+            {isSavingMission ? 'Saving...' : 'Complete Mission'}
           </button>
         )}
       </section>

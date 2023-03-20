@@ -11,13 +11,15 @@ const initialState: {
   status: string,
   playerPosition: GridPosition,
   inventory: InventoryItem[],
-  allItemsCollected: Boolean,
+  allItemsCollected: boolean,
+  isSavingMission: boolean,
 } = {
   mission: missions[0],
   status: '',
   playerPosition: { x: 0, y: 0 },
   inventory: [],
   allItemsCollected: false,
+  isSavingMission: false,
 };
 
 const legalInventoryGridPositions = [
@@ -75,6 +77,7 @@ export const gameSlice = createSlice({
         status,
         inventory,
         allItemsCollected: false,
+        isSavingMission: false,
       }
     },
     moveUp: state => {
@@ -102,10 +105,13 @@ export const gameSlice = createSlice({
       }
       state.allItemsCollected = state.inventory.length > 0 && state.inventory.every(item => item.status === 'COLLECTED');
     },
+    setIsSavingMission: (state, action: PayloadAction<boolean>) => {
+      state.isSavingMission = action.payload;
+    },
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { startMission, moveUp, moveDown, moveLeft, moveRight, collectItem } = gameSlice.actions
+export const { startMission, moveUp, moveDown, moveLeft, moveRight, collectItem, setIsSavingMission } = gameSlice.actions
 
 export default gameSlice.reducer
