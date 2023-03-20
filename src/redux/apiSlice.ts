@@ -7,7 +7,7 @@ import { User } from 'src/models/User'
 export const apiSlice = createApi({
   // The cache reducer expects to be added at `state.api` (already default - this is optional)
   reducerPath: 'api',
-  // All of our requests will have URLs starting with '/fakeApi'
+  // All of our requests will have URLs starting with '/api'
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
   tagTypes: ['User'],
   // The "endpoints" represent operations and requests for this server
