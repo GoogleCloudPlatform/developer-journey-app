@@ -131,6 +131,28 @@ resource "google_secret_manager_secret_iam_binding" "nextauth_secret" {
   ]
 }
 
+resource "google_secret_manager_secret" "firestore_key" {
+  project   = var.project_id
+  secret_id = "firestore-key"
+  replication {
+    automatic = true
+  }
+}
+
+resource "google_secret_manager_secret_version" "firestore_key" {
+  secret      = google_secret_manager_secret.firestore_key.id
+  secret_data = "tobereplaced"
+}
+
+resource "google_secret_manager_secret_iam_binding" "firestore_key" {
+  project   = var.project_id
+  secret_id = google_secret_manager_secret.firestore_key.secret_id
+  role      = "roles/secretmanager.secretAccessor"
+  members = [
+    "serviceAccount:${google_service_account.cloud_run.email}",
+  ]
+}
+
 # Cloud Run service resources and network endpoint group
 
 resource "google_service_account" "cloud_run" {
