@@ -8,7 +8,7 @@ import Inventory from "../components/inventory";
 import Footer from "../components/footer";
 import Head from "next/head";
 import Navbar from "src/components/navbar";
-import SignInRecommendation from "src/components/SignInRecommendation";
+import SignInRecommendation from "src/components/sign-in-recommendation";
 
 export default function Home() {
   const { status } = useSession();

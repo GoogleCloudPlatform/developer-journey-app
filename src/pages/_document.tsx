@@ -7,7 +7,7 @@ export default function Document() {
         <meta name="description" content="Google Cloud Developer Journey App for JavaScript" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <body>
+      <body className='bg-slate-700'>
         <Main />
         <NextScript />
       </body>

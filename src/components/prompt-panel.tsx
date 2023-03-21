@@ -8,7 +8,7 @@ export default function Component() {
 
   if (allItemsCollected) {
     return (
-      <section className="bg-slate-100 text-slate-100 rounded-r-xl p-8 dark:bg-slate-800 col-span-2 space-y-4">
+      <section className="bg-slate-100 text-slate-100 rounded-r-xl p-8 dark:bg-slate-800 my-4 col-span-2 space-y-4">
         <p>
           Huzzah Traveler! You have gathered all the necessary keys and the location of the treasure has been revealed!
           Hurry before the evil creatures of the forest block you.
