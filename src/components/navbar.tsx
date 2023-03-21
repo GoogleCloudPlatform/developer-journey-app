@@ -21,7 +21,7 @@ export default function Navbar() {
 
   useEffect(() => {
     if (user) {
-      dispatch(startMission({ user }))
+      dispatch(startMission({}))
     }
   }, [dispatch, user]);
   const router = useRouter()

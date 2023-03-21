@@ -42,7 +42,7 @@ export default function Component() {
           dispatch(setIsSavingMission(true));
           return addCompletedMission({ mission }).unwrap()
             .then(() => {
-              dispatch(startMission({ user, nextMission: true }))
+              dispatch(startMission({ nextMission: true }))
             })
             .catch(error => {
               console.error('addCompletedMission request did not work.', { error })

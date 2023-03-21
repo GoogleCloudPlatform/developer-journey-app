@@ -33,7 +33,7 @@ export default function Component({ x, y }: GridPosition) {
       dispatch(setIsSavingMission(true));
       return addCompletedMission({ mission }).unwrap()
         .then(() => {
-          dispatch(startMission({ user, nextMission: true }))
+          dispatch(startMission({ nextMission: true }))
         })
         .catch(error => {
           console.error('addCompletedMission request did not work.', { error })
@@ -70,10 +70,12 @@ export default function Component({ x, y }: GridPosition) {
         <figure className="bg-slate-200 rounded-xl p-3 w-full">
           <div className="h-8 md:h-12 lg:h-20 flex justify-between">
             {playerIsOnTile && session?.user?.image ? (
-              <img
-                className="rounded-full"
+              <Image
                 src={session.user.image}
-                alt=""
+                alt=''
+                width='80'
+                height='80'
+                className='align-right text-right w-auto rounded-full'
                 referrerPolicy="no-referrer"
               />
             ) : <div />}
@@ -83,7 +85,7 @@ export default function Component({ x, y }: GridPosition) {
                 alt={`icon of ${tileItem.title}`}
                 width='80'
                 height='80'
-                className='align-right text-right'
+                className='align-right text-right w-auto'
               />
             )}
             {allItemsCollected && tileIsFinalTile && (
@@ -92,7 +94,7 @@ export default function Component({ x, y }: GridPosition) {
                 alt='Google Cloud Logo'
                 width='80'
                 height='80'
-                className='align-right text-right h-auto w-auto'
+                className='align-right text-right w-auto'
               />
             )}
           </div>
