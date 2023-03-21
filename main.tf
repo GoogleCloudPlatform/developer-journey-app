@@ -170,18 +170,18 @@ resource "google_cloud_run_v2_service" "default" {
   template {
     containers {
       image = "us-docker.pkg.dev/cloudrun/container/hello"
+      volume_mounts {
+        name       = "firestore-auth"
+        mount_path = "/secrets"
+      }
       env {
         name  = "NEXTAUTH_URL"
         value = local.nextauth_url
       }
+      
       env {
-        name = "GOOGLE_CLIENT_ID"
-        value_source {
-          secret_key_ref {
-            secret  = google_secret_manager_secret.client_id.secret_id
-            version = "latest"
-          }
-        }
+        name = "FIRESTORE_KEY_FILENAME"
+        value = "/secrets/firestore"
       }
       env {
         name = "GOOGLE_CLIENT_SECRET"
@@ -213,6 +213,18 @@ resource "google_cloud_run_v2_service" "default" {
       liveness_probe {
         http_get {
           path = "/"
+        }
+      }
+    }
+    volumes {
+      name = "firestore-auth"
+      secret {
+        secret       = google_secret_manager_secret.firestore_key.secret_id
+        default_mode = 292 # 0444
+        items {
+          version = "1"
+          path    = "firestore"
+          mode    = 256 # 0400
         }
       }
     }
