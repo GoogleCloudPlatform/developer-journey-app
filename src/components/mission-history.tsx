@@ -64,7 +64,9 @@ export default function MissionHistory() {
     )
   } else if (isError) {
     return <div>{error.toString()}</div>
-  } 
+  }
+
+  // TODO: Better fall through logic, but can't return 'Element | undefined'
   return <div>Something has gone terribly wrong with mission-history.tsx</div>
 }
 

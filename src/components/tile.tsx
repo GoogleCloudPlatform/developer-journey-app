@@ -17,7 +17,7 @@ export default function Component({ x, y }: GridPosition) {
   } = useGetUserQuery();
 
   const [addCompletedMission] = useAddCompletedMissionMutation()
-  
+
   const dispatch = useAppDispatch()
 
   const { playerPosition, mission, inventory, allItemsCollected, isSavingMission } = useAppSelector((state: RootState) => state.game)
@@ -44,7 +44,13 @@ export default function Component({ x, y }: GridPosition) {
 
   if (isLoading) {
     return <div>Loading...</div>
-  } else if (isSuccess) {
+  }
+
+  if (isError) {
+    return <div>{error.toString()}</div>
+  }
+
+  if (isSuccess) {
     return (
       <section className={styles.tile}>
         {playerIsOnTile && 'X'}
@@ -68,8 +74,8 @@ export default function Component({ x, y }: GridPosition) {
         )}
       </section>
     )
-  } else if (isError) {
-    return <div>{error.toString()}</div>
   }
+
+  // TODO: Better fall through logic, but can't return 'Element | undefined'
   return <div>Something has gone terribly wrong with tile.tsx</div>
 }
