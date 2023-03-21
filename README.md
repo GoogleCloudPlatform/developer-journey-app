@@ -158,6 +158,12 @@ Once the installation is done, run `gcloud init` to set up your environment.
 More information can be found
 [in the docs](https://cloud.google.com/sdk/docs/initializing).
 
+In case your `gcloud` cli is outdated, you can update it running:
+
+```
+gcloud components update
+```
+
 ### 4. Install the Firestore Emulator
 
 Installing the [Firestore Emulator] for local development is optional. If you
