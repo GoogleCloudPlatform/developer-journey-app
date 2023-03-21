@@ -1,14 +1,8 @@
-.header {
-  grid-area: header;
-  background-color: #fed330;
-  padding: 20px;
-}
 .wrapper {
   display: grid;
   grid-gap: 20px;
   grid-template-columns: 1fr 3fr;
   grid-template-areas: 
-    "header  header"
     "prompts tileBoard"
     "controls inventory"
     "footer  footer";
@@ -17,7 +11,6 @@
   .wrapper {
     grid-template-columns: 4fr;
     grid-template-areas:
-      "header"
       "prompts"
       "tileBoard"
       "controls"

@@ -2,7 +2,6 @@ import { useSession, } from "next-auth/react"
 import styles from 'src/styles/Home.module.css'
 
 // Components
-import Header from "../components/header";
 import PromptPanel from "../components/prompt-panel";
 import TileBoard from "../components/tile-board";
 import GameControls from "../components/game-controls";
@@ -10,6 +9,7 @@ import Inventory from "../components/inventory";
 import Footer from "../components/footer";
 import Head from "next/head";
 import Navbar from "src/components/navbar";
+import SignInRecommendation from "src/components/SignInRecommendation";
 
 export default function Home() {
   const { status } = useSession();
@@ -20,8 +20,7 @@ export default function Home() {
       </Head>
       <Navbar />
       <main className={styles.wrapper}>
-        <Header />
-        {status === "authenticated" && (
+        {status === "authenticated" ? (
           <>
             <PromptPanel />
             <TileBoard />
@@ -29,7 +28,7 @@ export default function Home() {
             <Inventory />
             <Footer />
           </>
-        )}
+        ) : (<SignInRecommendation />)}
       </main>
     </>
   )

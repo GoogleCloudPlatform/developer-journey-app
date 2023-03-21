@@ -1,7 +1,7 @@
 import { useSession, } from "next-auth/react"
 
 // Components
-import Header from "../components/header";
+import SignInRecommendation from "../components/SignInRecommendation";
 import MissionHistory from "src/components/mission-history";
 import Head from "next/head";
 import Navbar from "src/components/navbar";
@@ -15,10 +15,9 @@ export default function MissionHistoryPage() {
       </Head>
       <main>
         <Navbar />
-        <Header />
-        {status === "authenticated" && (
+        {status === "authenticated" ? (
           <MissionHistory />
-        )}
+        ) : (<SignInRecommendation />) }
       </main>
     </>
   )

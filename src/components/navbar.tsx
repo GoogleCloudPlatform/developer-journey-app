@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
-import { signOut } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 import { useGetUserQuery } from 'src/redux/apiSlice'
 
 
@@ -13,14 +13,7 @@ function classNames(...classes: any) {
 
 export default function Navbar() {
   const router = useRouter()
-
-  const {
-    data: user,
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-  } = useGetUserQuery();
+  const { data: session } = useSession();
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -58,7 +51,6 @@ export default function Navbar() {
                     src="/Google_Cloud_logo.svg"
                     alt="Your Company"
                   />
-                  <span>{JSON.stringify({image: user?.image})}</span>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
@@ -87,15 +79,16 @@ export default function Navbar() {
                 </button>
 
                 {/* Profile dropdown */}
-                {user && (
+                {session?.user?.image ? (
                   <Menu as="div" className="relative ml-3">
                     <div>
                       <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                         <span className="sr-only">Open user menu</span>
                         <img
                           className="h-8 w-8 rounded-full"
-                          src={user.image}
+                          src={session.user.image}
                           alt=""
+                          referrerPolicy="no-referrer"
                         />
                       </Menu.Button>
                     </div>
@@ -132,16 +125,23 @@ export default function Navbar() {
                         <Menu.Item>
                           {({ active }: { active: any }) => (
                             <a
-                              href="#"
+                              onClick={() => signOut()}
                               className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                             >
-                              <button onClick={() => signOut()}>Sign out</button>
+                              Sign out
                             </a>
                           )}
                         </Menu.Item>
                       </Menu.Items>
                     </Transition>
                   </Menu>
+                ) : (
+                  <button
+                    className={classNames('bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded')}
+                    onClick={() => signIn()}
+                  >
+                    Sign in
+                  </button>
                 )}
               </div>
             </div>
