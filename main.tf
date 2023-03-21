@@ -169,7 +169,7 @@ resource "google_cloud_run_v2_service" "default" {
 
   template {
     containers {
-      image = "us-docker.pkg.dev/cloudrun/container/hello"
+      image = var.initial_run_image
       volume_mounts {
         name       = "firestore-auth"
         mount_path = "/secrets"
@@ -178,9 +178,9 @@ resource "google_cloud_run_v2_service" "default" {
         name  = "NEXTAUTH_URL"
         value = local.nextauth_url
       }
-      
+
       env {
-        name = "FIRESTORE_KEY_FILENAME"
+        name  = "FIRESTORE_KEY_FILENAME"
         value = "/secrets/firestore"
       }
       env {

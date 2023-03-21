@@ -24,3 +24,9 @@ variable "enable_apis" {
   description = "Whether or not to enable underlying apis in this solution. ."
   default     = true
 }
+
+variable "initial_run_image" {
+  type        = string
+  description = "Initial image to deploy to Cloud Run service."
+  default     = "us-docker.pkg.dev/cloudrun/container/hello"
+}
