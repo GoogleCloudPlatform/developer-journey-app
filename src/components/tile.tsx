@@ -43,15 +43,11 @@ export default function Component({ x, y }: GridPosition) {
     }
   }
 
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
-
   if (isError) {
     return <div>{error.toString()}</div>
   }
 
-  if (isSuccess) {
+  if (isSuccess || isLoading) {
     return (
       <section className="min-h-full" onClick={() => {
         const playerIsLeftOfTile = playerPosition.x + 1 === x && playerPosition.y === y;
