@@ -1,5 +1,4 @@
 import { useSession, } from "next-auth/react"
-import styles from 'src/styles/Home.module.css'
 
 // Components
 import PromptPanel from "../components/prompt-panel";
@@ -19,13 +18,15 @@ export default function Home() {
         <title>Home | Developer Journey App</title>
       </Head>
       <Navbar />
-      <main className={styles.wrapper}>
+      <main className="">
         {status === "authenticated" ? (
           <>
-            <PromptPanel />
-            <TileBoard />
-            <GameControls />
-            <Inventory />
+            <div className="grid grid-cols-5 gap-3">
+              <PromptPanel />
+              <TileBoard />
+              <GameControls />
+              <Inventory />
+            </div>
             <Footer />
           </>
         ) : (<SignInRecommendation />)}

@@ -1,4 +1,3 @@
-import styles from 'src/styles/Mission.module.css'
 import { useGetUserQuery } from 'src/redux/apiSlice'
 
 
@@ -15,7 +14,7 @@ export default function Component() {
     return <div>Loading...</div>
   } else if (isSuccess) {
     return (
-      <footer className={styles.footer}>
+      <footer className="">
         {user.completedMissions.length}
         {' '}
         Completed Missions:

@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import styles from 'src/styles/Mission.module.css'
 import { missions } from 'src/initialData.ts/missions'
 import { useGetUserQuery } from 'src/redux/apiSlice';
 
@@ -17,7 +16,7 @@ export default function MissionHistory() {
   } else if (isSuccess) {
 
     return (
-      <div className={styles.missionHistory}>
+      <div className="">
         Completed Missions:
         <table>
           <thead>

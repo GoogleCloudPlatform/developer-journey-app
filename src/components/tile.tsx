@@ -1,10 +1,10 @@
-import styles from 'src/styles/Mission.module.css'
 import Image from 'next/image'
 import { RootState } from '../redux/store'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { GridPosition } from 'src/models/GridPosition';
 import { collectItem, setIsSavingMission, startMission } from 'src/redux/gameSlice';
 import { useAddCompletedMissionMutation, useGetUserQuery } from 'src/redux/apiSlice'
+import { useSession } from 'next-auth/react';
 
 
 export default function Component({ x, y }: GridPosition) {
@@ -15,6 +15,7 @@ export default function Component({ x, y }: GridPosition) {
     isError,
     error
   } = useGetUserQuery();
+  const { data: session } = useSession();
 
   const [addCompletedMission] = useAddCompletedMissionMutation()
 
@@ -52,26 +53,46 @@ export default function Component({ x, y }: GridPosition) {
 
   if (isSuccess) {
     return (
-      <section className={styles.tile}>
-        {playerIsOnTile && 'X'}
-        {tileItem && (
-          <Image
-            src={`./google-cloud-icons/${tileItem.title}.svg`}
-            alt={`icon of ${tileItem.title}`}
-            width='30'
-            height='30'
-          />
-        )}
-        {playerIsOnTile && tileItem && (
-          <button onClick={() => dispatch(collectItem())}>
-            Collect Item {tileItem.title}
-          </button>
-        )}
-        {allItemsCollected && tileIsFinalTile && (
-          <button disabled={!playerIsOnTile || isSavingMission} onClick={completeMission}>
-            {isSavingMission ? 'Saving...' : 'Complete Mission'}
-          </button>
-        )}
+      <section className="min-h-full">
+        <figure className="bg-slate-200 rounded-xl p-3">
+          <div className="h-10 flex justify-between">
+            {playerIsOnTile && session?.user?.image && (
+              <img
+                className="h-9 w-9 rounded-full float-left"
+                src={session.user.image}
+                alt=""
+                referrerPolicy="no-referrer"
+              />
+            )}
+            {tileItem && (
+              <Image
+                src={`./google-cloud-icons/${tileItem.title}.svg`}
+                alt={`icon of ${tileItem.title}`}
+                width='80'
+                height='80'
+                className='float-right'
+              />
+            )}
+          </div>
+          <div className="h-10">
+            {playerIsOnTile && tileItem && (
+              <button
+                className='bg-blue-500 hover:bg-blue-700 text-white p-2 rounded'
+                onClick={() => dispatch(collectItem())}
+              >
+                Collect
+              </button>
+            )}
+            {allItemsCollected && tileIsFinalTile && (
+              <button
+                className='bg-blue-500 hover:bg-blue-700 text-white p-2 rounded'
+                disabled={!playerIsOnTile || isSavingMission} onClick={completeMission}
+              >
+                {isSavingMission ? 'Saving...' : 'Complete Mission'}
+              </button>
+            )}
+          </div>
+        </figure>
       </section>
     )
   }
