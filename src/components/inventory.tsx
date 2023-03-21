@@ -1,15 +1,14 @@
 import Image from 'next/image'
 import { useAppSelector } from 'src/redux/hooks';
 import { RootState } from 'src/redux/store';
-import styles from 'src/styles/Mission.module.css'
 
 export default function Component() {
   const { inventory } = useAppSelector((state: RootState) => state.game)
 
   return (
-    <section className={styles.inventory}>
+    <section className="bg-slate-800 text-slate-100 rounded-l-xl p-8 col-span-3 space-y-4">
       <h2>Inventory</h2>
-      <div>
+      <div className='flex'>
         {inventory.filter(item => item.status === 'COLLECTED').map(({title}) => (
           <Image
             key={title}

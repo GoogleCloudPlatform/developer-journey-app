@@ -11,11 +11,12 @@ export class Database {
     });
   }
 
-  async setUser({email, completedMissions}: User): Promise<any> {
+  async setUser({email, image, completedMissions}: User): Promise<any> {
     const userDoc = this.db.collection('users').doc(email);
     
     return userDoc.set({
       email,
+      image,
       completedMissions: completedMissions || [],
     }, {merge: true});
   }
@@ -24,17 +25,19 @@ export class Database {
     const userDoc = this.db.collection('users').doc(email);
     const snapshot = await userDoc.get();
     const completedMissions = snapshot.data()?.completedMissions || [];
+    const image = snapshot.data()?.image || '';
 
-    return { email, completedMissions }
+    return { email, image, completedMissions }
   }
 
   async addCompletedMission({email, missionId}: {email: string, missionId: string}): Promise<any> {
-    const { completedMissions } = await this.getUser({email});
+    const { completedMissions, image } = await this.getUser({email});
     const updatedMissions = [ ...completedMissions, missionId ]
 
     
     return this.setUser({
       email,
+      image,
       completedMissions: updatedMissions,
     });
   }

@@ -1,11 +1,12 @@
 import { useSession, } from "next-auth/react"
 
 // Components
-import Header from "../components/header";
+import SignInRecommendation from "../components/sign-in-recommendation";
 import MissionHistory from "src/components/mission-history";
 import Head from "next/head";
+import Navbar from "src/components/navbar";
 
-export default function Home() {
+export default function MissionHistoryPage() {
   const { status } = useSession();
   return (
     <>
@@ -13,10 +14,13 @@ export default function Home() {
         <title>Mission History | Developer Journey App</title>
       </Head>
       <main>
-        <Header />
-        {status === "authenticated" && (
-          <MissionHistory />
-        )}
+        <Navbar />
+        {status === "authenticated" ? (
+
+          <div className="grid grid-cols-12 gap-3">
+            <MissionHistory />
+          </div>
+        ) : (<SignInRecommendation />)}
       </main>
     </>
   )
