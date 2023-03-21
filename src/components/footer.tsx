@@ -26,6 +26,9 @@ export default function Component() {
   } else if (isError) {
     return <div>{error.toString()}</div>
   }
+
+  // TODO: Better fall through logic, but can't return 'Element | undefined'
+  return <></>
 }
 
 
