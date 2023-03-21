@@ -81,16 +81,16 @@ export const gameSlice = createSlice({
       }
     },
     moveUp: state => {
-      if (state.playerPosition.y < 2) state.playerPosition.y += 1
+      if (state.playerPosition.y < 2 && !state.isSavingMission) state.playerPosition.y += 1
     },
     moveDown: state => {
-      if (state.playerPosition.y > 0) state.playerPosition.y -= 1
+      if (state.playerPosition.y > 0 && !state.isSavingMission) state.playerPosition.y -= 1
     },
     moveLeft: state => {
-      if (state.playerPosition.x > 0) state.playerPosition.x -= 1
+      if (state.playerPosition.x > 0 && !state.isSavingMission) state.playerPosition.x -= 1
     },
     moveRight: state => {
-      if (state.playerPosition.x < 2) state.playerPosition.x += 1
+      if (state.playerPosition.x < 2 && !state.isSavingMission) state.playerPosition.x += 1
     },
     collectItem: (state) => {
       const itemIndex = state.inventory.findIndex(item => {

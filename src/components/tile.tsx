@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { RootState } from '../redux/store'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { GridPosition } from 'src/models/GridPosition';
-import { collectItem, setIsSavingMission, startMission } from 'src/redux/gameSlice';
+import { collectItem, moveDown, moveLeft, moveRight, moveUp, setIsSavingMission, startMission } from 'src/redux/gameSlice';
 import { useAddCompletedMissionMutation, useGetUserQuery } from 'src/redux/apiSlice'
 import { useSession } from 'next-auth/react';
 
@@ -53,28 +53,45 @@ export default function Component({ x, y }: GridPosition) {
 
   if (isSuccess) {
     return (
-      <section className="min-h-full">
-        <figure className="bg-slate-200 rounded-xl p-3">
-          <div className="h-10 flex justify-between">
-            {playerIsOnTile && session?.user?.image && (
+      <section className="min-h-full" onClick={() => {
+        const playerIsLeftOfTile = playerPosition.x + 1 === x && playerPosition.y === y;
+        if(playerIsLeftOfTile) {
+          dispatch(moveRight())
+        }
+        const playerIsRightOfTile = playerPosition.x - 1 === x && playerPosition.y === y;
+        if(playerIsRightOfTile) {
+          dispatch(moveLeft())
+        }
+        const playerIsAboveTile = playerPosition.x === x && playerPosition.y - 1 === y;
+        if(playerIsAboveTile) {
+          dispatch(moveDown())
+        }
+        const playerIsBelowTile = playerPosition.x === x && playerPosition.y + 1 === y;
+        if(playerIsBelowTile) {
+          dispatch(moveUp())
+        }
+      }}>
+        <figure className="bg-slate-200 rounded-xl p-3 w-full">
+          <div className="h-20 flex justify-between">
+            {playerIsOnTile && session?.user?.image ? (
               <img
-                className="h-9 w-9 rounded-full float-left"
+                className="h-18 w-18 rounded-full"
                 src={session.user.image}
                 alt=""
                 referrerPolicy="no-referrer"
               />
-            )}
+            ): <div/>}
             {tileItem && (
               <Image
                 src={`./google-cloud-icons/${tileItem.title}.svg`}
                 alt={`icon of ${tileItem.title}`}
                 width='80'
                 height='80'
-                className='float-right'
+                className='align-right text-right h-18 w-18'
               />
             )}
           </div>
-          <div className="h-10">
+          <div className="h-10 text-center">
             {playerIsOnTile && tileItem && (
               <button
                 className='bg-blue-500 hover:bg-blue-700 text-white p-2 rounded'
