@@ -15,55 +15,52 @@ export default function MissionHistory() {
     return (
       <section className="bg-slate-100 text-slate-100 rounded-r-xl p-8 bg-slate-800 my-4 col-span-11 space-y-4">
         <div className="relative overflow-x-auto">
-          <table className="w-full text-sm text-left text-gray-400">
-            <thead className="text-xs uppercase bg-gray-700 text-gray-400">
-              <tr>
-                <th scope="col" className="px-6 py-3">Mission</th>
-                <th scope="col" className="px-6 py-3">Technologies</th>
-                <th scope="col" className="px-6 py-3">Learning Resources</th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading ? (
-                <tr className="border-b bg-gray-800 border-gray-700">
-                  <td className="px-6 py-4">Loading...</td>
-                  <td className="px-6 py-4 flex"></td>
-                  <td className="px-6 py-4"></td>
-                </tr>
-              ) : (<>
-                {user.completedMissions.map((missionId, index) => {
-                  const mission = missions.find(mission => mission.id === missionId);
-                  if (!mission) return null;
-                  return (
-                    <tr key={`${mission.id}${index}`} className="border-b bg-gray-800 border-gray-700">
-                      <td className="px-6 py-4">{mission.title}</td>
-                      <td className="px-6 py-4 flex">
-                        {mission.technologies.map(technology => (
-                          <Image
-                            key={technology}
-                            src={`./google-cloud-icons/${technology}.svg`}
-                            alt={`icon of ${technology}`}
-                            width='50'
-                            height='50'
-                          />
-                        ))}
-                      </td>
-                      <td className="px-6 py-4">
-                        {mission.learningResources.map(learningResource => (
-                          <a
-                            key={learningResource.link}
-                            href={learningResource.link}
-                          >
-                            {learningResource.title}
-                          </a>
-                        ))}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </>)}
-            </tbody>
-          </table>
+          {isLoading ? ('Loading...') : (<>
+          <div className='mb-2'>{user.completedMissions.length} Completed Missions</div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-fit">
+              {user.completedMissions.map((missionId, index) => {
+                const mission = missions.find(mission => mission.id === missionId);
+                if (!mission) return null;
+                return (
+                  <div key={`${mission.id}${index}`} className="max-w-sm w-full lg:max-w-full lg:flex">
+                    <div className="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-slate-900 rounded-b rounded p-4 flex flex-col justify-between leading-normal">
+                      <div className="text-slate-100 font-bold text-xl mb-2">{mission.title}</div>
+                      <div className="flex items-center">
+                        <div className="text-sm">
+                          <div className='flex mb-2'>
+                            {mission.technologies.map(technology => (
+                              <Image
+                                key={technology}
+                                src={`./google-cloud-icons/${technology}.svg`}
+                                alt={`icon of ${technology}`}
+                                width='50'
+                                height='50'
+                              />
+                            ))}
+                          </div>
+                          <div>
+                            Learning Resources
+                            <ul className='list-disc'>
+                              {mission.learningResources.map(learningResource => (
+                                <li key={learningResource.link} className='mx-5'>
+                                  <a
+                                    href={learningResource.link}
+                                    className='underline'
+                                  >
+                                    {learningResource.title}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            </>)}
         </div>
       </section>
     )

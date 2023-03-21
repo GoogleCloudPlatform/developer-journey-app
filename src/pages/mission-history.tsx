@@ -5,6 +5,7 @@ import SignInRecommendation from "../components/sign-in-recommendation";
 import MissionHistory from "src/components/mission-history";
 import Head from "next/head";
 import Navbar from "src/components/navbar";
+import Footer from "src/components/footer";
 
 export default function MissionHistoryPage() {
   const { status } = useSession();
@@ -22,6 +23,7 @@ export default function MissionHistoryPage() {
           </div>
         ) : (<SignInRecommendation />)}
       </main>
+      <Footer />
     </>
   )
 }

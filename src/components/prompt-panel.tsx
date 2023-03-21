@@ -39,10 +39,6 @@ export default function Component() {
         {currentMission.title}.
       </p>
       <p>
-        To explore the forest maze, you can navigate through using W (up), A (left), S (down), D (right) keys -
-        and pick up the technologies by hitting Enter.
-      </p>
-      <p>
         Good luck,
         <br />
         GCP Elders

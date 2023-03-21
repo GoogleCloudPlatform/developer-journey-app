@@ -20,17 +20,15 @@ export default function Home() {
       <Navbar />
       <main className="">
         {status === "authenticated" ? (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
-              <PromptPanel />
-              <TileBoard />
-              <GameControls />
-              <Inventory />
-            </div>
-            <Footer />
-          </>
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
+            <PromptPanel />
+            <TileBoard />
+            <GameControls />
+            <Inventory />
+          </div>
         ) : (<SignInRecommendation />)}
       </main>
+      <Footer />
     </>
   )
 }
