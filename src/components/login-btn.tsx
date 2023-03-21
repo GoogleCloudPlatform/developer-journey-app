@@ -1,11 +1,12 @@
-import { signIn, signOut } from "next-auth/react"
-import { useEffect } from "react";
-import { useGetUserQuery } from "src/redux/apiSlice";
-import { startMission } from "src/redux/gameSlice";
-import { useAppDispatch } from "src/redux/hooks";
+import {signIn, signOut} from "next-auth/react";
+import {useEffect} from "react";
+import {useGetUserQuery} from "src/redux/apiSlice";
+import {startMission} from "src/redux/gameSlice";
+import {useAppDispatch} from "src/redux/hooks";
+
 
 export default function Component() {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   const {
     data: user,
@@ -16,29 +17,32 @@ export default function Component() {
   } = useGetUserQuery();
 
   useEffect(() => {
-    if(user) {
-      dispatch(startMission({ user }))
+    if (user) {
+      dispatch(startMission({user}));
     }
   }, [dispatch, user]);
 
   if (isLoading) {
-    return <div>Loading...</div>
-  } else if (isSuccess) {
-    if (user.email) {
-      return (
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>{error.toString()}</div>;
+  }
+
+  if (isSuccess && user.email) {
+    return (
         <>
-          Signed in as {JSON.stringify(user.email)} <br />
+          Signed in as {JSON.stringify(user.email)} <br/>
           <button onClick={() => signOut()}>Sign out</button>
         </>
-      )
-    }
-    return (
+    );
+  }
+
+  return (
       <>
-        Not signed in <br />
+        Not signed in <br/>
         <button onClick={() => signIn()}>Sign in</button>
       </>
-    )
-  } else if (isError) {
-    return <div>{error.toString()}</div>
-  }
+  );
 }
