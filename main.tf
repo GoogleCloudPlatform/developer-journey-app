@@ -23,8 +23,8 @@ resource "random_id" "bucket_prefix" {
 }
 
 resource "google_storage_bucket" "default" {
-  name          = "image-backend-bucket-${random_id.bucket_prefix.hex}"
   project       = var.project_id
+  name          = "image-backend-bucket-${random_id.bucket_prefix.hex}"
   location      = "US"
   storage_class = "STANDARD"
   force_destroy = true
@@ -37,6 +37,7 @@ resource "google_storage_bucket_iam_member" "default" {
 }
 
 resource "google_compute_backend_bucket" "default" {
+  project     = var.project_id
   name        = "serverless-app-backend-bucket"
   description = "Serverless app backend bucket"
   bucket_name = google_storage_bucket.default.name
@@ -65,6 +66,7 @@ resource "random_id" "nextauth_secret" {
 }
 
 resource "google_secret_manager_secret" "client_secret" {
+  project   = var.project_id
   secret_id = "google-client-secret"
   replication {
     automatic = true
@@ -77,6 +79,7 @@ resource "google_secret_manager_secret_version" "client_secret" {
 }
 
 resource "google_secret_manager_secret_iam_binding" "client_secret" {
+  project   = var.project_id
   secret_id = google_secret_manager_secret.client_secret.secret_id
   role      = "roles/secretmanager.secretAccessor"
   members = [
@@ -85,6 +88,7 @@ resource "google_secret_manager_secret_iam_binding" "client_secret" {
 }
 
 resource "google_secret_manager_secret" "client_id" {
+  project   = var.project_id
   secret_id = "google-client-id"
   replication {
     automatic = true
@@ -97,6 +101,7 @@ resource "google_secret_manager_secret_version" "client_id" {
 }
 
 resource "google_secret_manager_secret_iam_binding" "client_id" {
+  project   = var.project_id
   secret_id = google_secret_manager_secret.client_id.secret_id
   role      = "roles/secretmanager.secretAccessor"
   members = [
@@ -105,6 +110,7 @@ resource "google_secret_manager_secret_iam_binding" "client_id" {
 }
 
 resource "google_secret_manager_secret" "nextauth_secret" {
+  project   = var.project_id
   secret_id = "nextauth-secret"
   replication {
     automatic = true
@@ -117,6 +123,7 @@ resource "google_secret_manager_secret_version" "nextauth_secret" {
 }
 
 resource "google_secret_manager_secret_iam_binding" "nextauth_secret" {
+  project   = var.project_id
   secret_id = google_secret_manager_secret.nextauth_secret.secret_id
   role      = "roles/secretmanager.secretAccessor"
   members = [
@@ -127,13 +134,14 @@ resource "google_secret_manager_secret_iam_binding" "nextauth_secret" {
 # Cloud Run service resources and network endpoint group
 
 resource "google_service_account" "cloud_run" {
+  project      = var.project_id
   account_id   = "cloud-run-service-account"
   display_name = "Service account for Cloud Run."
 }
 
 resource "google_cloud_run_v2_service" "default" {
-  name     = "hello"
   project  = var.project_id
+  name     = "hello"
   location = "us-central1"
   ingress  = "INGRESS_TRAFFIC_ALL"
 
@@ -200,14 +208,15 @@ data "google_iam_policy" "noauth" {
 }
 
 resource "google_cloud_run_service_iam_policy" "noauth" {
-  location = google_cloud_run_v2_service.default.location
   project  = google_cloud_run_v2_service.default.project
+  location = google_cloud_run_v2_service.default.location
   service  = google_cloud_run_v2_service.default.name
 
   policy_data = data.google_iam_policy.noauth.policy_data
 }
 
 resource "google_compute_region_network_endpoint_group" "default" {
+  project               = var.project_id
   name                  = "run-network-endpoint-group"
   network_endpoint_type = "SERVERLESS"
   region                = "us-central1"
@@ -218,11 +227,12 @@ resource "google_compute_region_network_endpoint_group" "default" {
 
 ### External loadbalancer ###
 resource "google_compute_global_address" "default" {
-  name    = "reserved-ip"
   project = var.project_id
+  name    = "reserved-ip"
 }
 
 resource "google_compute_url_map" "default" {
+  project         = var.project_id
   name            = "http-load-balancer"
   default_service = google_compute_backend_service.default.id
   host_rule {
@@ -240,6 +250,7 @@ resource "google_compute_url_map" "default" {
 }
 
 resource "google_compute_backend_service" "default" {
+  project               = var.project_id
   name                  = "run-backend-service"
   port_name             = "http"
   protocol              = "HTTP"
@@ -273,11 +284,13 @@ resource "google_compute_backend_service" "default" {
 }
 
 resource "google_compute_target_http_proxy" "default" {
+  project = var.project_id
   name    = "http-proxy"
   url_map = google_compute_url_map.default.id
 }
 
 resource "google_compute_global_forwarding_rule" "http" {
+  project               = var.project_id
   name                  = "http-forwarding-rule"
   load_balancing_scheme = "EXTERNAL_MANAGED"
   port_range            = "80"
@@ -296,6 +309,7 @@ resource "google_compute_global_forwarding_rule" "http" {
 
 # Artifact Registry 
 resource "google_artifact_registry_repository" "default" {
+  project       = var.project_id
   location      = "us-central1"
   repository_id = "dev-journey"
   description   = "Dev journey artifact registry repo."
