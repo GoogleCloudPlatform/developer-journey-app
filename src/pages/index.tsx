@@ -21,7 +21,7 @@ export default function Home() {
       <main className="">
         {status === "authenticated" ? (
           <>
-            <div className="grid grid-cols-5 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
               <PromptPanel />
               <TileBoard />
               <GameControls />

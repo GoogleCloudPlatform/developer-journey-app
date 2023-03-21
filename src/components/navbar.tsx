@@ -1,4 +1,5 @@
 import { Fragment, useEffect } from 'react'
+import Image from 'next/image';
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
@@ -52,15 +53,12 @@ export default function Navbar() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <img
-                    className="block h-8 w-auto lg:hidden"
-                    src="/Google_Cloud_logo.svg"
-                    alt="Your Company"
-                  />
-                  <img
-                    className="hidden h-8 w-auto lg:block"
-                    src="/Google_Cloud_logo.svg"
-                    alt="Your Company"
+                  <Image
+                    src='/Google_Cloud_logo.svg'
+                    alt='Google Cloud Logo'
+                    width='80'
+                    height='80'
+                    className='block h-8 w-auto'
                   />
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
@@ -95,11 +93,13 @@ export default function Navbar() {
                     <div>
                       <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                         <span className="sr-only">Open user menu</span>
-                        <img
+                        <Image
                           className="h-8 w-8 rounded-full"
                           src={session.user.image}
                           alt=""
                           referrerPolicy="no-referrer"
+                          width='150'
+                          height='150'
                         />
                       </Menu.Button>
                     </div>

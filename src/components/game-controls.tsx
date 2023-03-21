@@ -62,7 +62,7 @@ export default function Component() {
   });
 
   return (
-    <section className="bg-slate-800 text-slate-100 rounded-r-xl p-8 col-span-2 space-y-4">
+    <section className="hidden sm:block bg-slate-800 text-slate-100 rounded-r-xl p-8 col-span-2 space-y-4">
       <h2>Controls</h2>
       <section className="grid grid-cols-3 gap-3 w-fit text-slate-100">
         <div />

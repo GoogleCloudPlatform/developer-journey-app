@@ -55,39 +55,48 @@ export default function Component({ x, y }: GridPosition) {
     return (
       <section className="min-h-full" onClick={() => {
         const playerIsLeftOfTile = playerPosition.x + 1 === x && playerPosition.y === y;
-        if(playerIsLeftOfTile) {
+        if (playerIsLeftOfTile) {
           dispatch(moveRight())
         }
         const playerIsRightOfTile = playerPosition.x - 1 === x && playerPosition.y === y;
-        if(playerIsRightOfTile) {
+        if (playerIsRightOfTile) {
           dispatch(moveLeft())
         }
         const playerIsAboveTile = playerPosition.x === x && playerPosition.y - 1 === y;
-        if(playerIsAboveTile) {
+        if (playerIsAboveTile) {
           dispatch(moveDown())
         }
         const playerIsBelowTile = playerPosition.x === x && playerPosition.y + 1 === y;
-        if(playerIsBelowTile) {
+        if (playerIsBelowTile) {
           dispatch(moveUp())
         }
       }}>
         <figure className="bg-slate-200 rounded-xl p-3 w-full">
-          <div className="h-20 flex justify-between">
+          <div className="h-8 md:h-12 lg:h-20 flex justify-between">
             {playerIsOnTile && session?.user?.image ? (
               <img
-                className="h-18 w-18 rounded-full"
+                className="rounded-full"
                 src={session.user.image}
                 alt=""
                 referrerPolicy="no-referrer"
               />
-            ): <div/>}
+            ) : <div />}
             {tileItem && (
               <Image
                 src={`./google-cloud-icons/${tileItem.title}.svg`}
                 alt={`icon of ${tileItem.title}`}
                 width='80'
                 height='80'
-                className='align-right text-right h-18 w-18'
+                className='align-right text-right'
+              />
+            )}
+            {allItemsCollected && tileIsFinalTile && (
+              <Image
+                src='/Google_Cloud_logo.svg'
+                alt='Google Cloud Logo'
+                width='80'
+                height='80'
+                className='align-right text-right h-auto w-auto'
               />
             )}
           </div>
@@ -100,12 +109,12 @@ export default function Component({ x, y }: GridPosition) {
                 Collect
               </button>
             )}
-            {allItemsCollected && tileIsFinalTile && (
+            {allItemsCollected && tileIsFinalTile && playerIsOnTile && (
               <button
-                className='bg-blue-500 hover:bg-blue-700 text-white p-2 rounded'
+                className='bg-blue-500 hover:bg-blue-700 text-white p-2 rounded disabled:bg-slate-50 disabled:text-slate-500'
                 disabled={!playerIsOnTile || isSavingMission} onClick={completeMission}
               >
-                {isSavingMission ? 'Saving...' : 'Complete Mission'}
+                {isSavingMission ? 'Saving...' : 'Complete'}
               </button>
             )}
           </div>
