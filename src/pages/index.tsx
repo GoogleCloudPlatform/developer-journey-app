@@ -9,6 +9,7 @@ import GameControls from "../components/game-controls";
 import Inventory from "../components/inventory";
 import Footer from "../components/footer";
 import Head from "next/head";
+import Navbar from "src/components/navbar";
 
 export default function Home() {
   const { status } = useSession();
@@ -17,6 +18,7 @@ export default function Home() {
       <Head>
         <title>Home | Developer Journey App</title>
       </Head>
+      <Navbar />
       <main className={styles.wrapper}>
         <Header />
         {status === "authenticated" && (

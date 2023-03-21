@@ -26,6 +26,7 @@ export default function Component() {
   } else if (isError) {
     return <div>{error.toString()}</div>
   }
+  return <div>Something has gone terribly wrong with footer.tsx</div>
 }
 
 

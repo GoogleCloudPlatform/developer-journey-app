@@ -71,4 +71,5 @@ export default function Component({ x, y }: GridPosition) {
   } else if (isError) {
     return <div>{error.toString()}</div>
   }
+  return <div>Something has gone terribly wrong with tile.tsx</div>
 }

@@ -64,7 +64,8 @@ export default function MissionHistory() {
     )
   } else if (isError) {
     return <div>{error.toString()}</div>
-  }
+  } 
+  return <div>Something has gone terribly wrong with mission-history.tsx</div>
 }
 
 

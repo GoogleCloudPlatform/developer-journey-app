@@ -66,7 +66,6 @@ export default function Component() {
     <section className={styles.controls}>
       <h2>Controls</h2>
       <div>WASD</div>
-      <span>{JSON.stringify(playerPosition)}</span>
       <button
         aria-label="Move player up"
         onClick={() => dispatch(moveUp())}

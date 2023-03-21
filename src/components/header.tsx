@@ -7,7 +7,6 @@ import LoginBtn from "./login-btn";
 export default function Home() {
   return (
     <header className={styles.header}>
-      Developer App Journey
       <div>
         <LoginBtn />
       </div>
