@@ -11,9 +11,8 @@ export default async function handler(
   const fs = new Database();
   const session = await getSession({ req });
   const email = session?.user?.email || '';
-  const image = session?.user?.image || '';
   if (!email) {
-    return res.status(200).send({ email, image, completedMissions: [] });
+    return res.status(200).send({ email, completedMissions: [] });
   }
 
   if (req.method === 'POST') {

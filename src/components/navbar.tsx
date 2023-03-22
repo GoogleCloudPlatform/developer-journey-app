@@ -1,11 +1,13 @@
 import { Fragment, useEffect } from 'react'
+import Image from 'next/image';
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, XMarkIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { useGetUserQuery } from 'src/redux/apiSlice'
 import { startMission } from 'src/redux/gameSlice'
 import { useAppDispatch } from 'src/redux/hooks'
+import Link from 'next/link';
 
 
 
@@ -20,7 +22,7 @@ export default function Navbar() {
 
   useEffect(() => {
     if (user) {
-      dispatch(startMission({ user }))
+      dispatch(startMission({}))
     }
   }, [dispatch, user]);
   const router = useRouter()
@@ -52,21 +54,18 @@ export default function Navbar() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <img
-                    className="block h-8 w-auto lg:hidden"
-                    src="/Google_Cloud_logo.svg"
-                    alt="Your Company"
-                  />
-                  <img
-                    className="hidden h-8 w-auto lg:block"
-                    src="/Google_Cloud_logo.svg"
-                    alt="Your Company"
+                  <Image
+                    src='/Google_Cloud_logo.svg'
+                    alt='Google Cloud Logo'
+                    width='80'
+                    height='80'
+                    className='block h-8 w-auto'
                   />
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
                         href={item.href}
                         className={classNames(
@@ -76,7 +75,7 @@ export default function Navbar() {
                         aria-current={item.current ? 'page' : undefined}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -95,11 +94,13 @@ export default function Navbar() {
                     <div>
                       <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                         <span className="sr-only">Open user menu</span>
-                        <img
+                        <Image
                           className="h-8 w-8 rounded-full"
                           src={session.user.image}
                           alt=""
                           referrerPolicy="no-referrer"
+                          width='150'
+                          height='150'
                         />
                       </Menu.Button>
                     </div>
@@ -115,22 +116,26 @@ export default function Navbar() {
                       <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <Menu.Item>
                           {({ active }: { active: any }) => (
-                            <a
+                            <Link
                               href="https://cloud.google.com/"
-                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                              className={`flex ${classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}`}
+                              target="_blank"
                             >
-                              Google Coud
-                            </a>
+                              Google Cloud
+                              <ArrowTopRightOnSquareIcon  className="h-4 w-4" aria-hidden="true" />
+                            </Link>
                           )}
                         </Menu.Item>
                         <Menu.Item>
                           {({ active }: { active: any }) => (
-                            <a
+                            <Link
                               href="https://github.com/GoogleCloudPlatform/developer-journey-app"
-                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                              className={`flex ${classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}`}
+                              target="_blank"
                             >
                               GitHub
-                            </a>
+                              <ArrowTopRightOnSquareIcon  className="h-4 w-4" aria-hidden="true" />
+                            </Link>
                           )}
                         </Menu.Item>
                         <Menu.Item>

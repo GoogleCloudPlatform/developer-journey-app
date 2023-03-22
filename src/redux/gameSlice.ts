@@ -2,20 +2,17 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Mission } from 'src/models/Mission'
 import { missions } from 'src/initialData.ts/missions';
 import { GridPosition } from 'src/models/GridPosition';
-import { User } from 'src/models/User';
 import { InventoryItem } from 'src/models/InventoryItem';
 
 // Define the initial state using that type
 const initialState: {
   mission: Mission,
-  status: string,
   playerPosition: GridPosition,
   inventory: InventoryItem[],
   allItemsCollected: boolean,
   isSavingMission: boolean,
 } = {
   mission: missions[0],
-  status: '',
   playerPosition: { x: 0, y: 0 },
   inventory: [],
   allItemsCollected: false,
@@ -36,8 +33,8 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    startMission: (state, action: PayloadAction<{ mission?: Mission, user: User, nextMission?: boolean }>) => {
-      const { user, nextMission } = action.payload;
+    startMission: (state, action: PayloadAction<{ mission?: Mission, nextMission?: boolean }>) => {
+      const { nextMission } = action.payload;
       // if no mission provided, restart this mission
       let mission = action.payload.mission || state.mission;
 
@@ -51,15 +48,16 @@ export const gameSlice = createSlice({
         }
       }
 
-      const status = user.completedMissions.includes(mission.id) ? 'COMPLETED' : 'NOT_STARTED';
-
-      // prevent moving items if mission hasn't changed
+      // prevent moving items and player if mission hasn't changed
       let inventory = state.inventory;
       const stateMissionId = state.mission.id.toString();
       const missionId = mission.id.toString();
       const sameMission = stateMissionId === missionId;
 
+      let playerPosition = state.playerPosition;
+
       if (!sameMission || state.inventory.length < 1) {
+        playerPosition = { x: 0, y: 0 }
         const arrayLength = legalInventoryGridPositions.length;
         const shuffledArray = legalInventoryGridPositions.sort(() => 0.5 - Math.random());
         inventory = mission.technologies.map((technology, index) => {
@@ -73,24 +71,23 @@ export const gameSlice = createSlice({
 
       return {
         mission,
-        playerPosition: { x: 0, y: 0 },
-        status,
+        playerPosition,
         inventory,
         allItemsCollected: false,
         isSavingMission: false,
       }
     },
     moveUp: state => {
-      if (state.playerPosition.y < 2) state.playerPosition.y += 1
+      if (state.playerPosition.y < 2 && !state.isSavingMission) state.playerPosition.y += 1
     },
     moveDown: state => {
-      if (state.playerPosition.y > 0) state.playerPosition.y -= 1
+      if (state.playerPosition.y > 0 && !state.isSavingMission) state.playerPosition.y -= 1
     },
     moveLeft: state => {
-      if (state.playerPosition.x > 0) state.playerPosition.x -= 1
+      if (state.playerPosition.x > 0 && !state.isSavingMission) state.playerPosition.x -= 1
     },
     moveRight: state => {
-      if (state.playerPosition.x < 2) state.playerPosition.x += 1
+      if (state.playerPosition.x < 2 && !state.isSavingMission) state.playerPosition.x += 1
     },
     collectItem: (state) => {
       const itemIndex = state.inventory.findIndex(item => {

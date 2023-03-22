@@ -42,7 +42,7 @@ export default function Component() {
           dispatch(setIsSavingMission(true));
           return addCompletedMission({ mission }).unwrap()
             .then(() => {
-              dispatch(startMission({ user, nextMission: true }))
+              dispatch(startMission({ nextMission: true }))
             })
             .catch(error => {
               console.error('addCompletedMission request did not work.', { error })
@@ -62,7 +62,7 @@ export default function Component() {
   });
 
   return (
-    <section className="bg-slate-800 rounded-r-xl p-8 col-span-2 space-y-4">
+    <section className="hidden sm:block bg-slate-800 rounded-r-xl p-8 col-span-2 space-y-4">
       <h2 className='text-slate-100'>Controls</h2>
       <section className="grid grid-cols-3 gap-3 w-fit">
         <div />

@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { RootState } from '../redux/store'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { GridPosition } from 'src/models/GridPosition';
-import { collectItem, setIsSavingMission, startMission } from 'src/redux/gameSlice';
+import { collectItem, moveDown, moveLeft, moveRight, moveUp, setIsSavingMission, startMission } from 'src/redux/gameSlice';
 import { useAddCompletedMissionMutation, useGetUserQuery } from 'src/redux/apiSlice'
 import { useSession } from 'next-auth/react';
 
@@ -23,6 +23,12 @@ export default function Component({ x, y }: GridPosition) {
 
   const { playerPosition, mission, inventory, allItemsCollected, isSavingMission } = useAppSelector((state: RootState) => state.game)
   const playerIsOnTile = playerPosition.x === x && playerPosition.y === y;
+  const playerIsOnStartingTile = playerPosition.x === 0 && playerPosition.y === 0;
+  const playerIsLeftOfTile = playerPosition.x + 1 === x && playerPosition.y === y;
+  const playerIsRightOfTile = playerPosition.x - 1 === x && playerPosition.y === y;
+  const playerIsAboveTile = playerPosition.x === x && playerPosition.y - 1 === y;
+  const playerIsBelowTile = playerPosition.x === x && playerPosition.y + 1 === y;
+  const playerIsOnAdjacentTile = playerIsLeftOfTile || playerIsRightOfTile || playerIsAboveTile || playerIsBelowTile;
   const tileIsFinalTile = x == 2 && y == 2;
 
   const tileItem = inventory.find(item => item.position.x === x && item.position.y === y && item.status === 'NOT_COLLECTED');
@@ -33,7 +39,7 @@ export default function Component({ x, y }: GridPosition) {
       dispatch(setIsSavingMission(true));
       return addCompletedMission({ mission }).unwrap()
         .then(() => {
-          dispatch(startMission({ user, nextMission: true }))
+          dispatch(startMission({ nextMission: true }))
         })
         .catch(error => {
           console.error('addCompletedMission request did not work.', { error })
@@ -43,38 +49,62 @@ export default function Component({ x, y }: GridPosition) {
     }
   }
 
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
-
   if (isError) {
     return <div>{error.toString()}</div>
   }
 
-  if (isSuccess) {
+  if (isSuccess || isLoading) {
     return (
-      <section className="min-h-full">
-        <figure className="bg-slate-200 rounded-xl p-3">
-          <div className="h-10 flex justify-between">
-            {playerIsOnTile && session?.user?.image && (
-              <img
-                className="h-9 w-9 rounded-full float-left"
+      <section className="min-h-full" onClick={() => {
+        if (playerIsLeftOfTile) {
+          dispatch(moveRight())
+        }
+        if (playerIsRightOfTile) {
+          dispatch(moveLeft())
+        }
+        if (playerIsAboveTile) {
+          dispatch(moveDown())
+        }
+        if (playerIsBelowTile) {
+          dispatch(moveUp())
+        }
+      }}>
+        <figure className="bg-slate-200 rounded-xl p-3 w-full">
+          <div className="h-8 md:h-12 lg:h-20 flex justify-between">
+            {playerIsOnTile && session?.user?.image ? (
+              <Image
                 src={session.user.image}
-                alt=""
+                alt=''
+                width='80'
+                height='80'
+                className='align-right text-right w-auto rounded-full'
                 referrerPolicy="no-referrer"
               />
-            )}
-            {tileItem && (
+            ) : <div />}
+            {tileItem ? (
               <Image
                 src={`./google-cloud-icons/${tileItem.title}.svg`}
                 alt={`icon of ${tileItem.title}`}
                 width='80'
                 height='80'
-                className='float-right'
+                className='align-right text-right w-auto'
+              />
+            ) : ((playerIsOnStartingTile || allItemsCollected) && !tileIsFinalTile && (
+              <div className={`block sm:hidden text-slate-500 transition-opacity ease-in-out delay-1000 duration-1000 ${playerIsOnStartingTile && isSuccess && playerIsOnAdjacentTile ? 'opacity-100' : 'opacity-0'}`}>
+                Click here to move to this tile.
+              </div>
+            ))}
+            {allItemsCollected && tileIsFinalTile && (
+              <Image
+                src='/Google_Cloud_logo.svg'
+                alt='Google Cloud Logo'
+                width='80'
+                height='80'
+                className='align-right text-right w-auto'
               />
             )}
           </div>
-          <div className="h-10">
+          <div className="h-10 text-center">
             {playerIsOnTile && tileItem && (
               <button
                 className='bg-blue-500 hover:bg-blue-700 text-white p-2 rounded'
@@ -83,12 +113,12 @@ export default function Component({ x, y }: GridPosition) {
                 Collect
               </button>
             )}
-            {allItemsCollected && tileIsFinalTile && (
+            {allItemsCollected && tileIsFinalTile && playerIsOnTile && (
               <button
-                className='bg-blue-500 hover:bg-blue-700 text-white p-2 rounded'
+                className='bg-blue-500 hover:bg-blue-700 text-white p-2 rounded disabled:bg-slate-50 disabled:text-slate-500'
                 disabled={!playerIsOnTile || isSavingMission} onClick={completeMission}
               >
-                {isSavingMission ? 'Saving...' : 'Complete Mission'}
+                {isSavingMission ? 'Saving...' : 'Complete'}
               </button>
             )}
           </div>

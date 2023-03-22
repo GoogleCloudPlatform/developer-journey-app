@@ -2,54 +2,84 @@ import { useAppSelector } from 'src/redux/hooks';
 import { RootState } from 'src/redux/store';
 
 import { LearningResource } from 'src/models/LearningResource';
+import Link from 'next/link';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 
 export default function Component() {
   const { mission: currentMission, allItemsCollected } = useAppSelector((state: RootState) => state.game)
 
-  if (allItemsCollected) {
-    return (
-      <section className="bg-slate-100 text-slate-100 rounded-r-xl p-8 dark:bg-slate-800 my-4 col-span-2 space-y-4">
-        <p>
-          Huzzah Traveler! You have gathered all the necessary keys and the location of the treasure has been revealed!
-          Hurry before the evil creatures of the forest block you.
-        </p>
-        <p>
-          To learn more, check out these learning resources:
-        </p>
-        <ul className='list-disc'>
-          {currentMission.learningResources.map((learningResource: LearningResource) => (
-            <li key={learningResource.link}>
-              <a href={learningResource.link} className="underline hover:text-blue-200">
-                {learningResource.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )
-  }
-
   return (
-    <section className="bg-slate-100 text-slate-100 rounded-r-xl p-8 dark:bg-slate-800 my-4 col-span-2 space-y-4">
-      <p>
-        Hello traveler, you have just entered the unknown forest of Google Cloud.
-        The forest holds valuable keys that you must gather to complete your mission.
-        To unlock the final treasure chest, you must gather the technologies used to
-        {' '}
-        {currentMission.title}.
-      </p>
-      <p>
-        To explore the forest maze, you can navigate through using W (up), A (left), S (down), D (right) keys -
-        and pick up the technologies by hitting Enter.
-      </p>
-      <p>
-        Good luck,
-        <br />
-        GCP Elders
-      </p>
-    </section>
+    <>
+      <section className="bg-slate-100 text-slate-300 rounded-r-xl p-8 dark:bg-slate-800 my-4 col-span-2 overflow-hidden">
+        <div className={`space-y-4 ${allItemsCollected ? 'opacity-100' : 'h-0 opacity-0'}`}>
+          <div className={`space-y-4 transition-all ease-in-out delay-75 duration-1000 ${allItemsCollected ? 'opacity-100' : 'opacity-0'}`}>
+            <p>
+              Huzzah Traveler! You have gathered all the necessary technologies and the treasure has been revealed!
+            </p>
+            <p>
+              Take time to explore these learning resources to
+              {' '}
+              <span className='font-bold text-lg text-slate-100'>{currentMission.title}</span>
+              {' '}
+              before moving on to the next mission:
+            </p>
+            <ul className='list-disc font-bold text-lg text-slate-100'>
+              {currentMission.learningResources.map((learningResource: LearningResource) => (
+                <li key={learningResource.link}>
+                  <Link
+                    href={learningResource.link}
+                    className="flex underline hover:text-blue-200"
+                    target='_blank'
+                  >
+                    {learningResource.title}
+                    <ArrowTopRightOnSquareIcon className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p>
+              To see learning resources from all of your completed missions, visit your
+              {' '}
+              <Link href='/mission-history' className="font-bold text-lg text-slate-100 underline hover:text-blue-200">
+                Mission History
+              </Link>
+            </p>
+          </div>
 
-  )
+        </div>
+        <div className={`space-y-4 ${allItemsCollected ? 'h-0 opacity-0' : 'opacity-100'}`}>
+          <div className={`space-y-4 transition-opacity ease-in-out delay-75 duration-1000 ${allItemsCollected ? 'opacity-0' : 'opacity-100'}`}>
+            <p>
+              Hello Traveler, you have started your journey in exploring Google Cloud.
+              Your environment holds valuable technologies that you must gather to complete your mission.
+              To complete the mission, you must gather the technologies used to
+              {' '}
+              <span className='font-bold text-lg text-slate-100'>{currentMission.title}</span>
+              .
+            </p>
+            <p className='block sm:hidden font-bold text-lg text-slate-100'>
+              Click a tile adjacent to you to explore your environment.
+            </p>
+            <p className='hidden sm:block'>
+              Use the
+              {' '}
+              <span className='font-bold text-lg text-slate-100'>Arrow Keys</span>
+              {' '}
+              to explore your environment and use the
+              {' '}
+              <span className='font-bold text-lg text-slate-100'>Enter Key</span>
+              {' '}
+              to collect a technology.
+            </p>
+            <p>
+              Good luck,
+              <br />
+              Senior Guides
+            </p>
+          </div>
+        </div>
+      </section>
+    </>)
 }
 
 
