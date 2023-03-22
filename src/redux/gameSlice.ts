@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Mission } from 'src/models/Mission'
 import { missions } from 'src/initialData.ts/missions';
 import { GridPosition } from 'src/models/GridPosition';
-import { User } from 'src/models/User';
 import { InventoryItem } from 'src/models/InventoryItem';
 
 // Define the initial state using that type
