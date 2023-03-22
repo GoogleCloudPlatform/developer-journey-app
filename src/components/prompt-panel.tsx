@@ -2,6 +2,8 @@ import { useAppSelector } from 'src/redux/hooks';
 import { RootState } from 'src/redux/store';
 
 import { LearningResource } from 'src/models/LearningResource';
+import Link from 'next/link';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 
 export default function Component() {
   const { mission: currentMission, allItemsCollected } = useAppSelector((state: RootState) => state.game)
@@ -22,18 +24,23 @@ export default function Component() {
         <ul className='list-disc font-bold text-lg text-slate-100'>
           {currentMission.learningResources.map((learningResource: LearningResource) => (
             <li key={learningResource.link}>
-              <a href={learningResource.link} className="underline hover:text-blue-200">
+              <Link
+                href={learningResource.link}
+                className="flex underline hover:text-blue-200"
+                target='_blank'
+              >
                 {learningResource.title}
-              </a>
+                <ArrowTopRightOnSquareIcon className="h-4 w-4" aria-hidden="true" />
+              </Link>
             </li>
           ))}
         </ul>
         <p>
           To see learning resources from all of your completed missions, visit your
           {' '}
-          <a href='/mission-history' className="font-bold text-lg text-slate-100 underline hover:text-blue-200">
+          <Link href='/mission-history' className="font-bold text-lg text-slate-100 underline hover:text-blue-200">
             Mission History
-          </a>
+          </Link>
         </p>
       </section>
     )

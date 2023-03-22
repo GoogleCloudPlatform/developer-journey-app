@@ -1,4 +1,6 @@
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image'
+import Link from 'next/link';
 import { missions } from 'src/initialData.ts/missions'
 import { useGetUserQuery } from 'src/redux/apiSlice';
 
@@ -16,7 +18,7 @@ export default function MissionHistory() {
       <section className="bg-slate-100 text-slate-100 rounded-r-xl p-8 bg-slate-800 my-4 col-span-11 space-y-4">
         <div className="relative overflow-x-auto">
           {isLoading ? ('Loading...') : (<>
-          <div className='mb-2'>{user.completedMissions.length} Completed Missions</div>
+            <div className='mb-2'>{user.completedMissions.length} Completed Missions</div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-fit">
               {user.completedMissions.map((missionId, index) => {
                 const mission = missions.find(mission => mission.id === missionId);
@@ -43,12 +45,14 @@ export default function MissionHistory() {
                             <ul className='list-disc'>
                               {mission.learningResources.map(learningResource => (
                                 <li key={learningResource.link} className='mx-5'>
-                                  <a
+                                  <Link
                                     href={learningResource.link}
-                                    className='underline'
+                                    className='flex underline'
+                                    target='_blank'
                                   >
                                     {learningResource.title}
-                                  </a>
+                                    <ArrowTopRightOnSquareIcon className="h-4 w-4" aria-hidden="true" />
+                                  </Link>
                                 </li>
                               ))}
                             </ul>
@@ -60,7 +64,7 @@ export default function MissionHistory() {
                 )
               })}
             </div>
-            </>)}
+          </>)}
         </div>
       </section>
     )
