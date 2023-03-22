@@ -23,6 +23,12 @@ export default function Component({ x, y }: GridPosition) {
 
   const { playerPosition, mission, inventory, allItemsCollected, isSavingMission } = useAppSelector((state: RootState) => state.game)
   const playerIsOnTile = playerPosition.x === x && playerPosition.y === y;
+  const playerIsOnStartingTile = playerPosition.x === 0 && playerPosition.y === 0;
+  const playerIsLeftOfTile = playerPosition.x + 1 === x && playerPosition.y === y;
+  const playerIsRightOfTile = playerPosition.x - 1 === x && playerPosition.y === y;
+  const playerIsAboveTile = playerPosition.x === x && playerPosition.y - 1 === y;
+  const playerIsBelowTile = playerPosition.x === x && playerPosition.y + 1 === y;
+  const playerIsOnAdjacentTile = playerIsLeftOfTile || playerIsRightOfTile || playerIsAboveTile || playerIsBelowTile;
   const tileIsFinalTile = x == 2 && y == 2;
 
   const tileItem = inventory.find(item => item.position.x === x && item.position.y === y && item.status === 'NOT_COLLECTED');
@@ -50,19 +56,15 @@ export default function Component({ x, y }: GridPosition) {
   if (isSuccess || isLoading) {
     return (
       <section className="min-h-full" onClick={() => {
-        const playerIsLeftOfTile = playerPosition.x + 1 === x && playerPosition.y === y;
         if (playerIsLeftOfTile) {
           dispatch(moveRight())
         }
-        const playerIsRightOfTile = playerPosition.x - 1 === x && playerPosition.y === y;
         if (playerIsRightOfTile) {
           dispatch(moveLeft())
         }
-        const playerIsAboveTile = playerPosition.x === x && playerPosition.y - 1 === y;
         if (playerIsAboveTile) {
           dispatch(moveDown())
         }
-        const playerIsBelowTile = playerPosition.x === x && playerPosition.y + 1 === y;
         if (playerIsBelowTile) {
           dispatch(moveUp())
         }
@@ -79,7 +81,7 @@ export default function Component({ x, y }: GridPosition) {
                 referrerPolicy="no-referrer"
               />
             ) : <div />}
-            {tileItem && (
+            {tileItem ? (
               <Image
                 src={`./google-cloud-icons/${tileItem.title}.svg`}
                 alt={`icon of ${tileItem.title}`}
@@ -87,7 +89,11 @@ export default function Component({ x, y }: GridPosition) {
                 height='80'
                 className='align-right text-right w-auto'
               />
-            )}
+            ) : (playerIsOnStartingTile && playerIsOnAdjacentTile && isSuccess && (
+              <div className='block sm:hidden text-slate-500'>
+                Click here to move to this tile.
+              </div>
+            ))}
             {allItemsCollected && tileIsFinalTile && (
               <Image
                 src='/Google_Cloud_logo.svg'
