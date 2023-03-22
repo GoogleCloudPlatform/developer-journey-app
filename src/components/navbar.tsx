@@ -121,7 +121,7 @@ export default function Navbar() {
                               className={`flex ${classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}`}
                               target="_blank"
                             >
-                              Google Coud
+                              Google Cloud
                               <ArrowTopRightOnSquareIcon  className="h-4 w-4" aria-hidden="true" />
                             </Link>
                           )}
