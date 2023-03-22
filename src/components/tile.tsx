@@ -89,8 +89,8 @@ export default function Component({ x, y }: GridPosition) {
                 height='80'
                 className='align-right text-right w-auto'
               />
-            ) : (playerIsOnStartingTile && playerIsOnAdjacentTile && isSuccess && (
-              <div className='block sm:hidden text-slate-500'>
+            ) : ((playerIsOnStartingTile || allItemsCollected) && !tileIsFinalTile && (
+              <div className={`block sm:hidden text-slate-500 transition-opacity ease-in-out delay-1000 duration-1000 ${playerIsOnStartingTile && isSuccess && playerIsOnAdjacentTile ? 'opacity-100' : 'opacity-0'}`}>
                 Click here to move to this tile.
               </div>
             ))}
