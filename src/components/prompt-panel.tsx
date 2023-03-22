@@ -43,7 +43,7 @@ export default function Component() {
     <section className="bg-slate-100 text-slate-300 rounded-r-xl p-8 dark:bg-slate-800 my-4 col-span-2 space-y-4">
       <p>
         Hello Traveler, you have started your journey in exploring Google Cloud.
-        Your environment holds valuable technoligies that you must gather to complete your mission.
+        Your environment holds valuable technologies that you must gather to complete your mission.
         To complete the mission, you must gather the technologies used to
         {' '}
         <span className='font-bold text-lg text-slate-100'>{currentMission.title}</span>
@@ -57,7 +57,11 @@ export default function Component() {
         {' '}
         <span className='font-bold text-lg text-slate-100'>Arrow Keys</span>
         {' '}
-        to explore your environment.
+        to explore your environment and use the
+        {' '}
+        <span className='font-bold text-lg text-slate-100'>Enter Key</span>
+        {' '}
+        to collect a technology.
       </p>
       <p>
         Good luck,
