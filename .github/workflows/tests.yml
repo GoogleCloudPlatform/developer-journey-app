@@ -1,0 +1,52 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+env:
+  FIRESTORE_EMULATOR_HOST: localhost:9999
+
+jobs:
+  unit-tests:
+    name: Unit tests
+    strategy:
+      matrix:
+        node-version: [v16.x, v18.x]
+        platform:
+        - os: ubuntu-latest
+          shell: bash
+      fail-fast: false
+
+    runs-on: ${{ matrix.platform.os }}
+    defaults:
+      run:
+        shell: ${{ matrix.platform.shell }}
+
+    steps:
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Setup Firestore Emulator
+        run: gcloud components install cloud-firestore-emulator --quiet
+
+      - name: Start Firestore Emulator
+        run: gcloud emulators firestore start --host-port="$FIRESTORE_EMULATOR_HOST" --quiet &
+
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Use Nodejs ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
+        timeout-minutes: 5
+
