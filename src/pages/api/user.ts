@@ -10,16 +10,16 @@ export default async function handler(
 ) {
   const fs = new Database();
   const session = await getSession({ req });
-  const email = session?.user?.email || '';
-  if (!email) {
-    return res.status(200).send({ email, completedMissions: [] });
+  const username = session?.user?.name || '';
+  if (!username) {
+    return res.status(200).send({ username, completedMissions: [] });
   }
 
   if (req.method === 'POST') {
     const missionId = req.body.id;
-    await fs.addCompletedMission({ email, missionId })
+    await fs.addCompletedMission({ username, missionId })
   }
 
-  const user = await fs.getUser({ email });
+  const user = await fs.getUser({ username });
   res.status(200).json(user)
 }
