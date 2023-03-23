@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 locals {
-  nextauth_url = "http://${google_compute_global_address.default.address}"
+  nextauth_url      = "http://${google_compute_global_address.default.address}"
+  firestore_enabled = one(data.google_cloud_asset_resources_search_all.firestore_database.results).display_name == "(default)" ? true : false
 }
 
-# GCS bucket
+### GCS bucket ###
+
 resource "random_id" "bucket_prefix" {
   byte_length = 6
 }
@@ -52,7 +54,8 @@ resource "google_compute_backend_bucket" "default" {
     serve_while_stale = 86400
   }
 }
-# Secret Manager resources
+
+### Secret Manager resources ###
 
 resource "random_id" "client_secret" {
   byte_length = 32
@@ -158,7 +161,7 @@ resource "google_secret_manager_secret_iam_binding" "firestore_key" {
   ]
 }
 
-# Cloud Run service resources and network endpoint group
+### Cloud Run service resources and network endpoint group ###
 
 resource "google_service_account" "cloud_run" {
   project      = var.project_id
@@ -348,16 +351,29 @@ resource "google_compute_global_forwarding_rule" "http" {
   labels                = var.labels
 }
 
-# Firestore
-# resource "google_firestore_database" "database" {
-#   name                        = "(default)"
-#   location_id                 = "nam5"
-#   type                        = "FIRESTORE_NATIVE"
-#   concurrency_mode            = "OPTIMISTIC"
-#   app_engine_integration_mode = "DISABLED"
-# }
+### Firestore ###
 
-# Artifact Registry 
+# The following checks Asset Inventory for an existing Firestore database
+data "google_cloud_asset_resources_search_all" "firestore_database" {
+  provider = google-beta
+  scope    = "projects/${var.project_id}"
+  asset_types = [
+    "firestore.googleapis.com/Database"
+  ]
+}
+
+# If a Firestore database exists on the project, Terraform will skip this resource
+resource "google_firestore_database" "database" {
+  count                       = local.firestore_enabled ? 0 : 1
+  project                     = var.project_id
+  name                        = "(default)"
+  location_id                 = "nam5"
+  type                        = "FIRESTORE_NATIVE"
+  concurrency_mode            = "OPTIMISTIC"
+  app_engine_integration_mode = "DISABLED"
+}
+
+### Artifact Registry ###
 resource "google_artifact_registry_repository" "default" {
   project       = var.project_id
   location      = "us-central1"
