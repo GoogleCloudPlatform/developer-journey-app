@@ -6,20 +6,17 @@ export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       credentials: {
-        username: {label: "Username", type: "text", placeholder: "username"},
-        email: {label: "Email", type: "text", placeholder: "email"},
-        // password: {label: "Password", type: "password"}
+        username: {label: "Username", type: "text", placeholder: "Username"},
       },
       async authorize(credentials) {
-        if (!credentials) {
+        if (!credentials || credentials.username.length < 1) {
           // Display an  error will be displayed advising the user to check
           // their details.
           return null;
         }
 
         const username = credentials.username;
-        const email = credentials.email;
-        const user = {id: "1", name: username, email: email};
+        const user = { id: username, name: username };
 
         if (user) {
           return user;

@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { GridPosition } from 'src/models/GridPosition';
 import { collectItem, moveDown, moveLeft, moveRight, moveUp, setIsSavingMission, startMission } from 'src/redux/gameSlice';
 import { useAddCompletedMissionMutation, useGetUserQuery } from 'src/redux/apiSlice'
+import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react';
 
 
@@ -41,7 +42,7 @@ export default function Component({ x, y }: GridPosition) {
         .then(() => {
           dispatch(startMission({ nextMission: true }))
         })
-        .catch(error => {
+        .catch((error: Error) => {
           console.error('addCompletedMission request did not work.', { error })
         }).finally(() => {
           dispatch(setIsSavingMission(false));
@@ -71,15 +72,10 @@ export default function Component({ x, y }: GridPosition) {
       }}>
         <figure className="bg-slate-200 rounded-xl p-3 w-full">
           <div className="h-8 md:h-12 lg:h-20 flex justify-between">
-            {playerIsOnTile && session?.user?.image ? (
-              <Image
-                src={session.user.image}
-                alt=''
-                width='80'
-                height='80'
-                className='align-right text-right w-auto rounded-full'
-                referrerPolicy="no-referrer"
-              />
+
+          
+            {playerIsOnTile && session?.user ? (
+              <UserCircleIcon className="block h-8 md:h-12 lg:h-20" aria-hidden="true" />
             ) : <div />}
             {tileItem ? (
               <Image

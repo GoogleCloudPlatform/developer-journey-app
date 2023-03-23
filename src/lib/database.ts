@@ -10,30 +10,30 @@ export class Database {
     });
   }
 
-  async setUser({email, completedMissions}: {email: string, completedMissions?: string[] }): Promise<any> {
-    const userDoc = this.db.collection('users').doc(email);
-
+  async setUser({username, completedMissions}: {username: string, completedMissions?: string[] }): Promise<any> {
+    const userDoc = this.db.collection('users').doc(username);
+    
     return userDoc.set({
-      email,
+      username,
       completedMissions: completedMissions || [],
     }, {merge: true});
   }
 
-  async getUser({email}: {email: string}): Promise<User> {
-    const userDoc = this.db.collection('users').doc(email);
+  async getUser({username}: {username: string}): Promise<User> {
+    const userDoc = this.db.collection('users').doc(username);
     const snapshot = await userDoc.get();
     const completedMissions = snapshot.data()?.completedMissions || [];
 
-    return { email, completedMissions }
+    return { username, completedMissions }
   }
 
-  async addCompletedMission({email, missionId}: {email: string, missionId: string}): Promise<any> {
-    const { completedMissions } = await this.getUser({email});
+  async addCompletedMission({username, missionId}: {username: string, missionId: string}): Promise<any> {
+    const { completedMissions } = await this.getUser({username});
     const updatedMissions = [ ...completedMissions, missionId ]
 
 
     return this.setUser({
-      email,
+      username,
       completedMissions: updatedMissions,
     });
   }
