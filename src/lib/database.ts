@@ -7,7 +7,6 @@ export class Database {
   constructor() {
     this.db = new Firestore({
       projectId: "birds-of-paradise",
-      // keyFilename: '/path/to/keyfile.json',
     });
   }
 
@@ -32,7 +31,7 @@ export class Database {
     const { completedMissions } = await this.getUser({username});
     const updatedMissions = [ ...completedMissions, missionId ]
 
-    
+
     return this.setUser({
       username,
       completedMissions: updatedMissions,
