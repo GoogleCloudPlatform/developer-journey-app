@@ -169,6 +169,12 @@ resource "google_service_account" "cloud_run" {
   display_name = "Service account for ${var.deployment_name} Cloud Run service."
 }
 
+resource "google_project_iam_member" "run_datastore_owner" {
+  project = var.project_id
+  role    = "roles/datastore.owner"
+  member  = "serviceAccount:${google_service_account.cloud_run.email}"
+}
+
 resource "google_cloud_run_v2_service" "default" {
   project  = var.project_id
   name     = var.deployment_name
