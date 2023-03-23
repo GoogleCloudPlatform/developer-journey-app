@@ -28,6 +28,7 @@ resource "google_storage_bucket" "default" {
   location      = "US"
   storage_class = "STANDARD"
   force_destroy = true
+  labels        = var.labels
 }
 
 resource "google_storage_bucket_iam_member" "default" {
@@ -71,6 +72,7 @@ resource "google_secret_manager_secret" "client_secret" {
   replication {
     automatic = true
   }
+  labels = var.labels
 }
 
 resource "google_secret_manager_secret_version" "client_secret" {
@@ -93,6 +95,7 @@ resource "google_secret_manager_secret" "client_id" {
   replication {
     automatic = true
   }
+  labels = var.labels
 }
 
 resource "google_secret_manager_secret_version" "client_id" {
@@ -115,6 +118,7 @@ resource "google_secret_manager_secret" "nextauth_secret" {
   replication {
     automatic = true
   }
+  labels = var.labels
 }
 
 resource "google_secret_manager_secret_version" "nextauth_secret" {
@@ -137,6 +141,7 @@ resource "google_secret_manager_secret" "firestore_key" {
   replication {
     automatic = true
   }
+  labels = var.labels
 }
 
 resource "google_secret_manager_secret_version" "firestore_key" {
@@ -239,6 +244,7 @@ resource "google_cloud_run_v2_service" "default" {
     }
     service_account = google_service_account.cloud_run.email
   }
+  labels = var.labels
 }
 
 data "google_iam_policy" "noauth" {
@@ -339,6 +345,7 @@ resource "google_compute_global_forwarding_rule" "http" {
   port_range            = "80"
   target                = google_compute_target_http_proxy.default.id
   ip_address            = google_compute_global_address.default.id
+  labels                = var.labels
 }
 
 # Firestore
@@ -357,4 +364,5 @@ resource "google_artifact_registry_repository" "default" {
   repository_id = "dev-journey"
   description   = "Dev journey artifact registry repo."
   format        = "DOCKER"
+  labels        = var.labels
 }

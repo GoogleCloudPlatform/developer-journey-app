@@ -30,3 +30,8 @@ variable "initial_run_image" {
   description = "Initial image to deploy to Cloud Run service."
   default     = "us-docker.pkg.dev/cloudrun/container/hello"
 }
+
+variable "labels" {
+  type    = map(string)
+  default = {}
+}
