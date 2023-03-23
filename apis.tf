@@ -26,11 +26,13 @@ module "project_services" {
     "artifactregistry.googleapis.com",
     "cloudasset.googleapis.com",
     "cloudbuild.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
     "compute.googleapis.com",
     "firestore.googleapis.com",
     "iam.googleapis.com",
     "run.googleapis.com",
     "secretmanager.googleapis.com",
+    "serviceusage.googleapis.com",
     "storage.googleapis.com"
   ]
 }
