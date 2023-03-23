@@ -13,3 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+output "frontend_url" {
+  value = "http://${google_compute_global_address.default.address}/"
+}
