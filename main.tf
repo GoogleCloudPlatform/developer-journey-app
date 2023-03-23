@@ -57,62 +57,8 @@ resource "google_compute_backend_bucket" "default" {
 
 ### Secret Manager resources ###
 
-resource "random_id" "client_secret" {
-  byte_length = 32
-}
-
-resource "random_id" "client_id" {
-  byte_length = 32
-}
-
 resource "random_id" "nextauth_secret" {
   byte_length = 32
-}
-
-resource "google_secret_manager_secret" "client_secret" {
-  project   = var.project_id
-  secret_id = "${var.deployment_name}-google-client-secret"
-  replication {
-    automatic = true
-  }
-  labels = var.labels
-}
-
-resource "google_secret_manager_secret_version" "client_secret" {
-  secret      = google_secret_manager_secret.client_secret.id
-  secret_data = random_id.client_secret.b64_std
-}
-
-resource "google_secret_manager_secret_iam_binding" "client_secret" {
-  project   = var.project_id
-  secret_id = google_secret_manager_secret.client_secret.secret_id
-  role      = "roles/secretmanager.secretAccessor"
-  members = [
-    "serviceAccount:${google_service_account.cloud_run.email}",
-  ]
-}
-
-resource "google_secret_manager_secret" "client_id" {
-  project   = var.project_id
-  secret_id = "${var.deployment_name}-google-client-id"
-  replication {
-    automatic = true
-  }
-  labels = var.labels
-}
-
-resource "google_secret_manager_secret_version" "client_id" {
-  secret      = google_secret_manager_secret.client_id.id
-  secret_data = random_id.client_id.b64_std
-}
-
-resource "google_secret_manager_secret_iam_binding" "client_id" {
-  project   = var.project_id
-  secret_id = google_secret_manager_secret.client_id.secret_id
-  role      = "roles/secretmanager.secretAccessor"
-  members = [
-    "serviceAccount:${google_service_account.cloud_run.email}",
-  ]
 }
 
 resource "google_secret_manager_secret" "nextauth_secret" {
@@ -132,29 +78,6 @@ resource "google_secret_manager_secret_version" "nextauth_secret" {
 resource "google_secret_manager_secret_iam_binding" "nextauth_secret" {
   project   = var.project_id
   secret_id = google_secret_manager_secret.nextauth_secret.secret_id
-  role      = "roles/secretmanager.secretAccessor"
-  members = [
-    "serviceAccount:${google_service_account.cloud_run.email}",
-  ]
-}
-
-resource "google_secret_manager_secret" "firestore_key" {
-  project   = var.project_id
-  secret_id = "${var.deployment_name}-firestore-key"
-  replication {
-    automatic = true
-  }
-  labels = var.labels
-}
-
-resource "google_secret_manager_secret_version" "firestore_key" {
-  secret      = google_secret_manager_secret.firestore_key.id
-  secret_data = "tobereplaced"
-}
-
-resource "google_secret_manager_secret_iam_binding" "firestore_key" {
-  project   = var.project_id
-  secret_id = google_secret_manager_secret.firestore_key.secret_id
   role      = "roles/secretmanager.secretAccessor"
   members = [
     "serviceAccount:${google_service_account.cloud_run.email}",
@@ -184,37 +107,6 @@ resource "google_cloud_run_v2_service" "default" {
   template {
     containers {
       image = var.initial_run_image
-      volume_mounts {
-        name       = "firestore-auth"
-        mount_path = "/secrets"
-      }
-      env {
-        name  = "NEXTAUTH_URL"
-        value = local.nextauth_url
-      }
-
-      env {
-        name  = "FIRESTORE_KEY_FILENAME"
-        value = "/secrets/firestore"
-      }
-      env {
-        name = "GOOGLE_CLIENT_SECRET"
-        value_source {
-          secret_key_ref {
-            secret  = google_secret_manager_secret.client_secret.secret_id
-            version = "latest"
-          }
-        }
-      }
-      env {
-        name = "GOOGLE_CLIENT_ID"
-        value_source {
-          secret_key_ref {
-            secret  = google_secret_manager_secret.client_id.secret_id
-            version = "latest"
-          }
-        }
-      }
       env {
         name = "NEXTAUTH_SECRET"
         value_source {
@@ -236,18 +128,6 @@ resource "google_cloud_run_v2_service" "default" {
       liveness_probe {
         http_get {
           path = "/"
-        }
-      }
-    }
-    volumes {
-      name = "firestore-auth"
-      secret {
-        secret       = google_secret_manager_secret.firestore_key.secret_id
-        default_mode = 292 # 0444
-        items {
-          version = "1"
-          path    = "firestore"
-          mode    = 256 # 0400
         }
       }
     }
