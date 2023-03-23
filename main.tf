@@ -24,7 +24,7 @@ resource "random_id" "bucket_prefix" {
 
 resource "google_storage_bucket" "default" {
   project       = var.project_id
-  name          = "image-backend-bucket-${random_id.bucket_prefix.hex}"
+  name          = "${var.deployment_name}-bucket-${random_id.bucket_prefix.hex}"
   location      = "US"
   storage_class = "STANDARD"
   force_destroy = true
@@ -39,8 +39,8 @@ resource "google_storage_bucket_iam_member" "default" {
 
 resource "google_compute_backend_bucket" "default" {
   project     = var.project_id
-  name        = "serverless-app-backend-bucket"
-  description = "Serverless app backend bucket"
+  name        = "${var.deployment_name}-backend-bucket"
+  description = "Backend bucket for ${var.deployment_name}"
   bucket_name = google_storage_bucket.default.name
   enable_cdn  = true
   cdn_policy {
@@ -68,7 +68,7 @@ resource "random_id" "nextauth_secret" {
 
 resource "google_secret_manager_secret" "client_secret" {
   project   = var.project_id
-  secret_id = "google-client-secret"
+  secret_id = "${var.deployment_name}-google-client-secret"
   replication {
     automatic = true
   }
@@ -91,7 +91,7 @@ resource "google_secret_manager_secret_iam_binding" "client_secret" {
 
 resource "google_secret_manager_secret" "client_id" {
   project   = var.project_id
-  secret_id = "google-client-id"
+  secret_id = "${var.deployment_name}-google-client-id"
   replication {
     automatic = true
   }
@@ -114,7 +114,7 @@ resource "google_secret_manager_secret_iam_binding" "client_id" {
 
 resource "google_secret_manager_secret" "nextauth_secret" {
   project   = var.project_id
-  secret_id = "nextauth-secret"
+  secret_id = "${var.deployment_name}-nextauth-secret"
   replication {
     automatic = true
   }
@@ -137,7 +137,7 @@ resource "google_secret_manager_secret_iam_binding" "nextauth_secret" {
 
 resource "google_secret_manager_secret" "firestore_key" {
   project   = var.project_id
-  secret_id = "firestore-key"
+  secret_id = "${var.deployment_name}-firestore-key"
   replication {
     automatic = true
   }
@@ -162,13 +162,13 @@ resource "google_secret_manager_secret_iam_binding" "firestore_key" {
 
 resource "google_service_account" "cloud_run" {
   project      = var.project_id
-  account_id   = "cloud-run-service-account"
-  display_name = "Service account for Cloud Run."
+  account_id   = "${var.deployment_name}-run"
+  display_name = "Service account for ${var.deployment_name} Cloud Run service."
 }
 
 resource "google_cloud_run_v2_service" "default" {
   project  = var.project_id
-  name     = "hello"
+  name     = var.deployment_name
   location = "us-central1"
   ingress  = "INGRESS_TRAFFIC_ALL"
 
@@ -266,7 +266,7 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
 
 resource "google_compute_region_network_endpoint_group" "default" {
   project               = var.project_id
-  name                  = "run-network-endpoint-group"
+  name                  = "${var.deployment_name}-network-endpoint-group"
   network_endpoint_type = "SERVERLESS"
   region                = "us-central1"
   cloud_run {
@@ -277,12 +277,12 @@ resource "google_compute_region_network_endpoint_group" "default" {
 ### External loadbalancer ###
 resource "google_compute_global_address" "default" {
   project = var.project_id
-  name    = "reserved-ip"
+  name    = "${var.deployment_name}-reserved-ip"
 }
 
 resource "google_compute_url_map" "default" {
   project         = var.project_id
-  name            = "http-load-balancer"
+  name            = "${var.deployment_name}-http-load-balancer"
   default_service = google_compute_backend_service.default.id
   host_rule {
     hosts        = ["${google_compute_global_address.default.address}"]
@@ -300,7 +300,7 @@ resource "google_compute_url_map" "default" {
 
 resource "google_compute_backend_service" "default" {
   project               = var.project_id
-  name                  = "run-backend-service"
+  name                  = "${var.deployment_name}-run-backend-service"
   port_name             = "http"
   protocol              = "HTTP"
   load_balancing_scheme = "EXTERNAL_MANAGED"
@@ -334,13 +334,13 @@ resource "google_compute_backend_service" "default" {
 
 resource "google_compute_target_http_proxy" "default" {
   project = var.project_id
-  name    = "http-proxy"
+  name    = "${var.deployment_name}-http-proxy"
   url_map = google_compute_url_map.default.id
 }
 
 resource "google_compute_global_forwarding_rule" "http" {
   project               = var.project_id
-  name                  = "http-forwarding-rule"
+  name                  = "${var.deployment_name}-http-forwarding-rule"
   load_balancing_scheme = "EXTERNAL_MANAGED"
   port_range            = "80"
   target                = google_compute_target_http_proxy.default.id
@@ -361,7 +361,7 @@ resource "google_compute_global_forwarding_rule" "http" {
 resource "google_artifact_registry_repository" "default" {
   project       = var.project_id
   location      = "us-central1"
-  repository_id = "dev-journey"
+  repository_id = "${var.deployment_name}-repo"
   description   = "Dev journey artifact registry repo."
   format        = "DOCKER"
   labels        = var.labels

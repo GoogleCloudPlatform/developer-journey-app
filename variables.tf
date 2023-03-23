@@ -35,3 +35,9 @@ variable "labels" {
   type    = map(string)
   default = {}
 }
+
+variable "deployment_name" {
+  type        = string
+  description = "Identifier for the deployment. Used in some resource names."
+  default     = "dev-journey"
+}
