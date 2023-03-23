@@ -7,13 +7,12 @@ export class Database {
   constructor() {
     this.db = new Firestore({
       projectId: "birds-of-paradise",
-      // keyFilename: '/path/to/keyfile.json',
     });
   }
 
   async setUser({email, completedMissions}: {email: string, completedMissions?: string[] }): Promise<any> {
     const userDoc = this.db.collection('users').doc(email);
-    
+
     return userDoc.set({
       email,
       completedMissions: completedMissions || [],
@@ -32,7 +31,7 @@ export class Database {
     const { completedMissions } = await this.getUser({email});
     const updatedMissions = [ ...completedMissions, missionId ]
 
-    
+
     return this.setUser({
       email,
       completedMissions: updatedMissions,

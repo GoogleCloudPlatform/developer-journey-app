@@ -3,7 +3,6 @@ import {Database} from "../database";
 
 const directDatabaseConnectionForTestReset = new Firestore({
   projectId: "birds-of-paradise",
-  // keyFilename: '/path/to/keyfile.json',
 });
 
 describe("database tests", () => {
