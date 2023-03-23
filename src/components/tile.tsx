@@ -75,7 +75,7 @@ export default function Component({ x, y }: GridPosition) {
 
           
             {playerIsOnTile && session?.user ? (
-              <UserCircleIcon className="block h-8 md:h-12 lg:h-20" aria-hidden="true" />
+              <UserCircleIcon className="block h-8 md:h-12 lg:h-20" data-testid="usericon" aria-hidden="true" />
             ) : <div />}
             {tileItem ? (
               <Image
