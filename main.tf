@@ -116,6 +116,10 @@ resource "google_cloud_run_v2_service" "default" {
           }
         }
       }
+      env {
+        name  = "NEXTAUTH_URL"
+        value = local.nextauth_url
+      }
       startup_probe {
         initial_delay_seconds = 0
         timeout_seconds       = 1
