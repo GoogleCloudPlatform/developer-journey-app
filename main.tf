@@ -39,6 +39,14 @@ resource "google_storage_bucket_iam_member" "default" {
   member = "allUsers"
 }
 
+resource "google_storage_bucket_object" "icons" {
+  for_each     = fileset("${path.module}/google-cloud-icons", "*.svg")
+  name         = "google-cloud-icons/${each.value}"
+  source       = "./google-cloud-icons/${each.value}"
+  content_type = "image/svg+xml"
+  bucket       = google_storage_bucket.default.name
+}
+
 resource "google_compute_backend_bucket" "default" {
   project     = var.project_id
   name        = "${var.deployment_name}-backend-bucket"
@@ -185,7 +193,7 @@ resource "google_compute_url_map" "default" {
     name            = "ip4addr"
     default_service = google_compute_backend_service.default.id
     path_rule {
-      paths   = ["/assets/*"]
+      paths   = ["/google-cloud-icons/*"]
       service = google_compute_backend_bucket.default.id
     }
   }
