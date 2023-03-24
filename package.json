@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test:e2e": "npx playwright install && playwright test",
+    "pretest:e2e": "playwright install",
+    "test:e2e": "playwright test",
     "test": "jest --verbose --detectOpenHandles",
     "test:watch": "jest --verbose --detectOpenHandles --watch"
   },
