@@ -41,3 +41,15 @@ variable "deployment_name" {
   description = "Identifier for the deployment. Used in some resource names."
   default     = "dev-journey"
 }
+
+variable "region" {
+  default     = "us-west1"
+  type        = string
+  description = "Google Cloud region"
+}
+
+variable "zone" {
+  default     = "us-west1-a"
+  type        = string
+  description = "Google Cloud zone"
+}

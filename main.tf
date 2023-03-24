@@ -101,7 +101,7 @@ resource "google_project_iam_member" "run_datastore_owner" {
 resource "google_cloud_run_v2_service" "default" {
   project  = var.project_id
   name     = var.deployment_name
-  location = "us-central1"
+  location = var.region
   ingress  = "INGRESS_TRAFFIC_ALL"
 
   template {
@@ -159,9 +159,9 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
 
 resource "google_compute_region_network_endpoint_group" "default" {
   project               = var.project_id
+  region                = var.region
   name                  = "${var.deployment_name}-network-endpoint-group"
   network_endpoint_type = "SERVERLESS"
-  region                = "us-central1"
   cloud_run {
     service = google_cloud_run_v2_service.default.name
   }
@@ -266,7 +266,7 @@ resource "google_firestore_database" "database" {
 ### Artifact Registry ###
 resource "google_artifact_registry_repository" "default" {
   project       = var.project_id
-  location      = "us-central1"
+  location      = var.region
   repository_id = "${var.deployment_name}-repo"
   description   = "Dev journey artifact registry repo."
   format        = "DOCKER"
