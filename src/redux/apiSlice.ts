@@ -17,7 +17,7 @@ export const apiSlice = createApi({
     getUser: builder.query<User, void>({
       // The URL for the request is '/api/user', this is a GET request
       query: () => '/user',
-      async onCacheEntryAdded(_, { dispatch }) {
+      onCacheEntryAdded: (_, { dispatch }) => { 
         dispatch(startMission({}))
       },
       providesTags: ['User'],
