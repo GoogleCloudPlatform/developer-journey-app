@@ -1,12 +1,12 @@
-import { useAppSelector } from 'src/redux/hooks';
-import { RootState } from 'src/redux/store';
+import {useAppSelector} from 'src/redux/hooks';
+import {RootState} from 'src/redux/store';
 
-import { LearningResource } from 'src/models/LearningResource';
+import {LearningResource} from 'src/models/LearningResource';
 import Link from 'next/link';
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
+import {ArrowTopRightOnSquareIcon} from '@heroicons/react/24/outline';
 
 export default function Component() {
-  const { mission: currentMission, allItemsCollected } = useAppSelector((state: RootState) => state.game)
+  const {mission: currentMission, allItemsCollected} = useAppSelector((state: RootState) => state.game);
 
   return (
     <>
@@ -79,9 +79,7 @@ export default function Component() {
           </div>
         </div>
       </section>
-    </>)
+    </>);
 }
-
-
 
 

@@ -1,8 +1,8 @@
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
-import Image from 'next/image'
+import {ArrowTopRightOnSquareIcon} from '@heroicons/react/24/outline';
+import Image from 'next/image';
 import Link from 'next/link';
-import { missions } from 'src/initialData.ts/missions'
-import { useGetUserQuery } from 'src/redux/apiSlice';
+import {missions} from 'src/initialData.ts/missions';
+import {useGetUserQuery} from 'src/redux/apiSlice';
 
 export default function MissionHistory() {
   const {
@@ -10,7 +10,7 @@ export default function MissionHistory() {
     isLoading,
     isSuccess,
     isError,
-    error
+    error,
   } = useGetUserQuery();
 
   if (isSuccess || isLoading) {
@@ -19,13 +19,13 @@ export default function MissionHistory() {
         <div className="relative overflow-x-auto">
           {isLoading ? ('Loading...') : (<>
             <div className='mb-2'>
-              {user.completedMissions.filter(missionId => missions.find(mission => mission.id === missionId)).length}
+              {user.completedMissions.filter((missionId) => missions.find((mission) => mission.id === missionId)).length}
               {' '}
               Completed Missions
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-fit">
               {user.completedMissions.map((missionId, index) => {
-                const mission = missions.find(mission => mission.id === missionId);
+                const mission = missions.find((mission) => mission.id === missionId);
                 if (!mission) return null;
                 return (
                   <div key={`${mission.id}${index}`} className="max-w-sm w-full lg:max-w-full lg:flex">
@@ -34,7 +34,7 @@ export default function MissionHistory() {
                       <div className="flex items-center">
                         <div className="text-sm">
                           <div className='flex mb-2'>
-                            {mission.technologies.map(technology => (
+                            {mission.technologies.map((technology) => (
                               <Image
                                 key={technology}
                                 src={`./google-cloud-icons/${technology}.svg`}
@@ -47,7 +47,7 @@ export default function MissionHistory() {
                           <div>
                             Learning Resources
                             <ul className='list-disc'>
-                              {mission.learningResources.map(learningResource => (
+                              {mission.learningResources.map((learningResource) => (
                                 <li key={learningResource.link} className='mx-5'>
                                   <Link
                                     href={learningResource.link}
@@ -65,21 +65,19 @@ export default function MissionHistory() {
                       </div>
                     </div>
                   </div>
-                )
+                );
               })}
             </div>
           </>)}
         </div>
       </section>
-    )
+    );
   } else if (isError) {
-    return <div>{error.toString()}</div>
+    return <div>{error.toString()}</div>;
   }
 
   // TODO: Better fall through logic, but can't return 'Element | undefined'
-  return <div>Something has gone terribly wrong with mission-history.tsx</div>
+  return <div>Something has gone terribly wrong with mission-history.tsx</div>;
 }
-
-
 
 

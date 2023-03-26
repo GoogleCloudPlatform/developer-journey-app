@@ -1,4 +1,4 @@
-import { LearningResource } from "./LearningResource";
+import {LearningResource} from './LearningResource';
 
 export class Mission {
   id!: string;

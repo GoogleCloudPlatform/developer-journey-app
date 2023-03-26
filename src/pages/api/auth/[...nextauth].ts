@@ -1,12 +1,12 @@
-import NextAuth, {AuthOptions} from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import NextAuth, {AuthOptions} from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
 
 export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       credentials: {
-        username: {label: "Username", type: "text", placeholder: "Username"},
+        username: {label: 'Username', type: 'text', placeholder: 'Username'},
       },
       async authorize(credentials) {
         if (!credentials || credentials.username.length < 1) {
@@ -16,7 +16,7 @@ export const authOptions: AuthOptions = {
         }
 
         const username = credentials.username;
-        const user = { id: username, name: username };
+        const user = {id: username, name: username};
 
         if (user) {
           return user;
@@ -27,7 +27,7 @@ export const authOptions: AuthOptions = {
           // Or reject this callback with an Error to send the user to the error
           // page with the error message as a query parameter
         }
-      }
+      },
     }),
   ],
 };

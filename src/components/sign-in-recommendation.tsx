@@ -1,4 +1,4 @@
-import { ArrowUpIcon } from "@heroicons/react/24/outline";
+import {ArrowUpIcon} from '@heroicons/react/24/outline';
 
 export default function SignInRecommendation() {
   return (
@@ -11,5 +11,5 @@ export default function SignInRecommendation() {
         Sign in to play!
       </h1>
     </div>
-  )
+  );
 }

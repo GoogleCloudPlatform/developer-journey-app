@@ -1,28 +1,28 @@
 import Image from 'next/image';
-import { Disclosure } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { useRouter } from 'next/router'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import {Disclosure} from '@headlessui/react';
+import {Bars3Icon, XMarkIcon} from '@heroicons/react/24/outline';
+import {useRouter} from 'next/router';
+import {signIn, signOut, useSession} from 'next-auth/react';
 import Link from 'next/link';
 
 function classNames(...classes: any) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ');
 }
 
 export default function Navbar() {
-  const router = useRouter()
-  const { data: session } = useSession();
+  const router = useRouter();
+  const {data: session} = useSession();
 
   const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'Mission History', href: '/mission-history' },
+    {name: 'Home', href: '/'},
+    {name: 'Mission History', href: '/mission-history'},
   ].map((route: any) => ({
     ...route,
     current: router.pathname === route.href,
   }));
   return (
     <Disclosure as="nav" className="bg-gray-800">
-      {({ open }: { open: any }) => (
+      {({open}: { open: any }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
@@ -70,10 +70,10 @@ export default function Navbar() {
               {session?.user?.name ? (
                 <>
                   <span className='block sm:hidden text-gray-300 rounded-md px-3 py-2 text-sm font-small'>
-                    {session.user.name.length < 20 ? (session.user.name) : (session.user.name.substring(0,18) + '...')}
+                    {session.user.name.length < 20 ? (session.user.name) : (session.user.name.substring(0, 18) + '...')}
                   </span>
                   <span className='hidden sm:block text-gray-300 rounded-md px-3 py-2 text-sm font-small'>
-                    {session.user.name.length < 30 ? (session.user.name) : (session.user.name.substring(0,28) + '...')}
+                    {session.user.name.length < 30 ? (session.user.name) : (session.user.name.substring(0, 28) + '...')}
                   </span>
                   <button
                     className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
@@ -114,5 +114,5 @@ export default function Navbar() {
         </>
       )}
     </Disclosure>
-  )
+  );
 }

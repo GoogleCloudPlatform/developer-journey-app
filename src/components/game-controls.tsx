@@ -1,63 +1,63 @@
 // Redux
-import { RootState } from '../redux/store'
-import { useAppSelector, useAppDispatch } from '../redux/hooks'
-import { moveUp, moveDown, moveLeft, moveRight, collectItem, startMission, setIsSavingMission } from '../redux/gameSlice'
-import { useEffect } from 'react';
-import { useAddCompletedMissionMutation, useGetUserQuery } from 'src/redux/apiSlice';
-import { ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon } from '@heroicons/react/24/outline'
+import {RootState} from '../redux/store';
+import {useAppSelector, useAppDispatch} from '../redux/hooks';
+import {moveUp, moveDown, moveLeft, moveRight, collectItem, startMission, setIsSavingMission} from '../redux/gameSlice';
+import {useEffect} from 'react';
+import {useAddCompletedMissionMutation, useGetUserQuery} from 'src/redux/apiSlice';
+import {ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon} from '@heroicons/react/24/outline';
 
 export default function Component() {
-  const { playerPosition, allItemsCollected, mission, isSavingMission } = useAppSelector((state: RootState) => state.game)
+  const {playerPosition, allItemsCollected, mission, isSavingMission} = useAppSelector((state: RootState) => state.game);
   const {
     data: user,
   } = useGetUserQuery();
   const playerOnFinalSquare = playerPosition.x === 2 && playerPosition.y === 2;
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
-  const [addCompletedMission] = useAddCompletedMissionMutation()
+  const [addCompletedMission] = useAddCompletedMissionMutation();
 
-  function keyPressHandler({ key, keyCode }: { key: string | undefined, keyCode: number | undefined }) {
+  function keyPressHandler({key, keyCode}: { key: string | undefined, keyCode: number | undefined }) {
     switch (key) {
       case 'w':
-        return dispatch(moveUp())
+        return dispatch(moveUp());
       case 'a':
-        return dispatch(moveLeft())
+        return dispatch(moveLeft());
       case 's':
-        return dispatch(moveDown())
+        return dispatch(moveDown());
       case 'd':
-        return dispatch(moveRight())
+        return dispatch(moveRight());
     }
 
     switch (keyCode) {
       case 38: // up arrow
-        return dispatch(moveUp())
+        return dispatch(moveUp());
       case 37: // left arrow
-        return dispatch(moveLeft())
+        return dispatch(moveLeft());
       case 40: // down arrow
-        return dispatch(moveDown())
+        return dispatch(moveDown());
       case 39: // right arrow
-        return dispatch(moveRight())
+        return dispatch(moveRight());
       case 13: // enter
         if (allItemsCollected && playerOnFinalSquare && user && !isSavingMission) {
           dispatch(setIsSavingMission(true));
-          return addCompletedMission({ mission }).unwrap()
-            .then(() => {
-              dispatch(startMission({ nextMission: true }))
-            })
-            .catch(error => {
-              console.error('addCompletedMission request did not work.', { error })
-            }).finally(() => {
-              dispatch(setIsSavingMission(false));
-            });
+          return addCompletedMission({mission}).unwrap()
+              .then(() => {
+                dispatch(startMission({nextMission: true}));
+              })
+              .catch((error) => {
+                console.error('addCompletedMission request did not work.', {error});
+              }).finally(() => {
+                dispatch(setIsSavingMission(false));
+              });
         }
-        return dispatch(collectItem())
+        return dispatch(collectItem());
     }
   }
 
   useEffect(() => {
-    window.addEventListener("keydown", keyPressHandler);
+    window.addEventListener('keydown', keyPressHandler);
     return () => {
-      window.removeEventListener("keydown", keyPressHandler);
+      window.removeEventListener('keydown', keyPressHandler);
     };
   });
 
@@ -97,9 +97,7 @@ export default function Component() {
         </button>
       </section>
     </section >
-  )
+  );
 }
-
-
 
 

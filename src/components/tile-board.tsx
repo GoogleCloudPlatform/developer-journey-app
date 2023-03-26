@@ -1,7 +1,6 @@
-import Tile from "./tile";
+import Tile from './tile';
 
 export default function Component() {
-
   return (
 
     <section className="bg-slate-800 rounded-l-xl my-4 col-span-3 space-y-4">
@@ -17,5 +16,5 @@ export default function Component() {
         <Tile x={2} y={0} />
       </section>
     </section>
-  )
+  );
 }

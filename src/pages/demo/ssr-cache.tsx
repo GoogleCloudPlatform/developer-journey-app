@@ -1,4 +1,4 @@
-import {GetServerSidePropsContext, GetServerSidePropsResult} from "next";
+import {GetServerSidePropsContext, GetServerSidePropsResult} from 'next';
 
 interface PropsData {
   greeting: string,
@@ -14,8 +14,8 @@ export async function getServerSideProps({res}: GetServerSidePropsContext): Prom
   );
 
   const data: PropsData = {
-    greeting: "Hello",
-  }
+    greeting: 'Hello',
+  };
 
   return {
     props: data,

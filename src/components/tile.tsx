@@ -1,26 +1,26 @@
-import Image from 'next/image'
-import { RootState } from '../redux/store'
-import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { GridPosition } from 'src/models/GridPosition';
-import { collectItem, moveDown, moveLeft, moveRight, moveUp, setIsSavingMission, startMission } from 'src/redux/gameSlice';
-import { useAddCompletedMissionMutation, useGetUserQuery } from 'src/redux/apiSlice'
-import { UserCircleIcon } from '@heroicons/react/24/outline'
+import Image from 'next/image';
+import {RootState} from '../redux/store';
+import {useAppDispatch, useAppSelector} from '../redux/hooks';
+import {GridPosition} from 'src/models/GridPosition';
+import {collectItem, moveDown, moveLeft, moveRight, moveUp, setIsSavingMission, startMission} from 'src/redux/gameSlice';
+import {useAddCompletedMissionMutation, useGetUserQuery} from 'src/redux/apiSlice';
+import {UserCircleIcon} from '@heroicons/react/24/outline';
 
 
-export default function Component({ x, y }: GridPosition) {
+export default function Component({x, y}: GridPosition) {
   const {
     data: user,
     isLoading,
     isSuccess,
     isError,
-    error
+    error,
   } = useGetUserQuery();
 
-  const [addCompletedMission] = useAddCompletedMissionMutation()
+  const [addCompletedMission] = useAddCompletedMissionMutation();
 
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
-  const { playerPosition, mission, inventory, allItemsCollected, isSavingMission } = useAppSelector((state: RootState) => state.game)
+  const {playerPosition, mission, inventory, allItemsCollected, isSavingMission} = useAppSelector((state: RootState) => state.game);
   const playerIsOnTile = playerPosition.x === x && playerPosition.y === y;
   const playerIsOnStartingTile = playerPosition.x === 0 && playerPosition.y === 0;
   const playerIsLeftOfTile = playerPosition.x + 1 === x && playerPosition.y === y;
@@ -30,48 +30,48 @@ export default function Component({ x, y }: GridPosition) {
   const playerIsOnAdjacentTile = playerIsLeftOfTile || playerIsRightOfTile || playerIsAboveTile || playerIsBelowTile;
   const tileIsFinalTile = x == 2 && y == 2;
 
-  const tileItem = inventory.find(item => item.position.x === x && item.position.y === y && item.status === 'NOT_COLLECTED');
+  const tileItem = inventory.find((item) => item.position.x === x && item.position.y === y && item.status === 'NOT_COLLECTED');
 
 
   const completeMission = async () => {
     if (allItemsCollected && user) {
       dispatch(setIsSavingMission(true));
-      return addCompletedMission({ mission }).unwrap()
-        .then(() => {
-          dispatch(startMission({ nextMission: true }))
-        })
-        .catch((error: Error) => {
-          console.error('addCompletedMission request did not work.', { error })
-        }).finally(() => {
-          dispatch(setIsSavingMission(false));
-        });
+      return addCompletedMission({mission}).unwrap()
+          .then(() => {
+            dispatch(startMission({nextMission: true}));
+          })
+          .catch((error: Error) => {
+            console.error('addCompletedMission request did not work.', {error});
+          }).finally(() => {
+            dispatch(setIsSavingMission(false));
+          });
     }
-  }
+  };
 
   if (isError) {
-    return <div>{error.toString()}</div>
+    return <div>{error.toString()}</div>;
   }
 
   if (isSuccess || isLoading) {
     return (
       <section className="min-h-full" onClick={() => {
         if (playerIsLeftOfTile) {
-          dispatch(moveRight())
+          dispatch(moveRight());
         }
         if (playerIsRightOfTile) {
-          dispatch(moveLeft())
+          dispatch(moveLeft());
         }
         if (playerIsAboveTile) {
-          dispatch(moveDown())
+          dispatch(moveDown());
         }
         if (playerIsBelowTile) {
-          dispatch(moveUp())
+          dispatch(moveUp());
         }
       }}>
         <figure className="bg-slate-200 rounded-xl p-3 w-full">
           <div className="h-8 md:h-12 lg:h-20 flex justify-between">
 
-          
+
             {playerIsOnTile ? (
               <UserCircleIcon className="block h-8 md:h-12 lg:h-20" data-testid="usericon" aria-hidden="true" />
             ) : <div />}
@@ -118,9 +118,9 @@ export default function Component({ x, y }: GridPosition) {
           </div>
         </figure>
       </section>
-    )
+    );
   }
 
   // TODO: Better fall through logic, but can't return 'Element | undefined'
-  return <div>Something has gone terribly wrong with tile.tsx</div>
+  return <div>Something has gone terribly wrong with tile.tsx</div>;
 }
