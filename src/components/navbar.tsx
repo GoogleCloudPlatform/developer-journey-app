@@ -1,30 +1,15 @@
-import { Fragment, useEffect } from 'react'
 import Image from 'next/image';
 import { Disclosure } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { signIn, signOut, useSession } from 'next-auth/react'
-import { useGetUserQuery } from 'src/redux/apiSlice'
-import { startMission } from 'src/redux/gameSlice'
-import { useAppDispatch } from 'src/redux/hooks'
 import Link from 'next/link';
-
-
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Navbar() {
-  const dispatch = useAppDispatch()
-
-  const { data: user } = useGetUserQuery();
-
-  useEffect(() => {
-    if (user) {
-      dispatch(startMission({}))
-    }
-  }, [dispatch, user]);
   const router = useRouter()
   const { data: session } = useSession();
 
