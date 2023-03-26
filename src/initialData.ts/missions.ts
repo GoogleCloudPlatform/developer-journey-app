@@ -15,7 +15,7 @@ export const missions: Mission[] = [
   {
     id: "1rSUn3CLB3UVgPbkoIoh",
     title: "Connect a Go application on Cloud Run to a Cloud SQL for PostgreSQL database",
-    technologies: ['cloud_run', 'cloud_sql'],
+    technologies: ['cloud_run', 'cloud_sql', 'identity_and_access_management'],
     learningResources: [
       {
         title: "How to connect a Go application on Cloud Run to a Cloud SQL for PostgreSQL database",

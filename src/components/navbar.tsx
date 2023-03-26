@@ -66,7 +66,7 @@ export default function Navbar() {
                 </div>
               </div>
 
-              {/* Profile dropdown */}
+              {/* username and sign in/sign out button */}
               {session?.user?.name ? (
                 <>
                   <span className='block sm:hidden text-gray-300 rounded-md px-3 py-2 text-sm font-small'>
@@ -76,7 +76,7 @@ export default function Navbar() {
                     {session.user.name.length < 30 ? (session.user.name) : (session.user.name.substring(0,28) + '...')}
                   </span>
                   <button
-                    className={classNames('bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded')}
+                    className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
                     onClick={() => signOut()}
                   >
                     Sign Out
@@ -84,7 +84,7 @@ export default function Navbar() {
                 </>
               ) : (
                 <button
-                  className={classNames('bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded')}
+                  className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
                   onClick={() => signIn()}
                 >
                   Sign in
