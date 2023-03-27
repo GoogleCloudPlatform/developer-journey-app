@@ -1,30 +1,15 @@
-import { Fragment, useEffect } from 'react'
 import Image from 'next/image';
 import { Disclosure } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { signIn, signOut, useSession } from 'next-auth/react'
-import { useGetUserQuery } from 'src/redux/apiSlice'
-import { startMission } from 'src/redux/gameSlice'
-import { useAppDispatch } from 'src/redux/hooks'
 import Link from 'next/link';
-
-
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Navbar() {
-  const dispatch = useAppDispatch()
-
-  const { data: user } = useGetUserQuery();
-
-  useEffect(() => {
-    if (user) {
-      dispatch(startMission({}))
-    }
-  }, [dispatch, user]);
   const router = useRouter()
   const { data: session } = useSession();
 
@@ -81,7 +66,7 @@ export default function Navbar() {
                 </div>
               </div>
 
-              {/* Profile dropdown */}
+              {/* username and sign in/sign out button */}
               {session?.user?.name ? (
                 <>
                   <span className='block sm:hidden text-gray-300 rounded-md px-3 py-2 text-sm font-small'>
@@ -91,7 +76,7 @@ export default function Navbar() {
                     {session.user.name.length < 30 ? (session.user.name) : (session.user.name.substring(0,28) + '...')}
                   </span>
                   <button
-                    className={classNames('bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded')}
+                    className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
                     onClick={() => signOut()}
                   >
                     Sign Out
@@ -99,7 +84,7 @@ export default function Navbar() {
                 </>
               ) : (
                 <button
-                  className={classNames('bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded')}
+                  className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
                   onClick={() => signIn()}
                 >
                   Sign in

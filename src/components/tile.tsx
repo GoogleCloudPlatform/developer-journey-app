@@ -5,7 +5,6 @@ import { GridPosition } from 'src/models/GridPosition';
 import { collectItem, moveDown, moveLeft, moveRight, moveUp, setIsSavingMission, startMission } from 'src/redux/gameSlice';
 import { useAddCompletedMissionMutation, useGetUserQuery } from 'src/redux/apiSlice'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
-import { useSession } from 'next-auth/react';
 
 
 export default function Component({ x, y }: GridPosition) {
@@ -16,7 +15,6 @@ export default function Component({ x, y }: GridPosition) {
     isError,
     error
   } = useGetUserQuery();
-  const { data: session } = useSession();
 
   const [addCompletedMission] = useAddCompletedMissionMutation()
 
@@ -74,7 +72,7 @@ export default function Component({ x, y }: GridPosition) {
           <div className="h-8 md:h-12 lg:h-20 flex justify-between">
 
           
-            {playerIsOnTile && session?.user ? (
+            {playerIsOnTile ? (
               <UserCircleIcon className="block h-8 md:h-12 lg:h-20" data-testid="usericon" aria-hidden="true" />
             ) : <div />}
             {tileItem ? (

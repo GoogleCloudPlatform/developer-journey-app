@@ -2,6 +2,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Mission } from 'src/models/Mission'
 import { User } from 'src/models/User'
+import { startMission } from './gameSlice';
 
 // Define our single API slice object
 export const apiSlice = createApi({
@@ -16,6 +17,9 @@ export const apiSlice = createApi({
     getUser: builder.query<User, void>({
       // The URL for the request is '/api/user', this is a GET request
       query: () => '/user',
+      onCacheEntryAdded: (_, { dispatch }) => { 
+        dispatch(startMission())
+      },
       providesTags: ['User'],
     }),
     addCompletedMission: builder.mutation({
