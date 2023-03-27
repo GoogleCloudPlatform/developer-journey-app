@@ -18,7 +18,7 @@ export const apiSlice = createApi({
       // The URL for the request is '/api/user', this is a GET request
       query: () => '/user',
       onCacheEntryAdded: (_, { dispatch }) => { 
-        dispatch(startMission({}))
+        dispatch(startMission())
       },
       providesTags: ['User'],
     }),

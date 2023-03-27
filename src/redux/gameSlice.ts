@@ -33,10 +33,10 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    startMission: (state, action: PayloadAction<{ mission?: Mission, nextMission?: boolean }>) => {
-      const { nextMission } = action.payload;
+    startMission: (state, action: PayloadAction<{ mission?: Mission, nextMission?: boolean } | undefined>) => {
+      const nextMission = action.payload?.nextMission;
       // if no mission provided, restart this mission
-      let mission = action.payload.mission || state.mission;
+      let mission = action.payload?.mission || state.mission;
 
       // increment to next mission if requested
       if (nextMission) {
