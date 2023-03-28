@@ -155,6 +155,9 @@ resource "google_cloud_run_v2_service" "default" {
     service_account = google_service_account.cloud_run.email
   }
   labels = var.labels
+  depends_on = [
+    google_secret_manager_secret.nextauth_secret
+  ]
 }
 
 data "google_iam_policy" "noauth" {
@@ -278,6 +281,9 @@ resource "google_firestore_database" "database" {
   type                        = "FIRESTORE_NATIVE"
   concurrency_mode            = "OPTIMISTIC"
   app_engine_integration_mode = "DISABLED"
+  depends_on = [
+    time_sleep.wait_30_seconds
+  ]
 }
 
 ### Artifact Registry ###
