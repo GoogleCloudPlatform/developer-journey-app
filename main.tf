@@ -76,11 +76,17 @@ resource "google_secret_manager_secret" "nextauth_secret" {
     automatic = true
   }
   labels = var.labels
+  depends_on = [
+    time_sleep.wait_30_seconds
+  ]
 }
 
 resource "google_secret_manager_secret_version" "nextauth_secret" {
   secret      = google_secret_manager_secret.nextauth_secret.id
   secret_data = random_id.nextauth_secret.b64_std
+  depends_on = [
+    google_secret_manager_secret.nextauth_secret
+  ]
 }
 
 resource "google_secret_manager_secret_iam_binding" "nextauth_secret" {
@@ -89,6 +95,9 @@ resource "google_secret_manager_secret_iam_binding" "nextauth_secret" {
   role      = "roles/secretmanager.secretAccessor"
   members = [
     "serviceAccount:${google_service_account.cloud_run.email}",
+  ]
+  depends_on = [
+    google_secret_manager_secret.nextauth_secret
   ]
 }
 
@@ -279,4 +288,7 @@ resource "google_artifact_registry_repository" "default" {
   description   = "Dev journey artifact registry repo."
   format        = "DOCKER"
   labels        = var.labels
+  depends_on = [
+    time_sleep.wait_30_seconds
+  ]
 }

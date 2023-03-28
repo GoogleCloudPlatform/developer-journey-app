@@ -36,3 +36,12 @@ module "project_services" {
     "storage.googleapis.com"
   ]
 }
+
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [
+    module.project_services
+  ]
+
+  create_duration = "30s"
+}
+
