@@ -15,8 +15,8 @@
  */
 
 variable "project_id" {
-  description = "The project ID to deploy resources to."
   type        = string
+  description = "The project ID to deploy resources to."
 }
 
 variable "enable_apis" {
@@ -32,8 +32,9 @@ variable "initial_run_image" {
 }
 
 variable "labels" {
-  type    = map(string)
-  default = {}
+  type        = map(string)
+  description = "A set of key/value label pairs to assign to the resources deployed by this solution."
+  default     = {}
 }
 
 variable "deployment_name" {
@@ -43,13 +44,13 @@ variable "deployment_name" {
 }
 
 variable "region" {
-  default     = "us-west1"
   type        = string
+  default     = "us-west1"
   description = "Google Cloud region"
 }
 
 variable "zone" {
-  default     = "us-west1-a"
   type        = string
+  default     = "us-west1-a"
   description = "Google Cloud zone"
 }
