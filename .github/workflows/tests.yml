@@ -8,6 +8,7 @@ on:
 
 env:
   FIRESTORE_EMULATOR_HOST: localhost:9999
+  PROJECT_ID: birds-of-paradise
 
 jobs:
   unit-tests:

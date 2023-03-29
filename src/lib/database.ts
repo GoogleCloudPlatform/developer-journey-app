@@ -5,14 +5,21 @@ export class Database {
   private db: Firestore;
 
   constructor() {
+    const projectId = process.env.PROJECT_ID;
+    if (!projectId) {
+      const errMessage = "PROJECT_ID environment variable must be defined.";
+      console.error(errMessage);
+      throw new Error(errMessage);
+    }
+
     this.db = new Firestore({
-      projectId: "birds-of-paradise",
+      projectId: projectId,
     });
   }
 
   async setUser({username, completedMissions}: {username: string, completedMissions?: string[] }): Promise<any> {
     const userDoc = this.db.collection('users').doc(username);
-    
+
     return userDoc.set({
       username,
       completedMissions: completedMissions || [],
