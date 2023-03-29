@@ -312,9 +312,9 @@ resource "google_sourcerepo_repository" "default" {
 
 resource "google_cloudbuild_trigger" "web_new_build" {
   project     = var.project_id
-  name        = "web-new-build"
-  filename    = "build/cloudbuild.yaml"
-  description = "Triggers on every change to main branch in website directory. Initiates website image build."
+  name        = "${var.deployment_name}-new-build"
+  filename    = "build/app.cloudbuild.yaml"
+  description = "Initiates new build of ${var.deployment_name}. Triggers by changes to app on main branch of source repo."
   included_files = [
     "src/*",
   ]
