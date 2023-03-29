@@ -77,7 +77,7 @@ resource "google_secret_manager_secret" "nextauth_secret" {
   }
   labels = var.labels
   depends_on = [
-    time_sleep.wait_30_seconds
+    time_sleep.project_services
   ]
 }
 
@@ -282,7 +282,7 @@ resource "google_firestore_database" "database" {
   concurrency_mode            = "OPTIMISTIC"
   app_engine_integration_mode = "DISABLED"
   depends_on = [
-    time_sleep.wait_30_seconds
+    time_sleep.project_services
   ]
 }
 
@@ -295,6 +295,35 @@ resource "google_artifact_registry_repository" "default" {
   format        = "DOCKER"
   labels        = var.labels
   depends_on = [
-    time_sleep.wait_30_seconds
+    time_sleep.project_services
   ]
 }
+
+# Cloud Source Repo
+resource "google_sourcerepo_repository" "default" {
+  project = var.project_id
+  name    = var.deployment_name
+  depends_on = [
+    time_sleep.project_services
+  ]
+}
+
+# Cloud Build Trigger
+
+resource "google_cloudbuild_trigger" "web_new_build" {
+  project     = var.project_id
+  name        = "${var.deployment_name}-new-build"
+  filename    = "build/app.cloudbuild.yaml"
+  description = "Initiates new build of ${var.deployment_name}. Triggers by changes to app on main branch of source repo."
+  included_files = [
+    "src/*",
+  ]
+  trigger_template {
+    repo_name   = google_sourcerepo_repository.default.name
+    branch_name = "main"
+  }
+  substitutions = {
+    _AR_REPO = "${google_artifact_registry_repository.default.location}-docker.pkg.dev/${google_artifact_registry_repository.default.project}/${google_artifact_registry_repository.default.name}/app"
+  }
+}
+
