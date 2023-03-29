@@ -33,6 +33,7 @@ module "project_services" {
     "run.googleapis.com",
     "secretmanager.googleapis.com",
     "serviceusage.googleapis.com",
+    "sourcerepo.googleapis.com",
     "storage.googleapis.com"
   ]
 }
