@@ -298,3 +298,32 @@ resource "google_artifact_registry_repository" "default" {
     time_sleep.wait_30_seconds
   ]
 }
+
+# Cloud Source Repo
+resource "google_sourcerepo_repository" "default" {
+  project = var.project_id
+  name    = var.deployment_name
+  depends_on = [
+    time_sleep.wait_30_seconds
+  ]
+}
+
+# Cloud Build Trigger
+
+resource "google_cloudbuild_trigger" "web_new_build" {
+  project     = var.project_id
+  name        = "web-new-build"
+  filename    = "build/cloudbuild.yaml"
+  description = "Triggers on every change to main branch in website directory. Initiates website image build."
+  included_files = [
+    "src/*",
+  ]
+  trigger_template {
+    repo_name   = google_sourcerepo_repository.default.name
+    branch_name = "main"
+  }
+  substitutions = {
+    _AR_REPO = "${google_artifact_registry_repository.default.location}-docker.pkg.dev/${google_artifact_registry_repository.default.project}/${google_artifact_registry_repository.default.name}/app"
+  }
+}
+
