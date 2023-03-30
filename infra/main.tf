@@ -313,7 +313,7 @@ resource "google_sourcerepo_repository" "default" {
 resource "google_cloudbuild_trigger" "web_new_build" {
   project     = var.project_id
   name        = "${var.deployment_name}-new-build"
-  filename    = "build/app.cloudbuild.yaml"
+  filename    = "build/app-build.cloudbuild.yaml"
   description = "Initiates new build of ${var.deployment_name}. Triggers by changes to app on main branch of source repo."
   included_files = [
     "src/*",
@@ -327,3 +327,29 @@ resource "google_cloudbuild_trigger" "web_new_build" {
   }
 }
 
+resource "google_pubsub_topic" "gcr" {
+  project  = var.project_id
+  name     = "gcr"
+}
+resource "google_cloudbuild_trigger" "app_deploy" {
+  project     = var.project_id
+  name        = "${var.deployment_name}-app-deploy"
+  description = "Triggers on any new website build to Artifact Registry."
+  pubsub_config {
+    topic = google_pubsub_topic.gcr.id
+  }
+  approval_config {
+    approval_required = true
+  }
+  filename = "build/app-deploy.cloudbuild.yaml"
+  substitutions = {
+    _SERVICE    = google_cloud_run_v2_service.default.name
+    _IMAGE_NAME = "$(body.message.data.tag)"
+    _REGION     = var.region
+  }
+  source_to_build {
+    uri       = google_sourcerepo_repository.default.url
+    ref       = "refs/heads/main"
+    repo_type = "CLOUD_SOURCE_REPOSITORIES"
+  }
+}
