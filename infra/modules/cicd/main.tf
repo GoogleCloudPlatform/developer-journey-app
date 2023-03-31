@@ -18,6 +18,12 @@ resource "google_artifact_registry_repository" "default" {
 
 # Cloud Build Trigger
 
+resource "google_service_account" "default" {
+  project = var.project_id
+  account_id   = "${var.run_service_name}-builder"
+  display_name = "Service Account for Cloud Build deployment to Cloud Run."
+}
+
 resource "google_cloudbuild_trigger" "app_new_build" {
   project     = var.project_id
   name        = "${var.deployment_name}-new-build"
@@ -47,13 +53,13 @@ resource "google_cloudbuild_trigger" "app_deploy" {
   project     = var.project_id
   name        = "${var.deployment_name}-app-deploy"
   description = "Triggers on any new website build to Artifact Registry."
+  service_account = google_service_account.default.name
   pubsub_config {
     topic = google_pubsub_topic.gcr.id
   }
   approval_config {
     approval_required = true
   }
-  filename = "build/app-deploy.cloudbuild.yaml"
   substitutions = {
     _SERVICE    = var.run_service_name
     _IMAGE_NAME = "$(body.message.data.tag)"
@@ -63,6 +69,12 @@ resource "google_cloudbuild_trigger" "app_deploy" {
     uri       = local.github_repository_url
     ref       = "refs/heads/main"
     repo_type = "GITHUB"
+  }
+  git_file_source {
+    path = "build/app-deploy.cloudbuild.yaml"
+    repo_type = "GITHUB"
+    revision = "refs/heads/main"
+    uri = local.github_repository_url
   }
 }
 
