@@ -1,6 +1,7 @@
 locals {
-  repository_name  = var.repository_name
-  repository_owner = var.repository_owner
+  repository_name  = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[1]
+  repository_owner = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[0]
+  github_repository_url = replace(var.github_repository_url, "/(.*github.com)/", "https://github.com")
 }
 ### Artifact Registry ###
 resource "google_artifact_registry_repository" "default" {
@@ -59,8 +60,9 @@ resource "google_cloudbuild_trigger" "app_deploy" {
     _REGION     = var.region
   }
   source_to_build {
-    uri       = "https://github.com/${local.repository_owner}/${local.reposiory_name}"
+    uri       = local.github_repository_url
     ref       = "refs/heads/main"
     repo_type = "GITHUB"
   }
 }
+

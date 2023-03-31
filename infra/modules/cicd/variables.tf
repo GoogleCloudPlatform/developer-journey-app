@@ -32,12 +32,7 @@ variable "run_service_name" {
   description = "The name of the Cloud Run service that this pipeline will deploy to."
 }
 
-variable "repository_owner" {
-  type        = string
-  description = "Owner of connected GitHub repository."
-}
-
-variable "repository_name" {
-  type        = string
-  description = "Name of connected GitHub repository."
+variable "github_repository_url" {
+    type = string
+    description = "URL of connected GitHub repository (https://github.com/repo_owner/repo_name)"
 }
