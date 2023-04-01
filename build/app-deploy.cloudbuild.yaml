@@ -24,5 +24,6 @@ steps:
       - --project=${PROJECT_ID}
       - --allow-unauthenticated
       - --tag=latest
+      - --service-account=${_RUN_SERVICE_ACCOUNT}
 options:
   logging: CLOUD_LOGGING_ONLY

@@ -9,6 +9,11 @@ variable "run_service_name" {
   default     = "dev-journey"
 }
 
+variable "run_service_account" {
+  type        = string
+  description = "The email of the Cloud Run service account for the service."
+}
+
 variable "github_repository_url" {
   type        = string
   description = "URL of connected GitHub repository (https://github.com/repo_owner/repo_name)"

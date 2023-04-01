@@ -82,7 +82,8 @@ resource "google_cloudbuild_trigger" "app_deploy" {
   substitutions = {
     _SERVICE    = var.run_service_name
     _IMAGE_NAME = "$(body.message.data.tag)"
-    _REGION     = var.region
+    _REGION              = var.region
+    _RUN_SERVICE_ACCOUNT = var.run_service_account
   }
   source_to_build {
     uri       = local.github_repository_url
