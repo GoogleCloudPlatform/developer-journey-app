@@ -24,9 +24,21 @@ resource "google_service_account" "default" {
   display_name = "Service Account for Cloud Build deployment to Cloud Run."
 }
 
+resource "google_project_iam_member" "builder_logwriter" {
+  project = var.project_id
+  role    = "roles/logging.logWriter"
+  member  = "serviceAccount:${google_service_account.default.email}"
+}
+
+resource "google_project_iam_member" "builder_run_developer" {
+  project = var.project_id
+  role    = "roles/run.developer"
+  member  = "serviceAccount:${google_service_account.default.email}"
+}
+
 resource "google_cloudbuild_trigger" "app_new_build" {
   project     = var.project_id
-  name        = "${var.deployment_name}-new-build"
+  name        = "${var.deployment_name}-app-build"
   filename    = "build/app-build.cloudbuild.yaml"
   description = "Initiates new build of ${var.deployment_name}. Triggers by changes to app on main branch of source repo."
   included_files = [
@@ -54,6 +66,7 @@ resource "google_cloudbuild_trigger" "app_deploy" {
   name        = "${var.deployment_name}-app-deploy"
   description = "Triggers on any new website build to Artifact Registry."
   service_account = google_service_account.default.name
+  # include_build_logs = "INCLUDE_BUILD_LOGS_WITH_STATUS"
   pubsub_config {
     topic = google_pubsub_topic.gcr.id
   }
