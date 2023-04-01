@@ -1,6 +1,6 @@
 locals {
-  repository_name  = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[1]
-  repository_owner = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[0]
+  repository_name       = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[1]
+  repository_owner      = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[0]
   github_repository_url = replace(var.github_repository_url, "/(.*github.com)/", "https://github.com")
 }
 ### Artifact Registry ###
@@ -19,7 +19,7 @@ resource "google_artifact_registry_repository" "default" {
 # Cloud Build Trigger
 
 resource "google_service_account" "default" {
-  project = var.project_id
+  project      = var.project_id
   account_id   = "${var.run_service_name}-builder"
   display_name = "Service Account for Cloud Build deployment to Cloud Run."
 }
@@ -68,9 +68,9 @@ resource "google_pubsub_topic" "gcr" {
   name    = "gcr"
 }
 resource "google_cloudbuild_trigger" "app_deploy" {
-  project     = var.project_id
-  name        = "${var.deployment_name}-app-deploy"
-  description = "Triggers on any new website build to Artifact Registry."
+  project         = var.project_id
+  name            = "${var.deployment_name}-app-deploy"
+  description     = "Triggers on any new website build to Artifact Registry."
   service_account = google_service_account.default.name
   # include_build_logs = "INCLUDE_BUILD_LOGS_WITH_STATUS"
   pubsub_config {
@@ -80,8 +80,8 @@ resource "google_cloudbuild_trigger" "app_deploy" {
     approval_required = true
   }
   substitutions = {
-    _SERVICE    = var.run_service_name
-    _IMAGE_NAME = "$(body.message.data.tag)"
+    _SERVICE             = var.run_service_name
+    _IMAGE_NAME          = "$(body.message.data.tag)"
     _REGION              = var.region
     _RUN_SERVICE_ACCOUNT = var.run_service_account
   }
@@ -91,10 +91,10 @@ resource "google_cloudbuild_trigger" "app_deploy" {
     repo_type = "GITHUB"
   }
   git_file_source {
-    path = "build/app-deploy.cloudbuild.yaml"
+    path      = "build/app-deploy.cloudbuild.yaml"
     repo_type = "GITHUB"
-    revision = "refs/heads/main"
-    uri = local.github_repository_url
+    revision  = "refs/heads/main"
+    uri       = local.github_repository_url
   }
 }
 
