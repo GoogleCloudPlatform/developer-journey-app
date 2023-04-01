@@ -2,7 +2,15 @@ locals {
   repository_name       = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[1]
   repository_owner      = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[0]
   github_repository_url = replace(var.github_repository_url, "/(.*github.com)/", "https://github.com")
+  run_service_account   = data.google_cloud_run_service.default.template[0].spec[0].service_account_name
 }
+
+data "google_cloud_run_service" "default" {
+  name     = var.run_service_name
+  project  = var.project_id
+  location = var.region
+}
+
 ### Artifact Registry ###
 resource "google_artifact_registry_repository" "default" {
   project       = var.project_id
@@ -83,7 +91,7 @@ resource "google_cloudbuild_trigger" "app_deploy" {
     _SERVICE             = var.run_service_name
     _IMAGE_NAME          = "$(body.message.data.tag)"
     _REGION              = var.region
-    _RUN_SERVICE_ACCOUNT = var.run_service_account
+    _RUN_SERVICE_ACCOUNT = local.run_service_account
   }
   source_to_build {
     uri       = local.github_repository_url
