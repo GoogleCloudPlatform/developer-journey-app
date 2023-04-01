@@ -30,6 +30,12 @@ resource "google_project_iam_member" "builder_logwriter" {
   member  = "serviceAccount:${google_service_account.default.email}"
 }
 
+resource "google_project_iam_member" "builder_sa_user" {
+  project = var.project_id
+  role    = "roles/iam.serviceAccountUser"
+  member  = "serviceAccount:${google_service_account.default.email}"
+}
+
 resource "google_project_iam_member" "builder_run_developer" {
   project = var.project_id
   role    = "roles/run.developer"
