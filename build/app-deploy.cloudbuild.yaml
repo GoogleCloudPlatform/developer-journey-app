@@ -24,3 +24,5 @@ steps:
       - --project=${PROJECT_ID}
       - --allow-unauthenticated
       - --tag=latest
+ options:
+  logging: CLOUD_LOGGING_ONLY
