@@ -17,3 +17,11 @@
 output "frontend_url" {
   value = "http://${google_compute_global_address.default.address}/"
 }
+
+output "source_repo_url" {
+  value = google_sourcerepo_repository.default.url
+}
+
+output "clone_app_repo_to_shell_url" {
+  value = "https://console.cloud.google.com/cloudshell/open?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2FGoogleCloudPlatform%2Fdeveloper-journey-app&cloudshell_tutorial=docs%2Ftutorials%2Fsetup-cicd.md"
+}
