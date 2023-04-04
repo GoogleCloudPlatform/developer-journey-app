@@ -17,11 +17,11 @@ resource "google_clouddeploy_delivery_pipeline" "default" {
   serial_pipeline {
     stages {
       profiles  = ["stage"]
-      target_id = "${var.run_service_name}-stage"
+      target_id = google_clouddeploy_target.stage.name
     }
     stages {
       profiles  = ["prod"]
-      target_id = var.run_service_name
+      target_id = google_clouddeploy_target.prod.name
     }
   }
 }
