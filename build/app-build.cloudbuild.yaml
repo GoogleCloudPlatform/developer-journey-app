@@ -21,7 +21,6 @@ steps:
       - '${_AR_REPO}:${_IMAGE_TAG}'
       - '.'
 substitutions:
-  _REGION: us-west1
   _IMAGE_TAG: $SHORT_SHA
 
 # Store in Artifact Registry
