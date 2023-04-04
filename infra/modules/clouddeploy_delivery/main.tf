@@ -74,3 +74,25 @@ resource "google_clouddeploy_target" "stage" {
   }
  
 }
+
+resource "google_clouddeploy_target" "prod" {
+  project = var.project_id
+  provider = google-beta
+  location = var.region
+  name     = "${var.deployment_name}-prod-target"
+  description = "Prod target for ${var.deployment_name} app."
+
+  execution_configs {
+    usages            = ["RENDER", "DEPLOY", "VERIFY"]
+    service_account = google_service_account.default.email
+  }
+
+  labels = var.labels
+  require_approval = false
+
+  run {
+    location = "projects/${var.project_id}/locations/${data.google_cloud_run_service.default.location}"
+  }
+ 
+}
+
