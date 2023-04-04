@@ -23,18 +23,7 @@ module "project_services" {
   enable_apis                 = var.enable_apis
 
   activate_apis = [
-    "artifactregistry.googleapis.com",
-    "cloudasset.googleapis.com",
-    "cloudbuild.googleapis.com",
-    "cloudresourcemanager.googleapis.com",
-    "compute.googleapis.com",
-    "firestore.googleapis.com",
-    "iam.googleapis.com",
-    "run.googleapis.com",
-    "secretmanager.googleapis.com",
-    "serviceusage.googleapis.com",
-    "sourcerepo.googleapis.com",
-    "storage.googleapis.com"
+
   ]
 }
 
