@@ -40,10 +40,10 @@ export default function Component() {
             Uh oh...
           </p>
           <p>
-            This typically doesn't take this long.
+            This typically does not take this long.
           </p>
           <p>
-            We'll wait two more seconds and then show you an error message.
+            We will wait two more seconds and then show you an error message.
           </p>
         </div>
       </section>
