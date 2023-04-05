@@ -62,8 +62,11 @@ You can start editing pages. The browser auto-updates when you save changes.
 
 ### If you want to run the Firestore Emulator locally
 
-Choose the port you want to use for the [Firestore Emulator], for example `9999`,
-and export the `FIRESTORE_EMULATOR_HOST` environment variable:
+Choose the port you want to use for the [Firestore Emulator], for example `9999`.
+
+> Note: If you choose a port that is not `9999` for this demo, you will need to update the `host` property in `database.ts` to match your selected port.
+
+Export the `FIRESTORE_EMULATOR_HOST` environment variable:
 
 ```bash
 export FIRESTORE_EMULATOR_HOST="localhost:9999"
@@ -72,7 +75,7 @@ export FIRESTORE_EMULATOR_HOST="localhost:9999"
 Start the emulator:
 
 ```bash
-gcloud emulators firestore start --host-port="$FIRESTORE_EMULATOR_HOST"
+gcloud emulators firestore start --host-port="$FIRESTORE_EMULATOR_HOST" --project=demo-test
 ```
 
 > When the exported `FIRESTORE_EMULATOR_HOST` environment variable is set, the
