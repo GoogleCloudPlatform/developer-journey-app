@@ -9,6 +9,7 @@ describe("database tests", () => {
   let fs: Database;
 
   beforeAll(async () => {
+    process.env = {...process.env, NODE_ENV: 'development'}
     await directDatabaseConnectionForTestReset.collection('users').doc('Bob').delete()
     fs = new Database();
   })
