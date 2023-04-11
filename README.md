@@ -221,7 +221,7 @@ Apache 2.0 - See [LICENSE](LICENSE) for more information.
 https://console.cloud.google.com/billing
 
 [Cloud Run]:
-https://cloud.google.com
+https://cloud.google.com/run
 
 [Cloud CDN]:
 https://cloud.google.com/cdn
