@@ -21,18 +21,15 @@ on:
       - main
 
 jobs:
-  lint:
-    name: Lint
-    strategy:
-      fail-fast: false
-
+  lint-ts:
+    name: Lint Typescript
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Use Nodejs v18.x
+      - name: Setup Nodejs v18.x
         uses: actions/setup-node@v3
         with:
           node-version: v18.x
@@ -43,3 +40,17 @@ jobs:
       - name: Run Lint
         run: npm run lint
 
+  lint-tf:
+    name: Lint Terraform
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Run Lint
+        working-directory: infra
+        run: terraform fmt --check $(find . -name *.tf)
