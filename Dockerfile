@@ -1,45 +1,40 @@
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # syntax = docker/dockerfile:1.2
 
 #######################################
-FROM node:18-slim AS base
+FROM node:18-slim AS builder
 #######################################
 
-
-#######################################
-FROM base AS deps
-#######################################
 WORKDIR /app
 COPY package.json \
      package-lock.json* \
-     yarn.lock* \
-     pnpm-lock.yaml* \
      ./
-RUN \
-  if [ -f package-lock.json ]; then npm ci; \
-  elif [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f pnpm-lock.yaml ]; then npm add --global pnpm && pnpm i --frozen-lockfile; \
-  else echo "Package is missing a lockfile." && exit 1; \
-  fi
-
-
-#######################################
-FROM base AS builder
-#######################################
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+     
+RUN npm ci
 COPY . .
 
 # Disable telemetry before building: https://nextjs.org/telemetry
 ENV NEXT_TELEMETRY_DISABLED 1
-
 RUN npm run build
 
+#######################################
+FROM node:18-slim AS runner
+#######################################
 
-#######################################
-FROM base AS runner
-#######################################
 WORKDIR /app
-
 RUN adduser --system --uid 1001 nextjs
 RUN addgroup --system --gid 1001 nodejs
 
@@ -51,9 +46,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
 USER nextjs
-# Disable telemetry before running: https://nextjs.org/telemetry
-ENV NEXT_TELEMETRY_DISABLED 1
 ENV NODE_ENV production
-ENV PORT 8080
-EXPOSE 8080
+
 CMD ["node", "server.js"]
