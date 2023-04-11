@@ -1,7 +1,5 @@
 # 🌺 Developer Journey App
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://github.com/GoogleCloudPlatform/developer-journey-app)
-
 *Description*
 
 **Developer Journey App** gives developers a fun user interface for exploring a
@@ -11,6 +9,10 @@ The main goal of the app, however, is to showcase how to write [Next.js] apps
 to reap the performance benefits of [Google Cloud] and [Cloud CDN].
 
 > **🧪 Preview:** This app is currently under development.
+
+## Launch
+
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fgooglecloudplatform%2Fdeveloper-journey-app)
 
 
 ## Features
@@ -221,7 +223,7 @@ Apache 2.0 - See [LICENSE](LICENSE) for more information.
 https://console.cloud.google.com/billing
 
 [Cloud Run]:
-https://cloud.google.com
+https://cloud.google.com/run
 
 [Cloud CDN]:
 https://cloud.google.com/cdn
