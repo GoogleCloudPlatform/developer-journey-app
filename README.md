@@ -36,25 +36,15 @@ Install dependencies:
 
 ```bash
 npm install
-# or
-yarn install
-# or
-pnpm install
 ```
 
-> If you don't have a preference for package manager, [pnpm](https://pnpm.io/)
-> is recommended for local development. However, this repo standardizes
-> on `npm`, so `yarn.lock` and `pnpm-lock.yaml` will be ignored by git if you
+> The repo's `package-lock.json` will be ignored by git if you
 > commit changes (configured in `.gitignore`).
 
 Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -93,12 +83,6 @@ Press `Ctrl-C` when you want to stop the Firestore emulator.
 ```bash
 npm test
 npm run test:watch
-# or
-yarn test
-yarn test:watch
-# or
-pnpm test
-pnpm test:watch
 ```
 
 [ts-jest](https://kulshekhar.github.io/ts-jest/) is installed as a dev
