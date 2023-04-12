@@ -38,8 +38,11 @@ next-env.d.ts
 **/.terraform/*
 
 # .tfstate files
+terraform.tfstate*
+terraform.tfvars
 *.tfstate
 *.tfstate.*
+*.terraform.lock*
 
 # Crash log files
 crash.log

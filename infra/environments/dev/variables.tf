@@ -20,7 +20,7 @@ variable "project_id" {
 variable "run_service_name" {
   type        = string
   description = "The name of the Cloud Run service that this pipeline will deploy to."
-  default     = "dev-journey"
+  default     = "app"
 }
 
 variable "github_repository_url" {

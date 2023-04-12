@@ -26,7 +26,7 @@ variable "region" {
 variable "deployment_name" {
   type        = string
   description = "Identifier for the deployment. Used in some resource names."
-  default     = "dev-journey"
+  default     = "dev-journey-app"
 }
 
 variable "enable_apis" {

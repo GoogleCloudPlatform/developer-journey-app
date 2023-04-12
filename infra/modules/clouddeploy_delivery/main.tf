@@ -70,7 +70,7 @@ resource "google_service_account_iam_binding" "deploy_sa_user_run" {
 
 resource "google_clouddeploy_target" "stage" {
   project     = var.project_id
-  provider    = google-beta
+  provider    = google
   location    = var.region
   name        = "${var.deployment_name}-stage-target"
   description = "Stage target for ${var.deployment_name} app."
@@ -91,7 +91,7 @@ resource "google_clouddeploy_target" "stage" {
 
 resource "google_clouddeploy_target" "prod" {
   project     = var.project_id
-  provider    = google-beta
+  provider    = google
   location    = var.region
   name        = "${var.deployment_name}-prod-target"
   description = "Prod target for ${var.deployment_name} app."
