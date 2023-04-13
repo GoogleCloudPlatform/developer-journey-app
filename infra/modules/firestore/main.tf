@@ -12,16 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module "cloud_build_cicd" {
-  source           = "../../modules/cicd"
-  project_id       = var.project_id
-  region           = var.region
-  repo_name        = var.repo_name
-  repo_owner       = var.repo_owner
-  run_service_name = var.run_service_name
-}
+# Cloud Firestore
 
-module "cloud_firestore" {
-  source     = "../../modules/firestore"
-  project_id = var.project_id
+resource "google_firestore_database" "database" {
+  project                     = var.project_id
+  name                        = "(default)"
+  location_id                 = "nam5"
+  type                        = "FIRESTORE_NATIVE"
+  concurrency_mode            = "PESSIMISTIC"
+  app_engine_integration_mode = "DISABLED"
 }

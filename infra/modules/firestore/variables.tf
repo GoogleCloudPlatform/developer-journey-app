@@ -17,24 +17,9 @@ variable "project_id" {
   description = "Google Cloud project ID to deploy resources to."
 }
 
-variable "run_service_name" {
-  type        = string
-  description = "The name of the Cloud Run service that this pipeline will deploy to."
-  default     = "dev-journey"
+variable "enable_apis" {
+  type        = bool
+  description = "Whether or not to enable underlying apis in this solution."
+  default     = true
 }
 
-variable "region" {
-  type        = string
-  description = "Default region to use for Google Cloud resources."
-  default     = "us-central1"
-}
-
-variable "repo_owner" {
-  type        = string
-  description = "Owner of GitHub repository to connect to."
-}
-
-variable "repo_name" {
-  type        = string
-  description = "Name of GitHub repository to connect to."
-}

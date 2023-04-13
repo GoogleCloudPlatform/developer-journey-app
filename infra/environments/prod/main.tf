@@ -13,8 +13,15 @@
 # limitations under the License.
 
 module "cloud_build_cicd" {
-  source                = "../../modules/cicd"
-  project_id            = var.project_id
-  run_service_name      = var.run_service_name
-  github_repository_url = var.github_repository_url
+  source           = "../../modules/cicd"
+  project_id       = var.project_id
+  region           = var.region
+  repo_name        = var.repo_name
+  repo_owner       = var.repo_owner
+  run_service_name = var.run_service_name
+}
+
+module "cloud_firestore" {
+  source     = "../../modules/firestore"
+  project_id = var.project_id
 }

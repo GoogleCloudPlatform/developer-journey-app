@@ -13,9 +13,9 @@
 # limitations under the License.
 
 locals {
-  repository_name       = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[1]
-  repository_owner      = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[0]
-  github_repository_url = replace(var.github_repository_url, "/(.*github.com)/", "https://github.com")
+  repository_name       = var.repo_name
+  repository_owner      = var.repo_owner
+  github_repository_url = format("https://github.com/%s/%s", var.repo_owner, var.repo_name)
   run_service_account   = data.google_cloud_run_service.default.template[0].spec[0].service_account_name
 }
 
@@ -76,7 +76,7 @@ resource "google_cloudbuild_trigger" "app_new_build" {
     name  = local.repository_name
     owner = local.repository_owner
     push {
-      branch       = "main"
+      branch       = "^main$"
       invert_regex = false
     }
   }

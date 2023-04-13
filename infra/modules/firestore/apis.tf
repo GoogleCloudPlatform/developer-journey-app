@@ -12,16 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module "cloud_build_cicd" {
-  source           = "../../modules/cicd"
-  project_id       = var.project_id
-  region           = var.region
-  repo_name        = var.repo_name
-  repo_owner       = var.repo_owner
-  run_service_name = var.run_service_name
-}
+# Google Cloud Services to enable
+module "project_services" {
+  source                      = "terraform-google-modules/project-factory/google//modules/project_services"
+  version                     = "13.0.0"
+  disable_services_on_destroy = false
+  project_id                  = var.project_id
+  enable_apis                 = var.enable_apis
 
-module "cloud_firestore" {
-  source     = "../../modules/firestore"
-  project_id = var.project_id
+  activate_apis = [
+    "firestore.googleapis.com"
+  ]
 }

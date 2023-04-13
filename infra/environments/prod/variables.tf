@@ -23,7 +23,18 @@ variable "run_service_name" {
   default     = "dev-journey"
 }
 
-variable "github_repository_url" {
+variable "region" {
   type        = string
-  description = "URL of connected GitHub repository (https://github.com/repo_owner/repo_name)"
+  description = "Default region to use for Google Cloud resources."
+  default     = "us-central1"
+}
+
+variable "repo_owner" {
+  type        = string
+  description = "Owner of GitHub repository to connect to."
+}
+
+variable "repo_name" {
+  type        = string
+  description = "Name of GitHub repository to connect to."
 }

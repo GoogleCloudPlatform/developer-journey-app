@@ -23,6 +23,12 @@ variable "region" {
   default     = "us-central1"
 }
 
+variable "run_service_name" {
+  type        = string
+  description = "The name of the Cloud Run service that this pipeline will deploy to."
+  default     = "dev-journey"
+}
+
 variable "deployment_name" {
   type        = string
   description = "Identifier for the deployment. Used in some resource names."
@@ -41,12 +47,12 @@ variable "labels" {
   default     = {}
 }
 
-variable "run_service_name" {
+variable "repo_owner" {
   type        = string
-  description = "The name of the Cloud Run service that this pipeline will deploy to."
+  description = "Owner of GitHub repository to connect to."
 }
 
-variable "github_repository_url" {
+variable "repo_name" {
   type        = string
-  description = "URL of connected GitHub repository (https://github.com/repo_owner/repo_name)"
+  description = "Name of GitHub repository to connect to."
 }

@@ -20,7 +20,7 @@ variable "project_id" {
 variable "region" {
   type        = string
   description = "Default region to use for Google Cloud resources."
-  default     = "us-west1"
+  default     = "us-central1"
 }
 
 variable "deployment_name" {
