@@ -16,7 +16,6 @@ locals {
   repository_name       = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[1]
   repository_owner      = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[0]
   github_repository_url = replace(var.github_repository_url, "/(.*github.com)/", "https://github.com")
-  run_service_account   = data.google_cloud_run_service.default.template[0].spec[0].service_account_name
 }
 
 data "google_cloud_run_service" "default" {
@@ -54,6 +53,18 @@ resource "google_service_account" "default" {
 resource "google_project_iam_member" "builder_logwriter" {
   project = var.project_id
   role    = "roles/logging.logWriter"
+  member  = "serviceAccount:${google_service_account.default.email}"
+}
+
+resource "google_project_iam_member" "builder_deploy_admin" {
+  project = var.project_id
+  role    = "roles/clouddeploy.admin"
+  member  = "serviceAccount:${google_service_account.default.email}"
+}
+
+resource "google_project_iam_member" "builder_builds_builder" {
+  project = var.project_id
+  role    = "roles/cloudbuild.builds.builder"
   member  = "serviceAccount:${google_service_account.default.email}"
 }
 
@@ -95,12 +106,22 @@ resource "google_pubsub_topic" "gcr" {
   name    = "gcr"
 }
 
+locals {
+  app_deploy_config = yamldecode(templatefile("${path.module}/cloudbuild/app-deploy.cloudbuild.yaml",
+    {
+      "_REGION"             = "${var.region}",
+      "_RUN_SERVICE_NAME"   = "${var.run_service_name}"
+      "RUN_SERVICE_ACCOUNT" = "${data.google_service_account.cloud_run.email}",
+      "_PIPELINE_NAME"      = "${google_clouddeploy_delivery_pipeline.default.name}"
+      "_IMAGE"              = "${google_artifact_registry_repository.default.location}-docker.pkg.dev/${google_artifact_registry_repository.default.project}/${google_artifact_registry_repository.default.name}/app"
+  }))
+}
 
 resource "google_cloudbuild_trigger" "app_deploy" {
-  project     = var.project_id
-  name        = "${var.deployment_name}-app-deploy"
-  description = "Triggers on any new website build to Artifact Registry."
-
+  project         = var.project_id
+  name            = "${var.deployment_name}-app-deploy"
+  description     = "Triggers on any new build pushed to Artifact Registry."
+  service_account = google_service_account.default.id
   pubsub_config {
     topic = google_pubsub_topic.gcr.id
   }
@@ -116,15 +137,21 @@ resource "google_cloudbuild_trigger" "app_deploy" {
   }
 
   build {
-    images        = []
-    substitutions = {}
-    tags          = []
-    step {
-      name = "ubuntu"
-      args = [
-        "echo",
-        "hello world hey"
-      ]
+    images = []
+    substitutions = {
+    }
+    tags = []
+    options {
+      logging = "CLOUD_LOGGING_ONLY"
+    }
+    dynamic "step" {
+      for_each = local.app_deploy_config.steps
+      content {
+        args       = step.value.args
+        name       = step.value.name
+        entrypoint = step.value.entrypoint
+        id         = step.value.id
+      }
     }
   }
 }
