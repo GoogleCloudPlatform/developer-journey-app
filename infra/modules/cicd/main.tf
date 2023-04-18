@@ -96,37 +96,38 @@ resource "google_pubsub_topic" "gcr" {
 }
 
 
-# this one has to deploy to cloudrun via cloud deploy
-# resource "google_cloudbuild_trigger" "app_deploy" {
-#   project         = var.project_id
-#   name            = "${var.deployment_name}-app-deploy"
-#   description     = "Triggers on any new website build to Artifact Registry."
-#   service_account = google_service_account.default.name
-#   # include_build_logs = "INCLUDE_BUILD_LOGS_WITH_STATUS"
-#   pubsub_config {
-#     topic = google_pubsub_topic.gcr.id
-#   }
-#   approval_config {
-#     approval_required = true
-#   }
-#   substitutions = {
-#     _SERVICE             = var.run_service_name
-#     _IMAGE_NAME          = "$(body.message.data.tag)"
-#     _REGION              = var.region
-#     _RUN_SERVICE_ACCOUNT = local.run_service_account
-#   }
-#   source_to_build {
-#     uri       = local.github_repository_url
-#     ref       = "refs/heads/main"
-#     repo_type = "GITHUB"
-#   }
-#   git_file_source {
-#     path      = "build/app-deploy.cloudbuild.yaml"
-#     repo_type = "GITHUB"
-#     revision  = "refs/heads/main"
-#     uri       = local.github_repository_url
-#   }
-# }
+resource "google_cloudbuild_trigger" "app_deploy" {
+  project     = var.project_id
+  name        = "${var.deployment_name}-app-deploy"
+  description = "Triggers on any new website build to Artifact Registry."
+
+  pubsub_config {
+    topic = google_pubsub_topic.gcr.id
+  }
+
+  approval_config {
+    approval_required = true
+  }
+
+  source_to_build {
+    uri       = local.github_repository_url
+    ref       = "refs/heads/main"
+    repo_type = "GITHUB"
+  }
+
+  build {
+    images        = []
+    substitutions = {}
+    tags          = []
+    step {
+      name = "ubuntu"
+      args = [
+        "echo",
+        "hello world hey"
+      ]
+    }
+  }
+}
 
 resource "google_clouddeploy_delivery_pipeline" "default" {
   project     = var.project_id
