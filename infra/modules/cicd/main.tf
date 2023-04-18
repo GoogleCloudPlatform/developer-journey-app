@@ -25,6 +25,11 @@ data "google_cloud_run_service" "default" {
   location = var.region
 }
 
+data "google_service_account" "cloud_run" {
+  account_id = data.google_cloud_run_service.default.template[0].spec[0].service_account_name
+}
+
+
 ### Artifact Registry ###
 resource "google_artifact_registry_repository" "default" {
   project       = var.project_id
@@ -89,34 +94,98 @@ resource "google_pubsub_topic" "gcr" {
   project = var.project_id
   name    = "gcr"
 }
-resource "google_cloudbuild_trigger" "app_deploy" {
-  project         = var.project_id
-  name            = "${var.deployment_name}-app-deploy"
-  description     = "Triggers on any new website build to Artifact Registry."
-  service_account = google_service_account.default.name
-  # include_build_logs = "INCLUDE_BUILD_LOGS_WITH_STATUS"
-  pubsub_config {
-    topic = google_pubsub_topic.gcr.id
-  }
-  approval_config {
-    approval_required = true
-  }
-  substitutions = {
-    _SERVICE             = var.run_service_name
-    _IMAGE_NAME          = "$(body.message.data.tag)"
-    _REGION              = var.region
-    _RUN_SERVICE_ACCOUNT = local.run_service_account
-  }
-  source_to_build {
-    uri       = local.github_repository_url
-    ref       = "refs/heads/main"
-    repo_type = "GITHUB"
-  }
-  git_file_source {
-    path      = "build/app-deploy.cloudbuild.yaml"
-    repo_type = "GITHUB"
-    revision  = "refs/heads/main"
-    uri       = local.github_repository_url
+
+
+# this one has to deploy to cloudrun via cloud deploy
+# resource "google_cloudbuild_trigger" "app_deploy" {
+#   project         = var.project_id
+#   name            = "${var.deployment_name}-app-deploy"
+#   description     = "Triggers on any new website build to Artifact Registry."
+#   service_account = google_service_account.default.name
+#   # include_build_logs = "INCLUDE_BUILD_LOGS_WITH_STATUS"
+#   pubsub_config {
+#     topic = google_pubsub_topic.gcr.id
+#   }
+#   approval_config {
+#     approval_required = true
+#   }
+#   substitutions = {
+#     _SERVICE             = var.run_service_name
+#     _IMAGE_NAME          = "$(body.message.data.tag)"
+#     _REGION              = var.region
+#     _RUN_SERVICE_ACCOUNT = local.run_service_account
+#   }
+#   source_to_build {
+#     uri       = local.github_repository_url
+#     ref       = "refs/heads/main"
+#     repo_type = "GITHUB"
+#   }
+#   git_file_source {
+#     path      = "build/app-deploy.cloudbuild.yaml"
+#     repo_type = "GITHUB"
+#     revision  = "refs/heads/main"
+#     uri       = local.github_repository_url
+#   }
+# }
+
+resource "google_clouddeploy_delivery_pipeline" "default" {
+  project     = var.project_id
+  location    = var.region
+  name        = "${var.deployment_name}-delivery"
+  description = "Basic delivery pipeline for ${var.deployment_name} app."
+  labels      = var.labels
+  serial_pipeline {
+    stages {
+      profiles  = ["prod"]
+      target_id = google_clouddeploy_target.prod.name
+    }
   }
 }
 
+resource "google_service_account" "cloud_deploy" {
+  project      = var.project_id
+  account_id   = "${var.deployment_name}-cloud-deploy"
+  display_name = "Service Account for Cloud Deploy deployment to Cloud Run."
+}
+
+resource "google_project_iam_member" "deploy_job_runner" {
+  project = var.project_id
+  role    = "roles/clouddeploy.jobRunner"
+  member  = "serviceAccount:${google_service_account.cloud_deploy.email}"
+}
+
+resource "google_project_iam_member" "deploy_run_admin" {
+  project = var.project_id
+  role    = "roles/run.admin"
+  member  = "serviceAccount:${google_service_account.cloud_deploy.email}"
+}
+
+resource "google_service_account_iam_binding" "deploy_sa_user_run" {
+  service_account_id = data.google_service_account.cloud_run.id
+  role               = "roles/iam.serviceAccountUser"
+
+  members = [
+    "serviceAccount:${google_service_account.cloud_deploy.email}",
+  ]
+}
+
+resource "google_clouddeploy_target" "prod" {
+  project     = var.project_id
+  provider    = google-beta
+  location    = var.region
+  name        = "${var.deployment_name}-prod-target"
+  description = "Prod target for ${var.deployment_name} app."
+
+  execution_configs {
+    usages          = ["RENDER", "DEPLOY", "VERIFY"]
+    service_account = google_service_account.cloud_deploy.email
+  }
+
+  labels           = var.labels
+  require_approval = false
+
+  run {
+    location = "projects/${var.project_id}/locations/${data.google_cloud_run_service.default.location}"
+  }
+
+}
