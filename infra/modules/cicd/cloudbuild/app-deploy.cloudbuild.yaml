@@ -60,7 +60,7 @@ steps:
     - deploy
     - releases
     - create
-    - app-release-$${SHORT_SHA}
+    - app-release-$${BUILD_ID}
     - --project=$${PROJECT_ID}
     - --region=${_REGION}
     - --delivery-pipeline=${_PIPELINE_NAME}
