@@ -83,7 +83,6 @@ resource "google_project_iam_member" "builder_run_developer" {
 resource "google_cloudbuild_trigger" "app_new_build" {
   project     = var.project_id
   name        = "${var.deployment_name}-app-build"
-  filename    = "build/app-build.cloudbuild.yaml"
   description = "Initiates new build of ${var.deployment_name}. Triggers by changes to app on main branch of source repo."
   included_files = [
     "src/*",
@@ -96,8 +95,23 @@ resource "google_cloudbuild_trigger" "app_new_build" {
       invert_regex = false
     }
   }
-  substitutions = {
-    _AR_REPO = "${google_artifact_registry_repository.default.location}-docker.pkg.dev/${google_artifact_registry_repository.default.project}/${google_artifact_registry_repository.default.name}/app"
+  build {
+    images = ["${google_artifact_registry_repository.default.location}-docker.pkg.dev/${google_artifact_registry_repository.default.project}/${google_artifact_registry_repository.default.name}/app:$${SHORT_SHA}"]
+    substitutions = {
+    }
+    tags = []
+    options {
+      logging = "CLOUD_LOGGING_ONLY"
+    }
+    dynamic "step" {
+      for_each = local.app_build_config.steps
+      content {
+        args       = step.value.args
+        name       = step.value.name
+        entrypoint = step.value.entrypoint
+        id         = step.value.id
+      }
+    }
   }
 }
 
@@ -115,6 +129,10 @@ locals {
       "_PIPELINE_NAME"      = "${google_clouddeploy_delivery_pipeline.default.name}"
       "_IMAGE"              = "${google_artifact_registry_repository.default.location}-docker.pkg.dev/${google_artifact_registry_repository.default.project}/${google_artifact_registry_repository.default.name}/app"
   }))
+  app_build_config = yamldecode(templatefile("${path.module}/cloudbuild/app-build.cloudbuild.yaml",
+    {
+      "_AR_REPO" = "${google_artifact_registry_repository.default.location}-docker.pkg.dev/${google_artifact_registry_repository.default.project}/${google_artifact_registry_repository.default.name}/app"
+  }))
 }
 
 resource "google_cloudbuild_trigger" "app_deploy" {
@@ -127,7 +145,7 @@ resource "google_cloudbuild_trigger" "app_deploy" {
   }
 
   approval_config {
-    approval_required = true
+    approval_required = false
   }
 
   source_to_build {
