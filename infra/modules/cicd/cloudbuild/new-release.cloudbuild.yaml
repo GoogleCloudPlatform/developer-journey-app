@@ -40,12 +40,12 @@ steps:
         echo "apiVersion: serving.knative.dev/v1
               kind: Service
               metadata:
-              name: ${_RUN_SERVICE_NAME}
+              name: $${_RUN_SERVICE_NAME}
               spec:
                 template:
                   spec:
                     containers:
-                    - image: ${_IMAGE}" > /workspace/app-prod.yaml
+                    - image: $${_IMAGE}" > /workspace/app-prod.yaml
   - name: gcr.io/cloud-builders/gcloud
     id: 'Create new release on Cloud Deploy'
     entrypoint: 'bash'
@@ -54,9 +54,7 @@ steps:
     - |
         gcloud deploy releases create app-release-$(echo $${BUILD_ID} | cut -f1 -d'-') \
         --project=$${PROJECT_ID} \
-        --region=${_REGION} \
-        --delivery-pipeline=${_PIPELINE_NAME} \
-        --images=my-app-image=${_IMAGE}
-options:
-  logging: CLOUD_LOGGING_ONLY
+        --region=$${_REGION} \
+        --delivery-pipeline=$${_PIPELINE_NAME} \
+        --images=my-app-image=$${_IMAGE}
 
