@@ -122,7 +122,7 @@ resource "google_pubsub_topic" "gcr" {
 }
 
 locals {
-  app_deploy_config = yamldecode(templatefile("${path.module}/cloudbuild/app-deploy.cloudbuild.yaml",
+  app_deploy_config = yamldecode(templatefile("${path.module}/cloudbuild/new-release.cloudbuild.yaml",
     {
       "_REGION"             = "${var.region}",
       "_RUN_SERVICE_NAME"   = "${var.run_service_name}"
