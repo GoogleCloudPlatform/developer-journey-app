@@ -44,7 +44,7 @@ resource "google_artifact_registry_repository" "default" {
 
 # Cloud Build Trigger
 
-resource "google_service_account" "default" {
+resource "google_service_account" "cloud_build" {
   project      = var.project_id
   account_id   = "${var.run_service_name}-builder"
   display_name = "Service Account for Cloud Build deployment to Cloud Run."
@@ -53,37 +53,38 @@ resource "google_service_account" "default" {
 resource "google_project_iam_member" "builder_logwriter" {
   project = var.project_id
   role    = "roles/logging.logWriter"
-  member  = "serviceAccount:${google_service_account.default.email}"
+  member  = "serviceAccount:${google_service_account.cloud_build.email}"
 }
 
 resource "google_project_iam_member" "builder_deploy_admin" {
   project = var.project_id
   role    = "roles/clouddeploy.admin"
-  member  = "serviceAccount:${google_service_account.default.email}"
+  member  = "serviceAccount:${google_service_account.cloud_build.email}"
 }
 
 resource "google_project_iam_member" "builder_builds_builder" {
   project = var.project_id
   role    = "roles/cloudbuild.builds.builder"
-  member  = "serviceAccount:${google_service_account.default.email}"
+  member  = "serviceAccount:${google_service_account.cloud_build.email}"
 }
 
 resource "google_project_iam_member" "builder_sa_user" {
   project = var.project_id
   role    = "roles/iam.serviceAccountUser"
-  member  = "serviceAccount:${google_service_account.default.email}"
+  member  = "serviceAccount:${google_service_account.cloud_build.email}"
 }
 
 resource "google_project_iam_member" "builder_run_developer" {
   project = var.project_id
   role    = "roles/run.developer"
-  member  = "serviceAccount:${google_service_account.default.email}"
+  member  = "serviceAccount:${google_service_account.cloud_build.email}"
 }
 
 resource "google_cloudbuild_trigger" "app_new_build" {
-  project     = var.project_id
-  name        = "${var.deployment_name}-app-build"
-  description = "Initiates new build of ${var.deployment_name}. Triggers by changes to app on main branch of source repo."
+  project         = var.project_id
+  name            = "${var.deployment_name}-app-build"
+  description     = "Initiates new build of ${var.deployment_name}. Triggers by changes to app on main branch of source repo."
+  service_account = google_service_account.cloud_build.id
   included_files = [
     "src/*",
   ]
@@ -139,7 +140,7 @@ resource "google_cloudbuild_trigger" "app_deploy" {
   project         = var.project_id
   name            = "${var.deployment_name}-app-deploy"
   description     = "Triggers on any new build pushed to Artifact Registry."
-  service_account = google_service_account.default.id
+  service_account = google_service_account.cloud_build.id
   pubsub_config {
     topic = google_pubsub_topic.gcr.id
   }
