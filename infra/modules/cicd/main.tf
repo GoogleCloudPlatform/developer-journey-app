@@ -136,10 +136,10 @@ locals {
   }))
 }
 
-resource "google_cloudbuild_trigger" "app_deploy" {
+resource "google_cloudbuild_trigger" "app_new_release" {
   project         = var.project_id
-  name            = "${var.deployment_name}-app-deploy"
-  description     = "Triggers on any new build pushed to Artifact Registry."
+  name            = "${var.deployment_name}-new-release"
+  description     = "Triggers on any new build pushed to Artifact Registry. Creates a new release in Cloud Deploy."
   service_account = google_service_account.cloud_build.id
   pubsub_config {
     topic = google_pubsub_topic.gcr.id
