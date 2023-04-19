@@ -155,17 +155,19 @@ resource "google_cloudbuild_trigger" "app_new_release" {
   build {
     images = []
     substitutions = {
-      "_REGION" = var.region
-      "_RUN_SERVICE_NAME"   = var.run_service_name
-      "_PIPELINE_NAME"      = google_clouddeploy_delivery_pipeline.default.name
-      "_IMAGE"              = "${google_artifact_registry_repository.default.location}-docker.pkg.dev/${google_artifact_registry_repository.default.project}/${google_artifact_registry_repository.default.name}/app"
+      _REGION           = var.region
+      _RUN_SERVICE_NAME = var.run_service_name
+      _PIPELINE_NAME    = google_clouddeploy_delivery_pipeline.default.name
+      _IMAGE            = "${google_artifact_registry_repository.default.location}-docker.pkg.dev/${google_artifact_registry_repository.default.project}/${google_artifact_registry_repository.default.name}/app"
+      _RUN_CONFIG       = local.run_config
+      _SKAFFOLD_CONFIG  = local.skaffold_config
     }
     tags = []
     options {
       logging = "CLOUD_LOGGING_ONLY"
     }
     dynamic "step" {
-      for_each = local.app_deploy_config.steps
+      for_each = local.new_release_config.steps
       content {
         args       = step.value.args
         name       = step.value.name
