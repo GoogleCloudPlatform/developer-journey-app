@@ -46,25 +46,17 @@ steps:
                   spec:
                     containers:
                     - image: ${_IMAGE}" > /workspace/app-prod.yaml
-  - name: 'ubuntu'
-    id: 'test'
+  - name: gcr.io/cloud-builders/gcloud
+    id: 'Create new release on Cloud Deploy'
     entrypoint: 'bash'
     args:
     - '-c'
     - |
-        cat /workspace/skaffold.yaml && cat /workspace/app-prod.yaml
-  - name: gcr.io/cloud-builders/gcloud
-    id: 'Cloud Deploy'
-    entrypoint: 'gcloud'
-    args:
-    - deploy
-    - releases
-    - create
-    - app-release-$${BUILD_ID}
-    - --project=$${PROJECT_ID}
-    - --region=${_REGION}
-    - --delivery-pipeline=${_PIPELINE_NAME}
-    - --images=my-app-image=${_IMAGE}
+        gcloud deploy releases create app-release-$(echo $${BUILD_ID} | cut -f1 -d'-') \
+        --project=$${PROJECT_ID} \
+        --region=${_REGION} \
+        --delivery-pipeline=${_PIPELINE_NAME} \
+        --images=my-app-image=${_IMAGE}
 options:
   logging: CLOUD_LOGGING_ONLY
 
