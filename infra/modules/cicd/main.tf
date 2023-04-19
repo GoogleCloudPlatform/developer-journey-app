@@ -133,13 +133,6 @@ resource "google_pubsub_topic" "gcr" {
   name    = "gcr"
 }
 
-locals {
-  app_deploy_config = yamldecode(templatefile("${path.module}/cloudbuild/new-release.cloudbuild.yaml",
-    {}))
-  app_build_config = yamldecode(templatefile("${path.module}/cloudbuild/app-build.cloudbuild.yaml",
-    {}))
-}
-
 resource "google_cloudbuild_trigger" "app_new_release" {
   project         = var.project_id
   name            = "${var.deployment_name}-new-release"
