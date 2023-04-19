@@ -1,9 +1,10 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: deploy-run-app
+  name: ${name}
 spec:
   template:
     spec:
       containers:
-      - image: my-app-image
+      - image: app-image
+      serviceAccountName: ${run_service_account}

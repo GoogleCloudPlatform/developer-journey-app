@@ -20,32 +20,14 @@ steps:
     args:
     - '-c'
     - |
-        echo "apiVersion: skaffold/v3alpha1
-              kind: Config
-              metadata: 
-                name: deploy-run-app
-              profiles:
-              - name: prod
-                manifests:
-                  rawYaml:
-                  - app-prod.yaml
-              deploy:
-                cloudrun: {}" > /workspace/skaffold.yaml
+        echo "$${_SKAFFOLD_CONFIG}" > /workspace/skaffold.yaml
   - name: 'ubuntu'
     id: 'Run yaml config'
     entrypoint: 'bash'
     args:
     - '-c'
     - |
-        echo "apiVersion: serving.knative.dev/v1
-              kind: Service
-              metadata:
-              name: $${_RUN_SERVICE_NAME}
-              spec:
-                template:
-                  spec:
-                    containers:
-                    - image: $${_IMAGE}" > /workspace/app-prod.yaml
+        echo "$${_RUN_CONFIG}" > /workspace/app-prod.yaml
   - name: gcr.io/cloud-builders/gcloud
     id: 'Create new release on Cloud Deploy'
     entrypoint: 'bash'
@@ -56,5 +38,5 @@ steps:
         --project=$${PROJECT_ID} \
         --region=$${_REGION} \
         --delivery-pipeline=$${_PIPELINE_NAME} \
-        --images=my-app-image=$${_IMAGE}
+        --images=app-image=$${_IMAGE}:$${SHORT_SHA}
 

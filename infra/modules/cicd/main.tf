@@ -16,6 +16,17 @@ locals {
   repository_name       = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[1]
   repository_owner      = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[0]
   github_repository_url = replace(var.github_repository_url, "/(.*github.com)/", "https://github.com")
+  new_release_config = yamldecode(templatefile("${path.module}/cloudbuild/new-release.cloudbuild.tftpl", {}))
+  app_build_config   = yamldecode(templatefile("${path.module}/cloudbuild/app-build.cloudbuild.yaml", {}))
+  skaffold_config = templatefile("${path.module}/cloudbuild/skaffold.yaml.tftpl",
+    { name = var.deployment_name
+    }
+  )
+  run_config = templatefile("${path.module}/cloudbuild/app-prod.yaml.tftpl",
+    { name                = var.deployment_name
+      run_service_account = data.google_service_account.cloud_run.email
+    }
+  )
 }
 
 data "google_cloud_run_service" "default" {
