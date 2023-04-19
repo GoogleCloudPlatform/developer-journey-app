@@ -20,5 +20,5 @@ steps:
     args: 
       - 'build'
       - '-t'
-      - '${_AR_REPO}:$${SHORT_SHA}'
+      - '$${_AR_REPO}:$${SHORT_SHA}'
       - '.'

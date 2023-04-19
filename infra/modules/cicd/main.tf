@@ -99,7 +99,7 @@ resource "google_cloudbuild_trigger" "app_new_build" {
   build {
     images = ["${google_artifact_registry_repository.default.location}-docker.pkg.dev/${google_artifact_registry_repository.default.project}/${google_artifact_registry_repository.default.name}/app:$${SHORT_SHA}"]
     substitutions = {
-      
+      "_AR_REPO"  = "${google_artifact_registry_repository.default.location}-docker.pkg.dev/${google_artifact_registry_repository.default.project}/${google_artifact_registry_repository.default.name}/app"
     }
     tags = []
     options {
@@ -124,17 +124,9 @@ resource "google_pubsub_topic" "gcr" {
 
 locals {
   app_deploy_config = yamldecode(templatefile("${path.module}/cloudbuild/new-release.cloudbuild.yaml",
-    {
-      "_REGION"             = "${var.region}",
-      "_RUN_SERVICE_NAME"   = "${var.run_service_name}"
-      "RUN_SERVICE_ACCOUNT" = "${data.google_service_account.cloud_run.email}",
-      "_PIPELINE_NAME"      = "${google_clouddeploy_delivery_pipeline.default.name}"
-      "_IMAGE"              = "${google_artifact_registry_repository.default.location}-docker.pkg.dev/${google_artifact_registry_repository.default.project}/${google_artifact_registry_repository.default.name}/app"
-  }))
+    {}))
   app_build_config = yamldecode(templatefile("${path.module}/cloudbuild/app-build.cloudbuild.yaml",
-    {
-      "_AR_REPO" = "${google_artifact_registry_repository.default.location}-docker.pkg.dev/${google_artifact_registry_repository.default.project}/${google_artifact_registry_repository.default.name}/app"
-  }))
+    {}))
 }
 
 resource "google_cloudbuild_trigger" "app_new_release" {
