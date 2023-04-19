@@ -16,8 +16,8 @@ locals {
   repository_name       = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[1]
   repository_owner      = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[0]
   github_repository_url = replace(var.github_repository_url, "/(.*github.com)/", "https://github.com")
-  new_release_config = yamldecode(templatefile("${path.module}/cloudbuild/new-release.cloudbuild.tftpl", {}))
-  app_build_config   = yamldecode(templatefile("${path.module}/cloudbuild/app-build.cloudbuild.yaml", {}))
+  new_release_config    = yamldecode(templatefile("${path.module}/cloudbuild/new-release.cloudbuild.tftpl", {}))
+  app_build_config      = yamldecode(templatefile("${path.module}/cloudbuild/app-build.cloudbuild.yaml", {}))
   skaffold_config = templatefile("${path.module}/cloudbuild/skaffold.yaml.tftpl",
     { name = var.deployment_name
     }
@@ -110,7 +110,7 @@ resource "google_cloudbuild_trigger" "app_new_build" {
   build {
     images = ["${google_artifact_registry_repository.default.location}-docker.pkg.dev/${google_artifact_registry_repository.default.project}/${google_artifact_registry_repository.default.name}/app:$${SHORT_SHA}"]
     substitutions = {
-      "_AR_REPO"  = "${google_artifact_registry_repository.default.location}-docker.pkg.dev/${google_artifact_registry_repository.default.project}/${google_artifact_registry_repository.default.name}/app"
+      _AR_REPO = "${google_artifact_registry_repository.default.location}-docker.pkg.dev/${google_artifact_registry_repository.default.project}/${google_artifact_registry_repository.default.name}/app"
     }
     tags = []
     options {
