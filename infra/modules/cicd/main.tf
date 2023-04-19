@@ -160,8 +160,8 @@ resource "google_cloudbuild_trigger" "app_new_release" {
     images = []
     substitutions = {
       "_REGION" = var.region
-      "_RUN_SERVICE_NAME"   = "${var.run_service_name}"
-      "_PIPELINE_NAME"      = "${google_clouddeploy_delivery_pipeline.default.name}"
+      "_RUN_SERVICE_NAME"   = var.run_service_name
+      "_PIPELINE_NAME"      = google_clouddeploy_delivery_pipeline.default.name
       "_IMAGE"              = "${google_artifact_registry_repository.default.location}-docker.pkg.dev/${google_artifact_registry_repository.default.project}/${google_artifact_registry_repository.default.name}/app"
     }
     tags = []
