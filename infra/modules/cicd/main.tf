@@ -16,8 +16,8 @@ locals {
   repository_name       = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[1]
   repository_owner      = split("/", replace(var.github_repository_url, "/(.*github.com/)/", ""))[0]
   github_repository_url = replace(var.github_repository_url, "/(.*github.com)/", "https://github.com")
-  new_release_config    = yamldecode(templatefile("${path.module}/cloudbuild/new-release.cloudbuild.yaml.tftpl", {}))
-  app_build_config      = yamldecode(templatefile("${path.module}/cloudbuild/app-build.cloudbuild.yaml", {}))
+  new_release_config    = templatefile("${path.module}/cloudbuild/new-release.cloudbuild.yaml.tftpl", {})
+  app_build_config      = templatefile("${path.module}/cloudbuild/app-build.cloudbuild.yaml", {})
   skaffold_config       = templatefile("${path.module}/cloudbuild/skaffold.yaml.tftpl",
     { name = var.deployment_name
     }
@@ -117,7 +117,7 @@ resource "google_cloudbuild_trigger" "app_new_build" {
       logging = "CLOUD_LOGGING_ONLY"
     }
     dynamic "step" {
-      for_each = local.app_build_config.steps
+      for_each = yamldecode(local.app_build_config).steps
       content {
         args       = step.value.args
         name       = step.value.name
@@ -167,7 +167,7 @@ resource "google_cloudbuild_trigger" "app_new_release" {
       logging = "CLOUD_LOGGING_ONLY"
     }
     dynamic "step" {
-      for_each = local.new_release_config.steps
+      for_each = yamldecode(local.new_release_config).steps
       content {
         args       = step.value.args
         name       = step.value.name
