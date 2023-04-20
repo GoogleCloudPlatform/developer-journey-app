@@ -42,13 +42,13 @@ gcloud services enable artifactregistry.googleapis.com firestore.googleapis.com 
 
 2. Create Cloud Firestore.
 
-If you haven't already, create a Firestore native database.
+Create (or use an existing) a Firestore native database. 
 
 ```bash
 gcloud firestore databases create --location=nam5
 ```
 
-3. Ensure that your project has [Artifact Registry](Artifact Registry Console) enabled. Once you've verified, locate the app's `Dockerfile` at root of the project.
+3. Enable [Artifact Registry](Artifact Registry Console). 
 Change directory to the root and push a new container image to [Artifact Registry](Artifact Registry Console).
 
 ```bash
@@ -75,7 +75,7 @@ echo -n $RANDOM | gcloud secrets create $SECRET_NAME \
     --data-file=-
 ```
 
-5. Deploy your Cloud Run container
+5. Deploy the image you just created to Cloud Run.
 
 ```bash
 gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
@@ -84,7 +84,7 @@ gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
     --image $REGION-docker.pkg.dev/$PROJECT_ID/$AR_REPO_NAME/$IMAGE_NAME 
 ```
 
-6. Update your newly deployed Cloud Run service with required environment variables and secrets.
+6. Update your newly deployed Cloud Run service with required environment variables and the secret you created.
 
 ```bash
 export SITE_URL = $(gcloud run services describe $CLOUD_RUN_SERVICE_NAME --project "${PROJECT_ID}" --region "${REGION}" --format "value(status.address.url)")
