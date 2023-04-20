@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.0.0...v1.1.0) (2023-04-19)
+
+
+### Features
+
+* adding in items for maintenance, workflows, standard commit linting ([#75](https://github.com/GoogleCloudPlatform/developer-journey-app/issues/75)) ([6dd4dc5](https://github.com/GoogleCloudPlatform/developer-journey-app/commit/6dd4dc5d56c850c9340fcb105fe16a65c7406275))
+
 ## 1.0.0 (2023-04-12)
 
 
