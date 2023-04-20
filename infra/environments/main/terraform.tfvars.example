@@ -1,0 +1,3 @@
+project_id            = # VALUE FOR PROJECT ID
+run_service_name      = # THE NAME OF YOUR RUN SERVICE
+github_repository_url = # THE URL OF YOUR GITHUB REPOSITORY 

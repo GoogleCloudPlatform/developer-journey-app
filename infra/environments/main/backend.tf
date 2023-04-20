@@ -13,9 +13,9 @@
 # limitations under the License.
 
 terraform {
-  backend "gcs" {
-    bucket                      = "birds-of-paradise-tf-state"
-    prefix                      = "build-cicd-state"
-    impersonate_service_account = "terraformer@birds-of-paradise.iam.gserviceaccount.com"
-  }
+  # Uncomment to use a remote GCS backend. Bucket must already exist.
+  # backend "gcs" {
+  #   bucket                      = "bucket-name"
+  #   prefix                      = "build-cicd-state"
+  # }
 }
