@@ -3,20 +3,19 @@
 Welcome. This will auto-provision using [Terraform](Terraform) solely the CI/CD pipeline for `developer-journey-app`.
 The following are the main resources that will be set up for you.
 
-* [Cloud Build](Cloud Build)
-* [Cloud Deploy](Cloud Deploy)
-
+* [Cloud Build]
+* [Cloud Deploy]
 
 ## Getting started
 
 This assumes that you have the following services already existing in your current Google Cloud Platform.
-If your project does fit these requirements, Continue to the [CI/CD documentation](./infra/environments/dev/README.md) to learn more, 
+If your project does fit these requirements, Continue to the [CI/CD documentation](./environments/dev/README.md) to learn more, 
 otherwise follow the pre-requisites before continuing.
 
-* [Artifact Registry](Artifact Registry) for managing container images
-* [Cloud Run](Cloud Run) for scalable serverless apps
-* [Cloud Firestore](Cloud Firestore) for scalable serverless databases
-* [Secret Manager](Secret Manager) for managing project secrets storage
+* [Artifact Registry] for managing container images
+* [Cloud Run] for scalable serverless apps
+* [Cloud Firestore] for scalable serverless databases
+* [Secret Manager] for managing project secrets storage
 
 **Note:** The manual `gcloud` commands below will be automated in future iterations of this project.
 
@@ -27,11 +26,12 @@ Set your environment variables:
 ```bash
 export PROJECT_ID="your-project"
 export REGION="your-region"
+export AR_REPO_NAME="dev-journey-repo"
 export CLOUD_RUN_SERVICE_NAME="dev-journey"
 export SECRET_NAME="dev-journey-nextauth-secret"
 ```
 
-1. Enable relevant services.
+1. Enable relevant Google Cloud services.
 
 ```bash
 gcloud services enable artifactregistry.googleapis.com firestore.googleapis.com run.googleapis.com secretmanager.googleapis.com
@@ -87,9 +87,9 @@ gcloud run services update $CLOUD_RUN_SERVICE_NAME \
 
 6. Verify that your set up.
 
-* Open your newly deployed [Cloud Run](Cloud Run) service.
+* Open your newly deployed [Cloud Run] service.
 * Log into the game and play! (Make sure your complete the game by landing on the Google Cloud icon!)
-* Open your [Firestore](Firestore console) database.
+* Open your [Firestore console] database.
 * Verify `users` collection exists, your given `username`, and past sessions are displayed.
 
 ## Modifying Schema
@@ -104,11 +104,11 @@ Fields:
 - `username` (string)
 ```
 
-Learn how to seed your [Cloud Firestore](Firestore Console), as well as export, data [here](https://cloud.google.com/firestore/docs/manage-data/export-import).
+Learn how to seed your [Cloud Firestore], as well as export, data [here](https://cloud.google.com/firestore/docs/manage-data/export-import).
 
 ## Manually Rollback
 
-If you've opted to not use [Cloud Deploy](Cloud Deploy), leverage the following to perform rollbacks for your [Cloud Run](Cloud Run) service.
+If you've opted to not use [Cloud Deploy], leverage the following to perform rollbacks for your [Cloud Run] service.
 
 ```bash
 # Lists out revisions for Cloud Run service
