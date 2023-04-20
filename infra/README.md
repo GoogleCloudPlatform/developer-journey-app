@@ -77,7 +77,7 @@ gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
 5. Update your newly deployed Cloud Run service with required environment variables and secrets.
 
 ```bash
-export SITE_URL = $(gcloud run services describe dev-journey --project "${PROJECT_ID}" --region "${REGION}" --format "value(status.address.url)")
+export SITE_URL = $(gcloud run services describe $CLOUD_RUN_SERVICE_NAME --project "${PROJECT_ID}" --region "${REGION}" --format "value(status.address.url)")
 
 gcloud run services update $CLOUD_RUN_SERVICE_NAME \
     --update-env-vars "PROJECT_ID=${PROJECT_ID},NEXTAUTH_URL=${SITE_URL}" \
