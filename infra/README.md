@@ -95,12 +95,12 @@ gcloud run services update $CLOUD_RUN_SERVICE_NAME \
     --project $PROJECT_ID
 ```
 
-7. Verify that your set up.
+7. Verify your work.
 
 * Open your newly deployed [Cloud Run] service.
-* Log into the game and play. Make sure your complete the game by landing on the Google Cloud icon!
+* Log into the game and successfully complete a mission by landing on the Google Cloud icon.
 * Open your [Firestore console] database.
-* Verify `users` collection exists, your given `username`, and past sessions are displayed.
+* Verify the `users` collection exists, your given `username`, and past sessions are displayed.
 
 ## Modifying Schema
 
