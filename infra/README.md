@@ -1,6 +1,6 @@
 # Infrastructure
 
-Welcome. This will auto-provision using [Terraform](Terraform) solely the CI/CD pipeline for `developer-journey-app`.
+Welcome. This will auto-provision using [Terraform] solely the CI/CD pipeline for `developer-journey-app`.
 The following are the main resources that will be set up for you.
 
 * [Cloud Build]
@@ -28,6 +28,7 @@ export PROJECT_ID="your-project"
 export REGION="your-region"
 export AR_REPO_NAME="dev-journey-repo"
 export CLOUD_RUN_SERVICE_NAME="dev-journey"
+export IMAGE_NAME="dev-journey"
 export SECRET_NAME="dev-journey-nextauth-secret"
 ```
 
@@ -52,7 +53,7 @@ gcloud artifacts repositories create $AR_REPO_NAME \
 # Create container image and push to new Artifact Registry repo
 gcloud builds submit \
 --project $PROJECT_ID \
---tag $REGION-docker.pkg.dev/$PROJECT_ID/dev-journey-repo/dev-journey .
+--tag $REGION-docker.pkg.dev/$PROJECT_ID/$AR_REPO_NAME/$IMAGE_NAME .
 ```
 
 3. Create secret for Cloud Run (Next.js app) container with [Secret Manager](Secret Manager).
@@ -70,7 +71,7 @@ echo -n $RANDOM | gcloud secrets create $SECRET_NAME \
 gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
     --project $PROJECT_ID \
     --region $REGION \
-    --image $REGION-docker.pkg.dev/$PROJECT_ID/dev-journey-repo/dev-journey 
+    --image $REGION-docker.pkg.dev/$PROJECT_ID/$AR_REPO_NAME/$IMAGE_NAME 
 ```
 
 5. Update your newly deployed Cloud Run service with required environment variables and secrets.
@@ -94,7 +95,7 @@ gcloud run services update $CLOUD_RUN_SERVICE_NAME \
 
 ## Modifying Schema
 
-The sample app stores `users` and their past `mission` sessions.
+The sample app stores `users` and their past `missions` upon session completion.
 
 ```bash
 Collection: users
