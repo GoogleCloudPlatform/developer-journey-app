@@ -19,10 +19,7 @@ locals {
   github_repository_url  = replace(var.github_repository_url, "/(.*github.com)/", "https://github.com")
   new_release_config     = templatefile("${path.module}/cloudbuild/new-release.cloudbuild.yaml.tftpl", {})
   app_build_config       = templatefile("${path.module}/cloudbuild/app-build.cloudbuild.yaml.tftpl", {})
-  skaffold_config = templatefile("${path.module}/cloudbuild/skaffold.yaml.tftpl",
-    { name = var.deployment_name
-    }
-  )
+  skaffold_config        = templatefile("${path.module}/cloudbuild/skaffold.yaml.tftpl", { name = var.deployment_name })
   run_config = templatefile("${path.module}/cloudbuild/app-prod.yaml.tftpl",
     { name                = var.deployment_name
       run_service_account = data.google_service_account.cloud_run.email
@@ -30,6 +27,7 @@ locals {
   )
 }
 
+# Retrieve existing resources
 data "google_cloud_run_service" "default" {
   name     = var.run_service_name
   project  = var.project_id
@@ -40,8 +38,7 @@ data "google_service_account" "cloud_run" {
   account_id = data.google_cloud_run_service.default.template[0].spec[0].service_account_name
 }
 
-
-### Artifact Registry ###
+# Create Artifact Registry and the gcr Pub/Sub topic
 resource "google_artifact_registry_repository" "default" {
   project       = var.project_id
   location      = var.region
@@ -54,8 +51,12 @@ resource "google_artifact_registry_repository" "default" {
   ]
 }
 
-# Cloud Build Trigger
+resource "google_pubsub_topic" "gcr" {
+  project = var.project_id
+  name    = "gcr"
+}
 
+# Cloud Build resources (triggers, service account, and IAM bindings)
 resource "google_service_account" "cloud_build" {
   project      = var.project_id
   account_id   = "${var.run_service_name}-builder"
@@ -129,11 +130,6 @@ resource "google_cloudbuild_trigger" "app_new_build" {
   }
 }
 
-resource "google_pubsub_topic" "gcr" {
-  project = var.project_id
-  name    = "gcr"
-}
-
 resource "google_cloudbuild_trigger" "app_new_release" {
   project         = var.project_id
   name            = "${var.deployment_name}-new-release"
@@ -178,7 +174,7 @@ resource "google_cloudbuild_trigger" "app_new_release" {
     }
   }
 }
-
+# Cloud Deploy resources (pipeline, target service account, and IAM bindings)
 resource "google_clouddeploy_delivery_pipeline" "default" {
   project     = var.project_id
   location    = var.region
@@ -214,7 +210,6 @@ resource "google_project_iam_member" "deploy_run_admin" {
 resource "google_service_account_iam_binding" "deploy_sa_user_run" {
   service_account_id = data.google_service_account.cloud_run.id
   role               = "roles/iam.serviceAccountUser"
-
   members = [
     "serviceAccount:${google_service_account.cloud_deploy.email}",
   ]
@@ -226,7 +221,7 @@ resource "google_clouddeploy_target" "prod" {
   location    = var.region
   name        = "${var.deployment_name}-prod-target"
   description = "Prod target for ${var.deployment_name} app."
-  
+
   execution_configs {
     usages          = ["RENDER", "DEPLOY", "VERIFY"]
     service_account = google_service_account.cloud_deploy.email
