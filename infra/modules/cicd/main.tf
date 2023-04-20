@@ -21,7 +21,9 @@ locals {
   app_build_config       = templatefile("${path.module}/cloudbuild/app-build.cloudbuild.yaml.tftpl", {})
   skaffold_config        = templatefile("${path.module}/cloudbuild/skaffold.yaml.tftpl", { name = var.deployment_name })
   run_config = templatefile("${path.module}/cloudbuild/app-prod.yaml.tftpl",
-    { name                = var.deployment_name
+    { deployment_name                = var.deployment_name
+      lb_ip_address                  = data.google_compute_global_address.default.address
+      project_id                     = var.project_id
       run_service_account = data.google_service_account.cloud_run.email
     }
   )
@@ -36,6 +38,11 @@ data "google_cloud_run_service" "default" {
 
 data "google_service_account" "cloud_run" {
   account_id = data.google_cloud_run_service.default.template[0].spec[0].service_account_name
+}
+
+data "google_compute_global_address" "default" {
+  project = var.project_id
+  name = "${var.deployment_name}-reserved-ip"
 }
 
 # Create Artifact Registry and the gcr Pub/Sub topic
