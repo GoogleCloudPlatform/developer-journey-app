@@ -4,12 +4,13 @@ Welcome. This will auto-provision using [Terraform] solely the CI/CD pipeline fo
 The following are the main resources that will be set up for you.
 
 * [Cloud Build]
+* [Cloud Build Triggers]
 * [Cloud Deploy]
 
 ## Getting started
 
-This assumes that you have the following services already existing in your current Google Cloud Platform.
-If your project does fit these requirements, Continue to the [CI/CD documentation](./environments/dev/README.md) to learn more, 
+This assumes that you have the following resources and an operational [Cloud Run Service] already existing in your current Google Cloud Platform.
+If your project does meet this requirement, continue to the [CI/CD documentation](./environments/dev/README.md) to learn more, 
 otherwise follow the pre-requisites before continuing.
 
 * [Artifact Registry] for managing container images
@@ -38,7 +39,15 @@ export SECRET_NAME="dev-journey-nextauth-secret"
 gcloud services enable artifactregistry.googleapis.com firestore.googleapis.com run.googleapis.com secretmanager.googleapis.com
 ```
 
-2. Ensure that your project has [Artifact Registry](Artifact Registry Console) enabled. Once you've verified, locate the app's `Dockerfile` at root of the project.
+2. Create Cloud Firestore.
+
+If you haven't already, create a Firestore native database.
+
+```bash
+gcloud firestore databases create --location=nam5
+```
+
+3. Ensure that your project has [Artifact Registry](Artifact Registry Console) enabled. Once you've verified, locate the app's `Dockerfile` at root of the project.
 Change directory to the root and push a new container image to [Artifact Registry](Artifact Registry Console).
 
 ```bash
@@ -56,7 +65,7 @@ gcloud builds submit \
 --tag $REGION-docker.pkg.dev/$PROJECT_ID/$AR_REPO_NAME/$IMAGE_NAME .
 ```
 
-3. Create secret for Cloud Run (Next.js app) container with [Secret Manager](Secret Manager).
+4. Create secret for Cloud Run (Next.js app) container with [Secret Manager](Secret Manager).
 
 ```bash
 # Creates a new secret with randomly generated number
@@ -65,7 +74,7 @@ echo -n $RANDOM | gcloud secrets create $SECRET_NAME \
     --data-file=-
 ```
 
-4. Deploy your Cloud Run container
+5. Deploy your Cloud Run container
 
 ```bash
 gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
@@ -74,7 +83,7 @@ gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
     --image $REGION-docker.pkg.dev/$PROJECT_ID/$AR_REPO_NAME/$IMAGE_NAME 
 ```
 
-5. Update your newly deployed Cloud Run service with required environment variables and secrets.
+6. Update your newly deployed Cloud Run service with required environment variables and secrets.
 
 ```bash
 export SITE_URL = $(gcloud run services describe $CLOUD_RUN_SERVICE_NAME --project "${PROJECT_ID}" --region "${REGION}" --format "value(status.address.url)")
@@ -86,24 +95,23 @@ gcloud run services update $CLOUD_RUN_SERVICE_NAME \
     --project $PROJECT_ID
 ```
 
-6. Verify that your set up.
+7. Verify that your set up.
 
 * Open your newly deployed [Cloud Run] service.
-* Log into the game and play! (Make sure your complete the game by landing on the Google Cloud icon!)
+* Log into the game and play. Make sure your complete the game by landing on the Google Cloud icon!
 * Open your [Firestore console] database.
 * Verify `users` collection exists, your given `username`, and past sessions are displayed.
 
 ## Modifying Schema
 
 The sample app stores `users` and their past `missions` upon session completion.
+Note that each completed `mission` ID correlates with `src/initialData.ts/missions.ts`.
 
-```bash
-Collection: users
-Document: <username>
-Fields: 
-- `completedMissions` (array of mission ids)
-- `username` (string)
-```
+# Example
+
+| Collection | Document | Field (`completedMissions`) | Field (`username`) | 
+|------|-------------|------|---------|
+| `users` | `janedoe` | `abc123` | `janedoe` |
 
 Learn how to seed your [Cloud Firestore], as well as export, data [here](https://cloud.google.com/firestore/docs/manage-data/export-import).
 
@@ -127,10 +135,10 @@ gcloud run services update-traffic $CLOUD_RUN_SERVICE_NAME \
 
 # Rollback to the latest
 gcloud run services update-traffic $CLOUD_RUN_SERVICE_NAME \
-  --to-latest \
-  --platform=managed \
-  --region=us-central1 \
-  --project ${project}
+    --to-latest \
+    --platform=managed \
+    --region=$REGION \
+    --project $PROJECT_ID
 ```
 
 <!-- doc links -->
