@@ -21,10 +21,9 @@ module "project_services" {
   enable_apis                 = var.enable_apis
 
   activate_apis = [
-     "artifactregistry.googleapis.com",
-     "cloudbuild.googleapis.com",
-     "clouddeploy.googleapis.com",
-
+    "artifactregistry.googleapis.com",
+    "cloudbuild.googleapis.com",
+    "clouddeploy.googleapis.com",
   ]
 }
 
@@ -32,7 +31,6 @@ resource "time_sleep" "project_services" {
   depends_on = [
     module.project_services
   ]
-
   create_duration = "45s"
 }
 
