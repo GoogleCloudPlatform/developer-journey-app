@@ -9,14 +9,15 @@ The following are the main resources that will be set up for you.
 
 ## Getting started
 
-This assumes that you have the following resources and an operational [Cloud Run Service] already existing in your current Google Cloud Platform.
-If your project does meet this requirement, continue to the [CI/CD documentation](./environments/dev/README.md) to learn more, 
-otherwise follow the pre-requisites before continuing.
+These instructions assume that you have an existing operational [Cloud Run Service] and the following resources:
 
 * [Artifact Registry] for managing container images
 * [Cloud Run] for scalable serverless apps
 * [Cloud Firestore] for scalable serverless databases
 * [Secret Manager] for managing project secrets storage
+
+If your project does meet this requirement, continue to the [CI/CD documentation](./environments/dev/README.md) to learn more, 
+otherwise follow the pre-requisites before continuing.
 
 **Note:** The manual `gcloud` commands below will be automated in future iterations of this project.
 
