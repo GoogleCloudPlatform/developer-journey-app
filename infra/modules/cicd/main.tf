@@ -226,14 +226,14 @@ resource "google_clouddeploy_target" "prod" {
   location    = var.region
   name        = "${var.deployment_name}-prod-target"
   description = "Prod target for ${var.deployment_name} app."
-
+  
   execution_configs {
     usages          = ["RENDER", "DEPLOY", "VERIFY"]
     service_account = google_service_account.cloud_deploy.email
   }
 
   labels           = var.labels
-  require_approval = false
+  require_approval = true
 
   run {
     location = "projects/${var.project_id}/locations/${data.google_cloud_run_service.default.location}"
