@@ -48,8 +48,7 @@ Create (or use an existing) a Firestore native database.
 gcloud firestore databases create --location=nam5
 ```
 
-3. Enable [Artifact Registry](Artifact Registry Console). 
-Change directory to the root and push a new container image to [Artifact Registry](Artifact Registry Console).
+3. Change directory to the root and push a new container image to [Artifact Registry](Artifact Registry Console).
 
 ```bash
 # Root project where Dockerfile lives
