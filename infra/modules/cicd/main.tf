@@ -194,6 +194,9 @@ resource "google_clouddeploy_delivery_pipeline" "default" {
       target_id = google_clouddeploy_target.prod.name
     }
   }
+  depends_on = [
+    time_sleep.project_services
+  ]
 }
 
 resource "google_service_account" "cloud_deploy" {
@@ -240,5 +243,7 @@ resource "google_clouddeploy_target" "prod" {
   run {
     location = "projects/${var.project_id}/locations/${data.google_cloud_run_service.default.location}"
   }
-
+  depends_on = [
+    time_sleep.project_services
+  ]
 }
