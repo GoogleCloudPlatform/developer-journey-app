@@ -32,6 +32,9 @@ export default function Component() {
               Huzzah Traveler! You have gathered all the necessary technologies and the treasure has been revealed!
             </p>
             <p>
+              Remember to collect the Cloud treasure to complete your mission.
+            </p>
+            <p>
               Take time to explore these learning resources to
               {' '}
               <span className='font-bold text-lg text-slate-100'>{currentMission.title}</span>
