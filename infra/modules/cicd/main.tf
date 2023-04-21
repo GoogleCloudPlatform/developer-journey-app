@@ -112,7 +112,7 @@ resource "google_cloudbuild_trigger" "app_new_build" {
     name  = local.repository_name
     owner = local.repository_owner
     push {
-      branch       = "main"
+      branch       = "^main$"
       invert_regex = false
     }
   }
