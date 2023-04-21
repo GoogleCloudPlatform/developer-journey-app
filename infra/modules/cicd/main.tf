@@ -106,7 +106,7 @@ resource "google_cloudbuild_trigger" "app_new_build" {
   description     = "Initiates new build of ${var.deployment_name}. Triggers by changes to app on main branch of source repo."
   service_account = google_service_account.cloud_build.id
   included_files = [
-    "src/*",
+    "src/**",
   ]
   github {
     name  = local.repository_name
