@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module "cloud_build_cicd" {
+module "cicd_pipeline" {
   source                = "../../modules/cicd"
   project_id            = var.project_id
   run_service_name      = var.run_service_name
