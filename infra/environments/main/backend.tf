@@ -12,9 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module "cloud_build_cicd" {
-  source                = "../../modules/cicd"
-  project_id            = var.project_id
-  run_service_name      = var.run_service_name
-  github_repository_url = var.github_repository_url
+terraform {
+  # Uncomment to use a remote GCS backend. Bucket must already exist.
+  # backend "gcs" {
+  #   bucket                      = "bucket-name"
+  #   prefix                      = "build-cicd-state"
+  # }
 }
