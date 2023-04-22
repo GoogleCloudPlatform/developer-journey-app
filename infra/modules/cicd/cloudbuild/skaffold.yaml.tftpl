@@ -1,0 +1,11 @@
+apiVersion: skaffold/v3alpha1
+kind: Config
+metadata: 
+  name: ${name}
+profiles:
+- name: prod
+  manifests:
+    rawYaml:
+    - app-prod.yaml
+deploy:
+  cloudrun: {}
