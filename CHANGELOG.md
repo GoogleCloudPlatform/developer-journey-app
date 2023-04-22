@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.1.0...v1.2.0) (2023-04-22)
+
+
+### Features
+
+* Cloud Deploy CICD  ([#79](https://github.com/GoogleCloudPlatform/developer-journey-app/issues/79)) ([d734481](https://github.com/GoogleCloudPlatform/developer-journey-app/commit/d734481c2943f2357ecf0074f2b6e87fa01d55af))
+
 ## [1.1.0](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.0.0...v1.1.0) (2023-04-19)
 
 
