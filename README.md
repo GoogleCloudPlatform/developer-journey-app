@@ -1,7 +1,5 @@
 # 🌺 Developer Journey App
 
-*Description*
-
 **Developer Journey App** gives developers a fun user interface for exploring a
 simple maze to find and collect resources that provide technical tips.
 
