@@ -91,7 +91,7 @@ Jest will run tests located in `__test__` directories (for example:
 
 ## Deployment
 
-Ready to deploy? Check out how to do that [here](`./infra/README.md`). 
+Ready to deploy? Check out how to do that [here](/infra/README.md). 
 
 ## Prerequisites
 
