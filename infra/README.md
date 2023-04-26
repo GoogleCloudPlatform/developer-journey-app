@@ -244,6 +244,9 @@ https://console.cloud.google.com/firestore
 [Cloud Build]:
 https://cloud.google.com/build
 
+[Cloud Build Triggers]:
+https://cloud.google.com/build/docs/triggers
+
 [Cloud Deploy]:
 https://cloud.google.com/deploy
 
