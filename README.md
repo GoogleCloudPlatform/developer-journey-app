@@ -1,7 +1,5 @@
 # 🌺 Developer Journey App
 
-*Description*
-
 **Developer Journey App** gives developers a fun user interface for exploring a
 simple maze to find and collect resources that provide technical tips.
 
@@ -77,7 +75,6 @@ Press `Ctrl-C` when you want to stop the Firestore emulator.
 
 > For more detail, see the docs for [Emulate Firestore locally](https://cloud.google.com/firestore/docs/emulator).
 
-
 ## Tests
 
 ```bash
@@ -92,6 +89,9 @@ dependency to support writing tests in TypeScript. The jest configuration
 Jest will run tests located in `__test__` directories (for example:
 `src/lib/__test__/database.test.ts`).
 
+## Deployment
+
+Ready to deploy? Check out how to do that [here](`./infra/README.md`). 
 
 ## Prerequisites
 
@@ -178,13 +178,18 @@ gcloud components install cloud-firestore-emulator
 
 ### 5. Cloud Firestore for development and production
 
-You will need databases for development, testing, staging, and production.
+If you prefer to manually create a Firestore native database in your Google Cloud Project:
 
-TODO
-* provisioning
-* configuring app environment
+```bash
+gcloud firestore databases create --location=nam5 --project=<project-id>
+```
+
+Passing an environment variable `NODE_ENV=development`, while running the app, will set it to use Firestore Emulator by default. 
+
+Otherwise, the app will expect to use an actual Cloud Firestore database in your Google Cloud Project.
 
 https://console.cloud.google.com/firestore/databases/-default-/data/panel
+
 
 ## Contributing
 
