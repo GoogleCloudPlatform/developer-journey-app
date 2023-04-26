@@ -1,4 +1,4 @@
-# Infrastructure
+# ⚙️ Infrastructure
 
 Welcome. This will auto-provision using [Terraform] solely the CI/CD pipeline for `developer-journey-app`.
 The following are the main resources that will be set up for you.
@@ -9,7 +9,7 @@ The following are the main resources that will be set up for you.
 
 ## Getting started
 
-These instructions assume that you have an existing operational [Cloud Run Service] and the following resources:
+These instructions assume that you have an existing operational [Cloud Run] service and the following resources:
 
 * [Artifact Registry] for managing container images
 * [Cloud Run] for scalable serverless apps
@@ -37,10 +37,14 @@ export SECRET_NAME="dev-journey-nextauth-secret"
 1. Enable relevant Google Cloud services.
 
 ```bash
-gcloud services enable artifactregistry.googleapis.com firestore.googleapis.com run.googleapis.com secretmanager.googleapis.com
+gcloud services enable \
+    artifactregistry.googleapis.com \
+    firestore.googleapis.com \
+    run.googleapis.com \
+    secretmanager.googleapis.com
 ```
 
-2. Create Cloud Firestore.
+2. Create [Cloud Firestore].
 
 Create (or use an existing) a Firestore native database. 
 
@@ -48,7 +52,7 @@ Create (or use an existing) a Firestore native database.
 gcloud firestore databases create --location=nam5
 ```
 
-3. Change directory to the root and push a new container image to [Artifact Registry](Artifact Registry Console).
+3. Change directory to the root and push a new container image to [Artifact Registry].
 
 ```bash
 # Root project where Dockerfile lives
@@ -86,7 +90,7 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
     --role="roles/secretmanager.secretAccessor"
 ```
 
-6. Create a new secret for Cloud Run (Next.js app) container with [Secret Manager](Secret Manager). This will populate the
+6. Create a new secret for Cloud Run (Next.js app) container with [Secret Manager]. This will populate the
 `NEXTAUTH_SECRET` environment variable required by [`next-auth`](https://next-auth.js.org/configuration/options).
 
 ```bash
@@ -96,7 +100,7 @@ echo -n $RANDOM | gcloud secrets create $SECRET_NAME \
     --data-file=-
 ```
 
-7. Deploy the image you just created to Cloud Run.
+7. Deploy the image you just created to [Cloud Run].
 
 ```bash
 gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
@@ -131,7 +135,7 @@ gcloud run services update $CLOUD_RUN_SERVICE_NAME \
 The sample app stores `users` and their past `missions` upon session completion.
 Note that each completed `mission` ID correlates with `src/initialData.ts/missions.ts`.
 
-# Example
+### Example
 
 | Collection | Document | Field (`completedMissions`) | Field (`username`) | 
 |------|-------------|------|---------|
@@ -165,9 +169,9 @@ gcloud run services update-traffic $CLOUD_RUN_SERVICE_NAME \
     --project=$PROJECT_ID 
 ```
 
-# Example CICD pipeline
+# Provision a CI/CD pipeline
 
-This repository includes an example CI/CD pipeline that uses Cloud Build and Cloud Deploy to continuously intergrate 
+This repository includes an example CI/CD pipeline that uses [Cloud Build] and [Cloud Deploy] to continuously intergrate 
 changes to the application code into new builds of your application and automatically deploy those builds to to Cloud 
 Run.  The following steps are required to set this pipeline up:
 
