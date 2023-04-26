@@ -16,8 +16,7 @@ These instructions assume that you have an existing operational [Cloud Run Servi
 * [Cloud Firestore] for scalable serverless databases
 * [Secret Manager] for managing project secrets storage
 
-If your project does meet this requirement, continue to the [CI/CD documentation](./environments/dev/README.md) to learn more, 
-otherwise follow the pre-requisites before continuing.
+Follow the pre-requisites before continuing. If you want to learn more about CI/CD, check out our [documentation](#provision-a-cicd-pipeline).
 
 **Note:** The manual `gcloud` commands below will be automated in future iterations of this project.
 
@@ -26,7 +25,8 @@ otherwise follow the pre-requisites before continuing.
 Set your environment variables:
 
 ```bash
-export PROJECT_ID="your-project"
+export PROJECT_ID="your-project-id"
+export PROJECT_NUM="your-project-num"
 export REGION="your-region"
 export AR_REPO_NAME="dev-journey-repo"
 export CLOUD_RUN_SERVICE_NAME="dev-journey"
@@ -65,7 +65,28 @@ gcloud builds submit \
 --tag $REGION-docker.pkg.dev/$PROJECT_ID/$AR_REPO_NAME/$IMAGE_NAME .
 ```
 
-4. Create secret for Cloud Run (Next.js app) container with [Secret Manager](Secret Manager).
+4. Create a service account for Cloud Run service
+
+```bash
+gcloud iam service-accounts create cloud-run-service-account \
+    --display-name="Service account for dev-journey Cloud Run service"
+```
+
+5. Grant roles to your newly created service account.
+
+```bash
+# Adding roles/run.invoker to your new service account to access your service
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:cloud-run-service-account@${PROJECT_ID}.iam.gserviceaccount.com" \
+    --role="roles/run.invoker"
+
+# Adding roles/secretmanager.secretAccessor to access required secrets
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:cloud-run-service-account@${PROJECT_ID}.iam.gserviceaccount.com" \
+    --role="roles/secretmanager.secretAccessor"
+```
+
+6. Create secret for Cloud Run (Next.js app) container with [Secret Manager](Secret Manager).
 
 ```bash
 # Creates a new secret with randomly generated number
@@ -74,28 +95,30 @@ echo -n $RANDOM | gcloud secrets create $SECRET_NAME \
     --data-file=-
 ```
 
-5. Deploy the image you just created to Cloud Run.
+7. Deploy the image you just created to Cloud Run.
 
 ```bash
 gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
     --project $PROJECT_ID \
     --region $REGION \
-    --image $REGION-docker.pkg.dev/$PROJECT_ID/$AR_REPO_NAME/$IMAGE_NAME 
+    --image $REGION-docker.pkg.dev/$PROJECT_ID/$AR_REPO_NAME/$IMAGE_NAME \
+    --service-account cloud-run-service-account@${PROJECT_ID}.iam.gserviceaccount.com
 ```
 
-6. Update your newly deployed Cloud Run service with required environment variables and the secret you created.
+8. Update your newly deployed Cloud Run service with required environment variables and the secret you created.
 
 ```bash
 export SITE_URL = $(gcloud run services describe $CLOUD_RUN_SERVICE_NAME --project "${PROJECT_ID}" --region "${REGION}" --format "value(status.address.url)")
 
 gcloud run services update $CLOUD_RUN_SERVICE_NAME \
     --update-env-vars "PROJECT_ID=${PROJECT_ID},NEXTAUTH_URL=${SITE_URL}" \
-    --update-secrets "CLIENT_ID=projects/${PROJECT_ID}/secrets/${SECRET_NAME}:latest" \
+    --update-secrets "NEXTAUTH_SECRET=projects/${PROJECT_NUM}/secrets/${SECRET_NAME}:latest" \
     --region $REGION \
-    --project $PROJECT_ID
+    --project $PROJECT_ID \
+    --service-account cloud-run-service-account@${PROJECT_ID}.iam.gserviceaccount.com
 ```
 
-7. Verify your work.
+9. Now, let's verify your setup.
 
 * Open your newly deployed [Cloud Run] service.
 * Log into the game and successfully complete a mission by landing on the Google Cloud icon.
@@ -124,21 +147,21 @@ If you've opted to not use [Cloud Deploy], leverage the following to perform rol
 gcloud run revisions list \
     --platform=managed \
     --region=$REGION \
-    --project $PROJECT_ID
+    --project=$PROJECT_ID 
 
 # Rollback to a specific revision
 gcloud run services update-traffic $CLOUD_RUN_SERVICE_NAME \
-    --to-revisions $REVISION_NAME=100 \
+    --to-revisions=$REVISION_NAME=100 \
     --platform=managed \
     --region=$REGION \
-    --project $PROJECT_ID
+    --project=$PROJECT_ID 
 
 # Rollback to the latest
 gcloud run services update-traffic $CLOUD_RUN_SERVICE_NAME \
     --to-latest \
     --platform=managed \
     --region=$REGION \
-    --project $PROJECT_ID
+    --project=$PROJECT_ID 
 ```
 
 # Example CICD pipeline
