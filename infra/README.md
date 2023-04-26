@@ -86,7 +86,8 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
     --role="roles/secretmanager.secretAccessor"
 ```
 
-6. Create secret for Cloud Run (Next.js app) container with [Secret Manager](Secret Manager).
+6. Create a new secret for Cloud Run (Next.js app) container with [Secret Manager](Secret Manager). This will populate the
+`NEXTAUTH_SECRET` environment variable required by [`next-auth`](https://next-auth.js.org/configuration/options).
 
 ```bash
 # Creates a new secret with randomly generated number
@@ -108,7 +109,7 @@ gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
 8. Update your newly deployed Cloud Run service with required environment variables and the secret you created.
 
 ```bash
-export SITE_URL = $(gcloud run services describe $CLOUD_RUN_SERVICE_NAME --project "${PROJECT_ID}" --region "${REGION}" --format "value(status.address.url)")
+export SITE_URL=$(gcloud run services describe $CLOUD_RUN_SERVICE_NAME --project "${PROJECT_ID}" --region "${REGION}" --format "value(status.address.url)")
 
 gcloud run services update $CLOUD_RUN_SERVICE_NAME \
     --update-env-vars "PROJECT_ID=${PROJECT_ID},NEXTAUTH_URL=${SITE_URL}" \
@@ -118,7 +119,7 @@ gcloud run services update $CLOUD_RUN_SERVICE_NAME \
     --service-account cloud-run-service-account@${PROJECT_ID}.iam.gserviceaccount.com
 ```
 
-9. Now, let's verify your setup.
+9. Let's verify your setup!
 
 * Open your newly deployed [Cloud Run] service.
 * Log into the game and successfully complete a mission by landing on the Google Cloud icon.
