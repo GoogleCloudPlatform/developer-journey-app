@@ -1,6 +1,6 @@
 # ⚙️  Provision with Terraform
 
-## Provision a CI/CD pipeline
+## Provision a CI/CD pipeline <a name="provision-a-cicd-pipeline"></a>
 
 This includes an example CI/CD pipeline that uses [Cloud Build] and [Cloud Deploy] to continuously intergrate 
 changes to the application code into new builds of your application and automatically deploy those builds to to Cloud 
@@ -11,21 +11,21 @@ Run.  The following steps are required to set this pipeline up:
 3. Connect the fork to your Google Cloud project
 4. Run the Terraform code in `terraform/environments/main`
 
-## 1. Deploy the application infrastructure
+### 1. Deploy the application infrastructure
 
 Using a Google Cloud Project with billing enabled, deploy the application infrastructure via the Terraform made 
 available in the 
 [terraform-dynamic-javascript-webapp repo](https://github.com/GoogleCloudPlatform/terraform-dynamic-javascript-webapp/tree/main/infra) 
 
-If you'd like to provision manually, see the [manual setup section](#manually-provision-cloud-run-cloud-firestore) before continuing.
+If you'd like to provision manually, see the [manual setup section](#manually-provision-run-firestore) before continuing.
 
-## 2. Fork this repository
+### 2. Fork this repository
 
 In order to demonstrate the CI/CD pipeline, you'll need to create a fork of this repository so that you can make 
 changes to the main branch and initiate the pipeline. Instructions for forking a repository can be found in GitHub's
 [documentation](https://docs.github.com/en/get-started/quickstart/fork-a-repo)
 
-## 3. Connect your fork to your Google Cloud Project
+### 3. Connect your fork to your Google Cloud Project
 
 Cloud Build triggers can be created to respond to GitHub repository actions, such as pull requests, and merges to the
 main branch. To be able to create such triggers, the Google Cloud project must have the repository added to it in the 
@@ -36,7 +36,7 @@ Connect your GitHub repo to your Google Cloud project via the
 'global' region.
 
 
-## 4. Run the Terraform code
+### 4. Run the Terraform code
 
 The `terraform/environments/main` directory is a root Terraform module that creates the CICD pipeline resources in the
 specified project. To apply the Terraform to your project, do the following from the `main` directory:
@@ -65,7 +65,7 @@ specified project. To apply the Terraform to your project, do the following from
 
 ___
 
-## Manually Provision Cloud Run & Cloud Firestore
+## Manually Provision Cloud Run & Cloud Firestore <a name="manually-provision-run-firestore"></a>
 
 In order to run the [Terraform] CI/CD pipeline, you must have an operational [Cloud Run] service and the following resources:
 
@@ -187,12 +187,12 @@ gcloud run services update $CLOUD_RUN_SERVICE_NAME \
 * Open your [Firestore console] database.
 * Verify the `users` collection exists, your given `username`, and past sessions are displayed.
 
-## Modifying Schema
+### Modifying Schema
 
 The sample app stores `users` and their past `missions` upon session completion.
 Note that each completed `mission` ID correlates with `src/initialData.ts/missions.ts`.
 
-### Example
+#### Example
 
 | Collection | Document | Field (`completedMissions`) | Field (`username`) | 
 |------|-------------|------|---------|
@@ -200,7 +200,7 @@ Note that each completed `mission` ID correlates with `src/initialData.ts/missio
 
 Learn how to seed your [Cloud Firestore], as well as export, data [here](https://cloud.google.com/firestore/docs/manage-data/export-import).
 
-## Manually Rollback
+### Manually Rollback
 
 If you've opted to not use [Cloud Deploy], leverage the following to perform rollbacks for your [Cloud Run] service.
 
