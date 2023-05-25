@@ -73,7 +73,7 @@ In order to run the [Terraform] CI/CD pipeline, you must have an operational [Cl
 * [Cloud Firestore] for scalable serverless databases
 * [Secret Manager] for managing project secrets storage
 
-If you are looking to manually provision these resources rather than run [terraform-dynamic-javascript-webapp repo](https://github.com/GoogleCloudPlatform/terraform-dynamic-javascript-webapp/tree/main/infra), then follow the pre-requisites before continuing on to the CI/CD pipeline [documentation](#provision-a-cicd-pipeline).
+If you are looking to manually provision these resources rather than run [terraform-dynamic-javascript-webapp repo](https://github.com/GoogleCloudPlatform/terraform-dynamic-javascript-webapp/tree/main/infra), follow along before continuing on to the CI/CD pipeline [documentation](#provision-a-cicd-pipeline).
 
 **Note:** The manual `gcloud` commands below will be automated in future iterations of this project.
 
