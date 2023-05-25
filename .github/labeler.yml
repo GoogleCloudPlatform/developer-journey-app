@@ -18,9 +18,9 @@
 'component: app':
 - 'src/*'
 - 'src/**/*'
-'component: infra':
-- 'infra/*'
-- 'infra/**/*'
+'component: terraform':
+- 'terraform/*'
+- 'terraform/**/*'
 - 'Dockerfile'
 'component: docs':
 - 'docs/*'

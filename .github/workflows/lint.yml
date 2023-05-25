@@ -52,5 +52,5 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Run Lint
-        working-directory: infra
+        working-directory: terraform
         run: terraform fmt --check $(find . -name *.tf)
