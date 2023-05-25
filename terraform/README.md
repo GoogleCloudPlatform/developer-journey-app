@@ -17,7 +17,7 @@ Using a Google Cloud Project with billing enabled, deploy the application infras
 available in the 
 [terraform-dynamic-javascript-webapp repo](https://github.com/GoogleCloudPlatform/terraform-dynamic-javascript-webapp/tree/main/infra) 
 
-If you'd like to provision manually, see the [manual setup section](#manually-provision-cloud-run-&-cloud-firestore) before continuing.
+If you'd like to provision manually, see the [manual setup section](#manually-provision-cloud-run-cloud-firestore) before continuing.
 
 ## 2. Fork this repository
 
