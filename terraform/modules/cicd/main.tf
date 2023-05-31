@@ -66,7 +66,7 @@ resource "google_pubsub_topic" "gcr" {
 # Cloud Build resources (triggers, service account, and IAM bindings)
 resource "google_service_account" "cloud_build" {
   project      = var.project_id
-  account_id   = "${var.run_service_name}-builder"
+  account_id   = "${substr(var.run_service_name, 0, 22)}-builder"
   display_name = "Service Account for Cloud Build deployment to Cloud Run."
 }
 
