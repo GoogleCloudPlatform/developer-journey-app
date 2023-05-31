@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.2.0...v1.2.1) (2023-05-31)
+
+
+### Bug Fixes
+
+* ensure valid length for cloud build service account ([#85](https://github.com/GoogleCloudPlatform/developer-journey-app/issues/85)) ([c4751fb](https://github.com/GoogleCloudPlatform/developer-journey-app/commit/c4751fbea20a80c68a461a08eaecab90c22b20a6))
+
 ## [1.2.0](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.1.0...v1.2.0) (2023-04-22)
 
 
