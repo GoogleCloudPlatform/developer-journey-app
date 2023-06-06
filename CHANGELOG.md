@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.2.1...v1.2.2) (2023-06-06)
+
+
+### Bug Fixes
+
+* add dark background for prompt text ([#87](https://github.com/GoogleCloudPlatform/developer-journey-app/issues/87)) ([ffeaefb](https://github.com/GoogleCloudPlatform/developer-journey-app/commit/ffeaefbfce60bc7cc90e248b3ed4a044fef0c4a0))
+
 ## [1.2.1](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.2.0...v1.2.1) (2023-05-31)
 
 
