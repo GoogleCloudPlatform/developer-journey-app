@@ -25,7 +25,7 @@ export default function Component() {
 
   return (
     <>
-      <section className="bg-slate-100 text-slate-300 rounded-r-xl p-8 dark:bg-slate-800 my-4 col-span-2 overflow-hidden">
+      <section className="bg-slate-800 text-slate-300 rounded-r-xl p-8 my-4 col-span-2 overflow-hidden">
         <div className={`space-y-4 ${allItemsCollected ? 'opacity-100' : 'h-0 opacity-0'}`}>
           <div className={`space-y-4 transition-all ease-in-out delay-75 duration-1000 ${allItemsCollected ? 'opacity-100' : 'opacity-0'}`}>
             <p>
