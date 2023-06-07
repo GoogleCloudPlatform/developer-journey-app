@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 export {default} from "next-auth/middleware"
 
 export const config = { matcher: ["/demo/page-secured-client-side"] }
