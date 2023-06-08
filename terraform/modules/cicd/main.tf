@@ -201,7 +201,7 @@ resource "google_clouddeploy_delivery_pipeline" "default" {
 
 resource "google_service_account" "cloud_deploy" {
   project      = var.project_id
-  account_id   = "${var.deployment_name}-cloud-deploy"
+  account_id   = "${substr(var.deployment_name, 0, 17)}-cloud-deploy" 
   display_name = "Service Account for Cloud Deploy deployment to Cloud Run."
 }
 
