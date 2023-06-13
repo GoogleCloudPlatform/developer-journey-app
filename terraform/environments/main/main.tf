@@ -17,4 +17,5 @@ module "cicd_pipeline" {
   project_id            = var.project_id
   run_service_name      = var.run_service_name
   github_repository_url = var.github_repository_url
+  lb_ip_address         = var.lb_ip_address
 }

@@ -19,10 +19,10 @@ locals {
   github_repository_url  = replace(var.github_repository_url, "/(.*github.com)/", "https://github.com")
   new_release_config     = templatefile("${path.module}/cloudbuild/new-release.cloudbuild.yaml.tftpl", {})
   app_build_config       = templatefile("${path.module}/cloudbuild/app-build.cloudbuild.yaml.tftpl", {})
-  skaffold_config        = templatefile("${path.module}/cloudbuild/skaffold.yaml.tftpl", { name = var.deployment_name })
+  skaffold_config        = templatefile("${path.module}/cloudbuild/skaffold.yaml.tftpl", { name = "dev-journey" })
   run_config = templatefile("${path.module}/cloudbuild/app-prod.yaml.tftpl",
-    { deployment_name     = var.deployment_name
-      lb_ip_address       = data.google_compute_global_address.default.address
+    { deployment_name     = "dev-journey"
+      lb_ip_address       = var.lb_ip_address
       project_id          = var.project_id
       run_service_account = data.google_service_account.cloud_run.email
     }
@@ -39,17 +39,11 @@ data "google_cloud_run_service" "default" {
 data "google_service_account" "cloud_run" {
   account_id = data.google_cloud_run_service.default.template[0].spec[0].service_account_name
 }
-
-data "google_compute_global_address" "default" {
-  project = var.project_id
-  name    = "${var.deployment_name}-reserved-ip"
-}
-
 # Create Artifact Registry and the gcr Pub/Sub topic
 resource "google_artifact_registry_repository" "default" {
   project       = var.project_id
   location      = var.region
-  repository_id = "${var.deployment_name}-repo"
+  repository_id = "dev-journey-repo"
   description   = "Dev journey artifact registry repo."
   format        = "DOCKER"
   labels        = var.labels
@@ -102,8 +96,8 @@ resource "google_project_iam_member" "builder_run_developer" {
 
 resource "google_cloudbuild_trigger" "app_new_build" {
   project         = var.project_id
-  name            = "${var.deployment_name}-app-build"
-  description     = "Initiates new build of ${var.deployment_name}. Triggers by changes to app on main branch of source repo."
+  name            = "dev-journey-app-build"
+  description     = "Initiates new build of dev-journey app. Triggers by changes to app on main branch of source repo."
   service_account = google_service_account.cloud_build.id
   included_files = [
     "src/**",
@@ -139,7 +133,7 @@ resource "google_cloudbuild_trigger" "app_new_build" {
 
 resource "google_cloudbuild_trigger" "app_new_release" {
   project         = var.project_id
-  name            = "${var.deployment_name}-new-release"
+  name            = "dev-journey-new-release"
   description     = "Triggers on any new build pushed to Artifact Registry. Creates a new release in Cloud Deploy."
   service_account = google_service_account.cloud_build.id
   pubsub_config {
@@ -185,8 +179,8 @@ resource "google_cloudbuild_trigger" "app_new_release" {
 resource "google_clouddeploy_delivery_pipeline" "default" {
   project     = var.project_id
   location    = var.region
-  name        = "${var.deployment_name}-delivery"
-  description = "Basic delivery pipeline for ${var.deployment_name} app."
+  name        = "dev-journey-delivery"
+  description = "Basic delivery pipeline for dev-journey app."
   labels      = var.labels
   serial_pipeline {
     stages {
@@ -201,7 +195,7 @@ resource "google_clouddeploy_delivery_pipeline" "default" {
 
 resource "google_service_account" "cloud_deploy" {
   project      = var.project_id
-  account_id   = "${var.deployment_name}-cloud-deploy"
+  account_id   = "dev-journey-cloud-deploy"
   display_name = "Service Account for Cloud Deploy deployment to Cloud Run."
 }
 
@@ -229,8 +223,8 @@ resource "google_clouddeploy_target" "prod" {
   project     = var.project_id
   provider    = google
   location    = var.region
-  name        = "${var.deployment_name}-prod-target"
-  description = "Prod target for ${var.deployment_name} app."
+  name        = "dev-journey-prod-target"
+  description = "Prod target for dev-journey app."
 
   execution_configs {
     usages          = ["RENDER", "DEPLOY", "VERIFY"]

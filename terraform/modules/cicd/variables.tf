@@ -23,10 +23,9 @@ variable "region" {
   default     = "us-central1"
 }
 
-variable "deployment_name" {
+variable "lb_ip_address" {
   type        = string
-  description = "Identifier for the deployment. Used in some resource names."
-  default     = "dev-journey"
+  description = "The IP address of your developer journey deployment"
 }
 
 variable "enable_apis" {

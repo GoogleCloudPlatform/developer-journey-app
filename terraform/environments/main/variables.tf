@@ -27,3 +27,8 @@ variable "github_repository_url" {
   type        = string
   description = "URL of connected GitHub repository (https://github.com/repo_owner/repo_name)"
 }
+
+variable "lb_ip_address" {
+  type        = string
+  description = "The IP address of your developer journey deployment"
+}
