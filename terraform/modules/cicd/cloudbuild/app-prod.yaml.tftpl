@@ -1,7 +1,7 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: ${deployment_name}
+  name: ${run_service_name}
 spec:
   template:
     spec:
@@ -16,5 +16,5 @@ spec:
           valueFrom:
             secretKeyRef:
               key: latest
-              name: ${deployment_name}-nextauth-secret
+              name: ${run_service_name}-nextauth-secret
       serviceAccountName: ${run_service_account}
