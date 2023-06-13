@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.3](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.2.2...v1.2.3) (2023-06-13)
+
+
+### Bug Fixes
+
+* remove use of deployment_name variable from cicd terraform ([#92](https://github.com/GoogleCloudPlatform/developer-journey-app/issues/92)) ([7aeaa50](https://github.com/GoogleCloudPlatform/developer-journey-app/commit/7aeaa50e96f86135ec5539dcf2e846fd98a8224d))
+
 ## [1.2.2](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.2.1...v1.2.2) (2023-06-06)
 
 
