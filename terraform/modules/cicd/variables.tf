@@ -23,12 +23,6 @@ variable "region" {
   default     = "us-central1"
 }
 
-variable "deployment_name" {
-  type        = string
-  description = "Identifier for the deployment. Used in some resource names."
-  default     = "dev-journey"
-}
-
 variable "enable_apis" {
   type        = bool
   description = "Whether or not to enable underlying apis in this solution."
