@@ -21,7 +21,7 @@ locals {
   app_build_config       = templatefile("${path.module}/cloudbuild/app-build.cloudbuild.yaml.tftpl", {})
   skaffold_config        = templatefile("${path.module}/cloudbuild/skaffold.yaml.tftpl", { name = var.run_service_name })
   run_config = templatefile("${path.module}/cloudbuild/app-prod.yaml.tftpl",
-    { run_service_name     = var.run_service_name
+    { run_service_name    = var.run_service_name
       lb_ip_address       = data.google_compute_global_address.default.address
       project_id          = var.project_id
       run_service_account = data.google_service_account.cloud_run.email
