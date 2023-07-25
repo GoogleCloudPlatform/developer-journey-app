@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.2.3...v1.3.0) (2023-07-25)
+
+
+### Features
+
+* health check - can connect to firestore ([#97](https://github.com/GoogleCloudPlatform/developer-journey-app/issues/97)) ([c9345be](https://github.com/GoogleCloudPlatform/developer-journey-app/commit/c9345be61ae426f6d15f9727b0402cffb18314dc))
+
 ## [1.2.3](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.2.2...v1.2.3) (2023-06-13)
 
 
