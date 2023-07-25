@@ -68,4 +68,36 @@ export class Database {
       completedMissions: updatedMissions,
     });
   }
+
+  /**
+   * Returns true if able to connect to the Firestore instance.
+   * The Firestore API times out a request after 60 seconds. This method
+   * implements a configurable override that defaults to 5 seconds, but there's
+   * no point in setting it higher than 60 seconds.
+   * @param timeout seconds
+   */
+  async isConnected(timeout: number = 5): Promise<boolean> {
+    try {
+      timeout = Math.min(timeout, 60) * 1000;
+      // eslint-disable-next-line no-undef
+      let timerId: NodeJS.Timeout;
+
+      const timer = new Promise<boolean>((resolve) => {
+        timerId = setTimeout(() => resolve(false), timeout);
+      });
+
+      // TODO: research if there's a lighter weight way to status a connection.
+      const connectionCheck = this.db.listCollections();
+
+      return Promise.race([connectionCheck, timer]).then(result => {
+        clearTimeout(timerId);
+        return !!result;
+      });
+
+    } catch (err) {
+      // GoogleError: Total timeout of API google.firestore.v1.Firestore
+      // exceeded 60000 milliseconds before any response was received.
+      return false;
+    }
+  }
 }
