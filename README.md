@@ -171,20 +171,9 @@ Jest will run tests located in `__test__` directories (for example:
 
 ## Deployment
 
-Ready to deploy? Check out how to do that [here](/terraform/README.md). 
-
-If you prefer to manually create a Firestore native database in your Google Cloud Project:
-
-```bash
-gcloud firestore databases create --location=nam5 --project=<project-id>
-```
-
-Passing an environment variable `NODE_ENV=development`, while running the app, will set it to use Firestore Emulator by default. 
-
-Otherwise, the app will expect to use an actual Cloud Firestore database in your Google Cloud Project.
-
-https://console.cloud.google.com/firestore/databases/-default-/data/panel
-
+For instructions on how to deploy this application to a Google Cloud Project,
+see the
+[Cloud Architecture Center](https://cloud.google.com/architecture/application-development/dynamic-app-javascript#deploy-the-solution).
 
 ## Contributing
 
