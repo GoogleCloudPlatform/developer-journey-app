@@ -6,8 +6,6 @@ simple maze to find and collect resources that provide technical tips.
 The main goal of the app, however, is to showcase how to write [Next.js] apps 
 to reap the performance benefits of [Google Cloud] and [Cloud CDN].
 
-> **🧪 Preview:** This app is currently under development.
-
 ## Launch
 
 [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fgooglecloudplatform%2Fdeveloper-journey-app)
