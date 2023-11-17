@@ -157,9 +157,16 @@ Press `Ctrl-C` when you want to stop the Firestore emulator.
 
 ## Tests
 
+> Before running tests, make sure you have the Firestore Emulator running on
+> your local machine on the indicated port.
+
+To run Jest tests:
 ```bash
-npm test
-npm run test:watch
+FIRESTORE_EMULATOR_HOST="localhost:9999" npm test
+```
+To run Jest tests in watch mode:
+```bash
+FIRESTORE_EMULATOR_HOST="localhost:9999" npm run test:watch
 ```
 
 [ts-jest](https://kulshekhar.github.io/ts-jest/) is installed as a dev
