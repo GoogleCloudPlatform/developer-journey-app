@@ -28,86 +28,18 @@ This demo runs on Google Cloud using the following services:
 
 ## Getting Started
 
-Clone this repo and change directory (`cd`) to it.
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-> The repo's `package-lock.json` will be ignored by git if you
-> commit changes (configured in `.gitignore`).
-
-Run the development server:
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing pages. The browser auto-updates when you save changes.
-
-
-### If you want to run the Firestore Emulator locally
-
-Choose the port you want to use for the [Firestore Emulator], for example `9999`.
-
-> Note: If you choose a port that is not `9999` for this demo, you will need to update the `host` property in `database.ts` to match your selected port.
-
-Export the `FIRESTORE_EMULATOR_HOST` environment variable:
-
-```bash
-export FIRESTORE_EMULATOR_HOST="localhost:9999"
-```
-
-Start the emulator:
-
-```bash
-gcloud emulators firestore start --host-port="$FIRESTORE_EMULATOR_HOST" --project=demo-test
-```
-
-> When the exported `FIRESTORE_EMULATOR_HOST` environment variable is set, the
-> Firestore client will automatically use it to connect to the emulator.
-
-Press `Ctrl-C` when you want to stop the Firestore emulator.
-
-> For more detail, see the docs for [Emulate Firestore locally](https://cloud.google.com/firestore/docs/emulator).
-
-## Tests
-
-```bash
-npm test
-npm run test:watch
-```
-
-[ts-jest](https://kulshekhar.github.io/ts-jest/) is installed as a dev
-dependency to support writing tests in TypeScript. The jest configuration
-(`jest.config.js`) sets `preset: 'ts-jest'` to enable this.
-
-Jest will run tests located in `__test__` directories (for example:
-`src/lib/__test__/database.test.ts`).
-
-## Deployment
-
-Ready to deploy? Check out how to do that [here](/terraform/README.md). 
-
-## Prerequisites
+### Prerequisites
 
 You need a Google Cloud account if you want to open the demo in [Cloud Shell]
 (a free online development and operations environment with an integrated editor)
 and deploy it.
 
-If you want to explore the developer experience **using your own machine**, you
-will need to install the Google Cloud CLI.
-
-While testing the app you can connect to a hosted Cloud Firestore database or
-you can run the [Firebase Emulator].
+To run Dev Journey locally **using your own machine**, you will need to install
+the following:
 
 * [Node.js] (installing the `LTS` version is recommended).
-* [Install the Google Cloud CLI](#3-install-the-google-cloud-cli).
-* [Install the Firestore Emulator](#4-install-the-firestore-emulator) (optional).
+* [Google Cloud CLI](#3-install-the-google-cloud-cli).
+* [Firestore Emulator](#4-install-the-firestore-emulator) (optional).
 
 
 ### 1. Sign up for a Google Cloud Account
@@ -177,6 +109,71 @@ gcloud components install cloud-firestore-emulator
 ```
 
 ### 5. Cloud Firestore for development and production
+
+Clone this repo and change directory (`cd`) to it.
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+> The repo's `package-lock.json` will be ignored by git if you
+> commit changes (configured in `.gitignore`).
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing pages. The browser auto-updates when you save changes.
+
+
+### If you want to run the Firestore Emulator locally
+
+Choose the port you want to use for the [Firestore Emulator], for example `9999`.
+
+> Note: If you choose a port that is not `9999` for this demo, you will need to update the `host` property in `database.ts` to match your selected port.
+
+Export the `FIRESTORE_EMULATOR_HOST` environment variable:
+
+```bash
+export FIRESTORE_EMULATOR_HOST="localhost:9999"
+```
+
+Start the emulator:
+
+```bash
+gcloud emulators firestore start --host-port="$FIRESTORE_EMULATOR_HOST" --project=demo-test
+```
+
+> When the exported `FIRESTORE_EMULATOR_HOST` environment variable is set, the
+> Firestore client will automatically use it to connect to the emulator.
+
+Press `Ctrl-C` when you want to stop the Firestore emulator.
+
+> For more detail, see the docs for [Emulate Firestore locally](https://cloud.google.com/firestore/docs/emulator).
+
+## Tests
+
+```bash
+npm test
+npm run test:watch
+```
+
+[ts-jest](https://kulshekhar.github.io/ts-jest/) is installed as a dev
+dependency to support writing tests in TypeScript. The jest configuration
+(`jest.config.js`) sets `preset: 'ts-jest'` to enable this.
+
+Jest will run tests located in `__test__` directories (for example:
+`src/lib/__test__/database.test.ts`).
+
+## Deployment
+
+Ready to deploy? Check out how to do that [here](/terraform/README.md). 
 
 If you prefer to manually create a Firestore native database in your Google Cloud Project:
 
