@@ -107,7 +107,7 @@ that you can use for development and testing.
    Open [http://localhost:3000](http://localhost:3000) with your browser to see
    the result.
 
-   You can start editing pages. The browser auto-updates when you save changes.
+   You can start editing the application. The browser auto-refreshes when you save changes.
 
    > The repo's `package-lock.json` will be ignored by git if you
    > commit changes (configured in `.gitignore`).
