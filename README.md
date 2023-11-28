@@ -68,7 +68,7 @@ that you can use for development and testing.
    To start the emulator:
 
    ```bash
-   gcloud emulators firestore start --host-port="$FIRESTORE_EMULATOR_HOST" --project=demo-test
+   gcloud emulators firestore start --host-port="$FIRESTORE_EMULATOR_HOST"
    ```
 
    Press `Ctrl-C` when you want to stop the Firestore emulator.
