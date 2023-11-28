@@ -90,7 +90,9 @@ that you can use for development and testing.
    cp .env.local.example .env.local
    ```
 
-   If neccessary, change any of the default values provided.
+   This file is used by Next.js to define default development values such as
+   `FIREBASE_EMULATOR_HOST`. If neccessary, change any of the default values
+   provided.
 
 4. Install npm dependencies:
 
