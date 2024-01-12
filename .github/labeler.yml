@@ -15,13 +15,19 @@
 # Labeler assigns GitHub labels to PRs based on changed files.
 
 # component labels are used in release notes.
-'component: app':
-- 'src/*'
-- 'src/**/*'
-'component: terraform':
-- 'terraform/*'
-- 'terraform/**/*'
-- 'Dockerfile'
-'component: docs':
-- 'docs/*'
-- 'docs/**/*'
+"component: app":
+  - changed-files:
+      - any-glob-to-all-files:
+          - "src/*"
+          - "src/**/*"
+"component: terraform":
+  - changed-files:
+      - any-glob-to-all-files:
+          - "terraform/*"
+          - "terraform/**/*"
+          - "Dockerfile"
+"component: docs":
+  - changed-files:
+      - any-glob-to-all-files:
+          - "docs/*"
+          - "docs/**/*"
