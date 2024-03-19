@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.3.0...v1.4.0) (2024-03-18)
+
+
+### Features
+
+* add boilerplate .env for dev env setup ([#109](https://github.com/GoogleCloudPlatform/developer-journey-app/issues/109)) ([e00f90f](https://github.com/GoogleCloudPlatform/developer-journey-app/commit/e00f90fd79cd957d31f752ba209565d24c9c8c74))
+
 ## [1.3.0](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.2.3...v1.3.0) (2023-07-25)
 
 
