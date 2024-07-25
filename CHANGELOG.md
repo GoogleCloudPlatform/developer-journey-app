@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.1](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.4.0...v1.4.1) (2024-07-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @headlessui/react to v1.7.19 ([#127](https://github.com/GoogleCloudPlatform/developer-journey-app/issues/127)) ([b78cab9](https://github.com/GoogleCloudPlatform/developer-journey-app/commit/b78cab98116929176a3e785c61a480969fc69747))
+* **deps:** update dependency @reduxjs/toolkit to v1.9.7 ([#128](https://github.com/GoogleCloudPlatform/developer-journey-app/issues/128)) ([e89f625](https://github.com/GoogleCloudPlatform/developer-journey-app/commit/e89f6251314b2f19dd021e1bde05dbe60314ae0e))
+
 ## [1.4.0](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.3.0...v1.4.0) (2024-03-18)
 
 
