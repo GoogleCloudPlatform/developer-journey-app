@@ -2,4 +2,9 @@
 # the repo. Unless a later match takes precedence,
 # global owners will be requested for
 # review when someone opens a pull request.
-* @GoogleCloudPlatform/team-egg @GoogleCloudPlatform/developer-journey-app-approvers
+
+* @GoogleCloudPlatform/blueprint-solutions @lukeschlangen @donmccasland @GoogleCloudPlatform/jump-start-solutions-admins @GoogleCloudPlatform/team-egg @GoogleCloudPlatform/developer-journey-app-approvers
+
+CODEOWNERS @GoogleCloudPlatform/blueprint-solutions
+docs/CODEOWNERS @GoogleCloudPlatform/blueprint-solutions
+.github/CODEOWNERS @GoogleCloudPlatform/blueprint-solutions
