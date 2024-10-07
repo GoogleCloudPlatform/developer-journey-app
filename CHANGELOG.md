@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.4.1...v1.4.2) (2024-10-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency next to v14.2.10 [security] ([#133](https://github.com/GoogleCloudPlatform/developer-journey-app/issues/133)) ([90c893a](https://github.com/GoogleCloudPlatform/developer-journey-app/commit/90c893aad06718bc8d043cd3feb219e6f1deb8a0))
+
 ## [1.4.1](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.4.0...v1.4.1) (2024-07-25)
 
 
