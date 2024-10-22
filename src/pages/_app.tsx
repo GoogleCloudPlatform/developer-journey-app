@@ -20,7 +20,6 @@ import { Provider } from 'react-redux'
 import { store } from '../redux/store'
 import Head from 'next/head';
 import Navbar from 'src/components/navbar';
-import Footer from 'src/components/footer';
 
 export default function App({
   Component,
@@ -35,7 +34,6 @@ export default function App({
           <div className="flex flex-col h-screen justify-between">
             <Navbar />
             <Component {...pageProps} />
-            <Footer />
           </div>
         </Provider>
       </SessionProvider>
