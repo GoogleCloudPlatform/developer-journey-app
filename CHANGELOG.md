@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.2](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.4.1...v1.4.2) (2025-07-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency next to v14.2.10 [security] ([#133](https://github.com/GoogleCloudPlatform/developer-journey-app/issues/133)) ([90c893a](https://github.com/GoogleCloudPlatform/developer-journey-app/commit/90c893aad06718bc8d043cd3feb219e6f1deb8a0))
+* **deps:** update dependency next to v14.2.21 [security] ([#152](https://github.com/GoogleCloudPlatform/developer-journey-app/issues/152)) ([c9483bb](https://github.com/GoogleCloudPlatform/developer-journey-app/commit/c9483bb8ad22a294552ec283b5d2ef352bd3a96f))
+* **deps:** update dependency next-auth to v4.24.8 ([#138](https://github.com/GoogleCloudPlatform/developer-journey-app/issues/138)) ([63c43d4](https://github.com/GoogleCloudPlatform/developer-journey-app/commit/63c43d4de9e66a0272ed0c368c6ef5c79c1d6fa3))
+* Remove &lt;Footer&gt; ([#147](https://github.com/GoogleCloudPlatform/developer-journey-app/issues/147)) ([1c38f29](https://github.com/GoogleCloudPlatform/developer-journey-app/commit/1c38f2967b4b470558bcc188bde4f6f68eb779f1))
+
 ## [1.4.1](https://github.com/GoogleCloudPlatform/developer-journey-app/compare/v1.4.0...v1.4.1) (2024-07-25)
 
 
